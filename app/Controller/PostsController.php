@@ -4,44 +4,47 @@ class PostsController extends AppController
 {
     public $components = ['RequestHandler'];
 
+    /**
+     * [GET]
+     * [PRIVATE] - for logged in users only
+     * Fetch posts to display
+     * Fetches
+     *  : Own Post
+     *  : Followed Post
+     *  : Shared Post
+     *  Ordered by created DESC
+     */
     public function index()
     {
-        $this->loadModel('Follower');
-        $followedUsers = $this->Follower->find('list', [
-            'recursive' => 0,
-            'fields' => ['following_id'],
-            'conditions' => ['user_id' => $this->Auth->user('id')]
-        ]);
-        $followedUsers[] = $this->Auth->user('id');
-        $posts = $this->Post->find('all', [
-            'fields' => ['title', 'body', 'id', 'user_id'],
-            'order' => ['created' => 'desc'],
-            'conditions' => ['user_id' => $followedUsers],
-            'limit' => 5,
-        ]);
-
-        return $this->responseData($posts);
+        return $this->responseData(
+            $this->Post->fetchPostsOfUser($this->Auth->user('id'))
+        );
     }
 
-    public function view($id = null)
+    /**
+     * [GET]
+     * [PUBLIC]
+     * 
+     * Fetches a post along with its comments
+     * 
+     * @param int $id - PK tbl posts
+     * @return json
+    */
+    public function view($id)
     {
-        if ( ! $id) {
-            throw new NotFoundException(__('Invalid post'));
-        }
-
-        $post = $this->Post->findById($id);
-        if (!$post) {
-            throw new NotFoundException(__('Invalid post'));
-        }
-
-        $this->loadModel('Comment');
-        $post['Post']['comments'] = $this->Comment->find('all', [
-            'order' => ['modified' => 'desc']
-        ]);
-
-        return $this->responseData($post);
+        return $this->responseData(
+            $this->Post->fetchPostsWithComments($id)
+        );
     }
 
+    /**
+     * [POST]
+     * [PRIVATE] - only for logged in user
+     * 
+     * Creates a post
+     * 
+     * @return json
+     */
     public function add()
     {
         if ( ! $this->request->is('post')) {
@@ -49,63 +52,61 @@ class PostsController extends AppController
         }
 
         $this->request->data['user_id'] = $this->Auth->user('id');
-        $this->Post->set($this->request->data);
-        if ( ! $this->Post->validates()) {
+        if ( ! $this->Post->addPost($this->request->data)) {
             return $this->responseUnprocessableEntity('', $this->Post->validationErrors);
-        }
-
-        if ( ! $this->Post->save($this->request->data)) {
-            return $this->responseInternalServerError();
         }
 
         return $this->responseCreated();
     }
 
+    /**
+     * [POST]
+     * [PRIVATE] - only for logged in user
+     * 
+     * Shares a post
+     * 
+     * @param int $id - PK posts table
+     * @return json
+     */
     public function share($id)
     {
         if ( ! $this->request->is('post')) {
             throw new MethodNotAllowedException();
         }
 
-        $post = $this->Post->findById($id);
-        if ( ! $post) {
-            throw new NotFoundException();
-        }
-
-        $this->Post->set([
-            'retweet_from' => $id,
-            'user_id' => $this->Auth->user('id')
-        ]);
-        if ( ! $this->Post->save($this->request->data)) {
-            return $this->responseInternalServerError();
-        }
-
+        $this->Post->sharePost($id, $this->Auth->user('id'));
         return $this->responseCreated();
     }
 
-    public function edit($id = null)
+    /**
+     * [PUT]
+     * [PRIVATE] - can only edit own posts
+     * 
+     * Edits the title and body of a post
+     * 
+     * @return json
+     */
+    public function edit($id)
     {
         if ( ! $this->request->is('put')) {
             throw new MethodNotAllowedException();
         }
-        if ( ! $id) {
-            throw new NotFoundException(__('Invalid post'));
-        }
 
         $this->request->data['user_id'] = $this->Auth->user('id');
-        $this->Post->set($this->request->data);
-        if ( ! $this->Post->validates()) {
+        if ( ! $this->Post->editPost($id, $this->request->data)) {
             return $this->responseUnprocessableEntity('', $this->Post->validationErrors);
         }
-
-        $this->Post->id = $id;
-        if ( ! $this->Post->save($this->request->data)) {
-            throw new InternalErrorException();
-        }
-
         return $this->responseOk();
     }
 
+    /**
+     * [DELETE]
+     * [PRIVATE] - can only delete self posts
+     * 
+     * Deletes a post or a shared post
+     * 
+     * @return json
+     */
     public function delete($id)
     {
         if ( ! $this->request->is('delete')) {
@@ -121,7 +122,7 @@ class PostsController extends AppController
 
     public function isAuthorized($user)
     {
-        if (in_array($this->action, ['share', 'add'])) {
+        if (in_array($this->action, ['share', 'add', 'index'])) {
             if ($user) {
                 return true;
             }
