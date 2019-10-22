@@ -1,6 +1,6 @@
-DROP PROCEDURE IF EXISTS fetchPostsToDisplay;
+DROP PROCEDURE IF EXISTS fetchPostOfUser;
 DELIMITER ;;
-CREATE PROCEDURE fetchPostsToDisplay(
+CREATE PROCEDURE fetchPostOfUser(
 	IN userId int,
     IN perPage int,
     IN pageOffset int
@@ -16,19 +16,19 @@ BEGIN
             WHERE user_id = userId
 		)
         OR user_id = userId
-		AND retweet_from IS NULL
+		AND retweet_post_id IS NULL
 		UNION
 		SELECT
 			b.id,
 			a.title,
 			a.body,
-			b.retweet_from,
+			b.retweet_post_id,
 			a.user_id,
 			b.created,
 			b.modified,
 			b.user_id as shared_by
 		FROM posts a
-		LEFT JOIN posts b ON b.retweet_from = a.id
+		LEFT JOIN posts b ON b.retweet_post_id = a.id
 		WHERE b.user_id IN (
 			SELECT following_id
             FROM followers

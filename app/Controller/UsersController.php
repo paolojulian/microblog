@@ -3,13 +3,16 @@
 App::uses('AppController', 'Controller');
 
 class UsersController extends AppController {
-    public $components = ['RequestHandler'];
+    public $components = [
+        'RequestHandler',
+        'UserHandler'
+    ];
 
     public function beforeFilter() {
         parent::beforeFilter();
 
         // Allows register and logout without auth
-        $this->Auth->allow('add', 'login', 'accessDenied');
+        $this->Auth->allow('signup', 'activate', 'login', 'accessDenied');
     }
 
     public function index() {
@@ -25,19 +28,25 @@ class UsersController extends AppController {
         $this->set('user', $this->User->findById($id));
     }
 
-    public function add() {
+    /**
+     * [POST]
+     * [PUBLIC]
+     * 
+     * Signs up a user,
+     * Sends an activation email after a successful registration
+     * 
+     * @return json
+     */
+    public function signup() {
         if ( ! $this->request->is('post')) {
             throw new MethodNotAllowedException();
         }
 
-        $this->User->set($this->request->data);
-        if ( ! $this->User->validates()) {
+        $this->request->data['User']['activation_key'] = time();
+        if ( ! $this->User->addUser($this->request->data)) {
             return $this->responseUnprocessableEntity('', $this->User->validationErrors);
         }
-
-        if ( ! $this->User->save($this->request->data)) {
-            throw new InternalErrorException();
-        }
+        $this->UserHandler->sendActivationMail($this->request->data);
 
         return $this->responseOK();
     }
@@ -89,7 +98,7 @@ class UsersController extends AppController {
         }
 
         if ($user['User']['is_activated'] != 1) {
-            throw new BadRequestException('Please activate your account first.');
+            throw new BadRequestException(__('Please activate your account first.'));
         }
 
         if ( ! $this->Auth->login($user['User'])) {
@@ -103,6 +112,21 @@ class UsersController extends AppController {
     {
         $this->Auth->logout();
         return $this->responseOK();
+    }
+
+    public function activate($key)
+    {
+        // TODO find id and is_activated only
+        $user = $this->User->findByActivationKey($key);
+        if ( ! $user) {
+            echo 'Account was not found';
+            die();
+        }
+        if ( ! $user['User']['is_activated']) {
+            $this->User->activateUser($user['User']['id']);
+        }
+        echo 'User activated';
+        die();
     }
 
     public function me()

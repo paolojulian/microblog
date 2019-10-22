@@ -58,7 +58,7 @@ class Post extends AppModel
     public function sharePost($postId, $userId)
     {
         $this->set([
-            'retweet_from' => $postId,
+            'retweet_post_id' => $postId,
             'user_id' => $userId
         ]);
         $post = $this->findById($postId);

@@ -119,6 +119,27 @@ class User extends AppModel
         ]
     ];
 
+    public function addUser($data)
+    {
+        $this->set($data);
+        if ( ! $this->validates()) {
+            return false;
+        }
+        if ( ! $this->save()) {
+            throw new InternalErrorException();
+        }
+        return true;
+    }
+
+    public function activateUser($userId)
+    {
+        $this->id = $userId;
+        if ( ! $this->saveField('is_activated', b'1')) {
+            throw new InternalErrorException();
+        }
+        return true;
+    }
+
     public function beforeSave($options = [])
     {
         if ( ! isset($this->data[$this->alias]['password'])) return true;
