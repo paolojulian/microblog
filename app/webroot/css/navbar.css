@@ -1,0 +1,28 @@
+nav.v-navbar {
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-right: 1rem;
+    background-color: var(--primary);
+    color: var(--grey-light);
+    box-shadow: 1px 0 5px rgba(0, 0, 0, 0.40);
+
+    display: flex;
+    justify-content: flex-end;
+}
+
+nav.v-navbar .link {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 400;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 200ms ease-in-out;
+}
+
+nav.v-navbar .link:hover {
+    color: var(--black);
+    background-color: var(--grey) !important;
+}

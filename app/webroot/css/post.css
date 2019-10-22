@@ -1,0 +1,12 @@
+.posts {
+
+}
+
+.post {
+    margin: 1rem auto;
+}
+
+.post-title {
+    color: var(--primary);
+    font-size: 1.2rem;
+}
