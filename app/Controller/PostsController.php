@@ -16,6 +16,7 @@ class PostsController extends AppController
      */
     public function index()
     {
+        $this->request->allowMethod('get');
         return $this->responseData(
             $this->Post->fetchPostsOfUser($this->Auth->user('id'))
         );
@@ -32,6 +33,7 @@ class PostsController extends AppController
     */
     public function view($id)
     {
+        $this->request->allowMethod('get');
         return $this->responseData(
             $this->Post->fetchPostsWithComments($id)
         );
@@ -47,10 +49,7 @@ class PostsController extends AppController
      */
     public function add()
     {
-        if ( ! $this->request->is('post')) {
-            throw new MethodNotAllowedException();
-        }
-
+        $this->request->allowMethod('post');
         $this->request->data['user_id'] = $this->Auth->user('id');
         if ( ! $this->Post->addPost($this->request->data)) {
             return $this->responseUnprocessableEntity('', $this->Post->validationErrors);
@@ -70,10 +69,7 @@ class PostsController extends AppController
      */
     public function share($id)
     {
-        if ( ! $this->request->is('post')) {
-            throw new MethodNotAllowedException();
-        }
-
+        $this->request->allowMethod('post');
         $this->Post->sharePost($id, $this->Auth->user('id'));
         return $this->responseCreated();
     }
@@ -88,10 +84,7 @@ class PostsController extends AppController
      */
     public function edit($id)
     {
-        if ( ! $this->request->is('put')) {
-            throw new MethodNotAllowedException();
-        }
-
+        $this->request->allowMethod('put');
         $this->request->data['user_id'] = $this->Auth->user('id');
         if ( ! $this->Post->editPost($id, $this->request->data)) {
             return $this->responseUnprocessableEntity('', $this->Post->validationErrors);
@@ -109,10 +102,7 @@ class PostsController extends AppController
      */
     public function delete($id)
     {
-        if ( ! $this->request->is('delete')) {
-            throw new MethodNotAllowedException();
-        }
-
+        $this->request->allowMethod('delete');
         if ( ! $this->Post->delete($id)) {
             throw new InternalErrorException();
         }
