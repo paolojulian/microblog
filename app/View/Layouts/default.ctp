@@ -25,21 +25,22 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		<?php echo $this->fetch('title'); ?>
 	</title>
 	<?php
-		echo $this->Html->meta('icon');
+		// echo $this->Html->meta('icon');
 
-		echo $this->Html->css('app');
-		echo $this->Html->css('navbar');
-		echo $this->Html->css('card');
+		// echo $this->Html->css('app');
+		// echo $this->Html->css('navbar');
+		// echo $this->Html->css('card');
 
-		echo $this->Html->css('profile');
+		// echo $this->Html->css('profile');
 
-		echo $this->fetch('meta');
-		echo $this->fetch('css');
-		echo $this->fetch('script');
+		// echo $this->fetch('meta');
+		// echo $this->fetch('css');
+		// echo $this->fetch('script');
 	?>
 </head>
 <body>
-	<div id="container">
+	<div id="app"></div>
+	<!-- <div id="container">
 		<?php echo $this->element('navbar'); ?>
 		<div id="content">
 			<!-- <?php echo $this->element('profile'); ?> -->
@@ -49,6 +50,6 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		</div>
 		<div id="footer">
 		</div>
-	</div>
+	</div> -->
 </body>
 </html>

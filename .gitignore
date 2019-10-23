@@ -8,6 +8,7 @@
 /build
 /dist
 /tags
+/node_modules
 *.mo
 
 # IDE and editor specific files #
