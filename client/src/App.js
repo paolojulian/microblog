@@ -16,6 +16,7 @@ import './assets/styles/Form.css'
 /* Components */
 import PrivateRoute from './components/widgets/private-route'
 import Landing from './components/landing'
+import Profile from './components/profile'
 import Login from './components/auth/login'
 import Register from './components/auth/register'
 
@@ -62,6 +63,9 @@ const App = () => {
                     <Route exact path="/register" component={Register}/>
                     <Switch>
                         <PrivateRoute exact path="/" component={Landing}/>
+                    </Switch>
+                    <Switch>
+                        <PrivateRoute exact path="/profile" component={Profile}/>
                     </Switch>
                 </div>
             </Router>

@@ -44,7 +44,7 @@ const Login = ({
         try {
             await loginUser(User, history)
         } catch (e) {
-            if (e.response.status === 400) {
+            if (!!e.response.status && e.response.status === 400) {
                 setErrors({
                     form: e.response.data.message,
                     username: true,

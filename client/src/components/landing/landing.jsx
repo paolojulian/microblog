@@ -1,5 +1,7 @@
 import React from 'react'
 
+import WithNavbar from '../hoc/with-navbar';
+
 const Landing = () => {
     return (
         <div className="landing">
@@ -8,4 +10,4 @@ const Landing = () => {
     )
 }
 
-export default Landing
+export default WithNavbar(Landing)

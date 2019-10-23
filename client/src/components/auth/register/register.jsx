@@ -54,7 +54,7 @@ const Register = ({
             confirm_password: confirm_password.current.value,
         }
         try {
-            const response = await registerUser(User, history)
+            await registerUser(User, history)
         } catch (e) {
             console.log(e);
         }

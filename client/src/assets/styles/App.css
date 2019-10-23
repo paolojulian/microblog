@@ -140,3 +140,7 @@ p.small {
     text-align: right;
     font-size: 0.9rem;
 }
+
+.with-navbar {
+    margin-top: 2rem;
+}
