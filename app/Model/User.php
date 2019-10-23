@@ -53,15 +53,15 @@ class User extends AppModel
             ],
         ],
         'username' => [
-            'alphaNumeric' => [
-                'rule' => 'alphaNumeric',
-                'required' => true,
-                'message' => 'Letters and Numbers only'
-            ],
             'between' => [
                 'rule' => ['lengthBetween', 6, 20],
                 'required' => true,
                 'message' => 'Between 6 to 20 characters only'
+            ],
+            'alphaNumeric' => [
+                'rule' => 'alphaNumeric',
+                'required' => true,
+                'message' => 'Letters and Numbers only'
             ],
             'unique' => [
                 'rule' => 'isUnique',
@@ -109,6 +109,12 @@ class User extends AppModel
                 'required' => 'create',
                 'message' => 'Minimum of 6 characters is allowed.'
             ],
+        ],
+        'confirm_password' => [
+            'identical' => [
+                'rule' => ['identicalFieldValues', 'password'],
+                'message' => 'Password confirmation does not match password.'
+            ]
         ],
         'role' => [
             'valid' => [
@@ -166,6 +172,11 @@ class User extends AppModel
 
         unset($user['User']['password']);  // Remove password for saving
         return $user;
-
     }
+
+	public function identicalFieldValues($data, $compareField) {
+		$value = array_values($data);
+		$comparewithvalue = $value[0];
+		return $this->data[$this->name][$compareField] === $comparewithvalue;
+	}
 }

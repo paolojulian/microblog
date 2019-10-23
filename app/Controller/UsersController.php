@@ -2,6 +2,9 @@
 
 App::uses('AppController', 'Controller');
 
+App::uses('JWT', 'Lib');
+App::uses('vendor', 'Firebase\JWT\JWT');
+
 class UsersController extends AppController {
     public $components = [
         'RequestHandler',
@@ -12,7 +15,7 @@ class UsersController extends AppController {
         parent::beforeFilter();
 
         // Allows register and logout without auth
-        $this->Auth->allow('signup', 'activate', 'login', 'accessDenied');
+        $this->Auth->allow('register', 'activate', 'login', 'accessDenied');
     }
 
     public function index() {
@@ -21,11 +24,12 @@ class UsersController extends AppController {
     }
 
     public function view($id = null) {
+        $this->request->allowMethod('get');
         $this->User->id = $id;
-        if (!$this->User->exists()) {
+        if ( ! $this->User->exists()) {
             throw new NotFoundException(__('Invalid user'));
         }
-        $this->set('user', $this->User->findById($id));
+        $this->responseData($this->User->findById($id));
     }
 
     /**
@@ -37,12 +41,10 @@ class UsersController extends AppController {
      * 
      * @return json
      */
-    public function signup() {
-        if ( ! $this->request->is('post')) {
-            throw new MethodNotAllowedException();
-        }
+    public function register() {
+        $this->request->allowMethod('post');
 
-        $this->request->data['User']['activation_key'] = time();
+        $this->request->data['activation_key'] = time();
         if ( ! $this->User->addUser($this->request->data)) {
             return $this->responseUnprocessableEntity('', $this->User->validationErrors);
         }
@@ -52,9 +54,7 @@ class UsersController extends AppController {
     }
 
     public function edit() {
-        if ( ! $this->request->is('put')) {
-            throw new MethodNotAllowedException();
-        }
+        $this->request->allowMethod('put');
 
         $this->User->id = $this->Auth->user('id');
         if (!$this->User->exists()) {
@@ -74,6 +74,7 @@ class UsersController extends AppController {
     }
 
     public function delete($id = null) {
+        $this->request->allowMethod('delete');
         $this->User->id = $id;
         if (!$this->User->exists()) {
             throw new NotFoundException(__('Invalid user'));
@@ -88,9 +89,7 @@ class UsersController extends AppController {
 
     public function login()
     {
-        if ( ! $this->request->is('post')) {
-            throw new MethodNotAllowedException();
-        }
+        $this->request->allowMethod('post');
 
         $user = $this->User->authenticate($this->request->data);
         if ( ! $user) {
@@ -105,11 +104,27 @@ class UsersController extends AppController {
             throw new InternalErrorException();
         }
 
-        return $this->responseOK();
+        $time = time();
+        $key = "example_key";
+        $payload = [
+            "iss" => "Pipz",
+            "aud" => "Microblog",
+            "exp" => $time + 86400, // One day exp
+            "iat" => $time,
+            "nbf" => $time,
+            "id" => $user["User"]["id"],
+            "username" => $user["User"]["username"],
+            "role" => $user["User"]["role"],
+        ];
+        $secretKey = 'sashagrey';
+        $jwt = JWT::encode($payload, $secretKey);
+
+        return $this->responseData($jwt);
     }
 
     public function logout()
     {
+        $this->request->allowMethod('post');
         $this->Auth->logout();
         return $this->responseOK();
     }
@@ -131,9 +146,7 @@ class UsersController extends AppController {
 
     public function me()
     {
-        if ( ! $this->request->is('get')) {
-            throw new MethodNotAllowedException();
-        }
+        $this->request->allowMethod('get');
         return $this->responseData($this->Auth->user());
     }
 

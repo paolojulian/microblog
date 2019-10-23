@@ -1,0 +1,26 @@
+.p__button {
+    width: 100%;
+    cursor: pointer;
+    padding: 0.3rem;
+    margin: 0.4rem 0;
+    border-radius: 10px;
+    background-color: var(--black-light);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.30);
+    text-transform: uppercase;
+    color: var(--grey);
+}
+.primary {
+    background-color: var(--primary);
+}
+
+.secondary {
+    background-color: var(--green-primary);
+}
+
+.accent {
+    background-color: var(--secondary);
+}
+
+.danger {
+    background-color: var(--secondary-dark);
+}

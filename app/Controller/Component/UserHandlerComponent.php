@@ -14,12 +14,12 @@ class UserHandlerComponent extends Component {
      */
     public function sendActivationMail($data)
     {
-        $name = $data['User']['first_name'] . ' ' . $data['User']['last_name'];
-        $to = $data['User']['email'];
+        $name = $data['first_name'] . ' ' . $data['last_name'];
+        $to = $data['email'];
         $subject = 'Account Activation';
         $activationUrl = Router::url([
             'controller' => 'users',
-            'action' => 'activate/' . $data['User']['activation_key']
+            'action' => 'activate/' . $data['activation_key']
         ], true);
         $message = "Dear <span color='red'>$name</span>";
         $message .= "<br />Your account has been created successfully.<br />";

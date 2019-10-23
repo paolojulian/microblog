@@ -35,12 +35,17 @@ class AppController extends Controller {
     public $components = [
         'Auth' => [
             'authenticate' => [
-                'Form' => [
-                    'passwordHasher' => 'Blowfish'
+                'JwtAuth.JwtToken' => [
+                    'fields' => [
+                        'username' => 'username',
+                        'password' => 'password',
+                        'token' => 'public_key'
+                    ],
+                    'parameter' => '_token',
+                    'userModel' => 'User',
+                    'scope' => ['User.is_active' => 1],
+                    'pepper' => 'sneezing'
                 ],
-                'Basic' => [
-                    'passwordHasher' => 'Blowfish'
-                ]
             ],
             'unauthorizedRedirect' => [
                 'controller' => 'users',
@@ -92,7 +97,7 @@ class AppController extends Controller {
 
     protected function responseUnprocessableEntity($message = '', $data = [])
     {
-        $this->jsonResponse(400, $message, ['errors' => $data]);
+        $this->jsonResponse(422, $message, ['errors' => $data]);
     }
 
     protected function responseDeleted($message = '')
