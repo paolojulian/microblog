@@ -1,26 +1,21 @@
 <?php
 
 App::uses('AppController', 'Controller');
-
-App::uses('JWT', 'Lib');
-App::uses('vendor', 'Firebase\JWT\JWT');
+App::uses('Folder', 'Utility');
+App::uses('File', 'Utility');
 
 class UsersController extends AppController {
     public $components = [
         'RequestHandler',
         'UserHandler'
     ];
+    public $public = ['register', 'activate', 'login', 'accessDenied'];
 
     public function beforeFilter() {
         parent::beforeFilter();
-
-        // Allows register and logout without auth
-        $this->Auth->allow('register', 'activate', 'login', 'accessDenied');
     }
 
     public function index() {
-        $this->User->recursive = 0;
-        $this->set('users', $this->paginate());
     }
 
     public function view($id = null) {
@@ -53,10 +48,17 @@ class UsersController extends AppController {
         return $this->responseOK();
     }
 
+    /**
+     * [PUT]
+     * [PRIVATE] - logged in users only
+     * Edits current user
+     * 
+     * @return json
+     */
     public function edit() {
         $this->request->allowMethod('put');
 
-        $this->User->id = $this->Auth->user('id');
+        $this->User->id = $this->request->request->id;
         if (!$this->User->exists()) {
             throw new NotFoundException(__('Invalid user'));
         }
@@ -73,20 +75,37 @@ class UsersController extends AppController {
         return $this->responseOK();
     }
 
+    /**
+     * [DELETE]
+     * [PRIVATE] - Logged in user only
+     */
     public function delete($id = null) {
         $this->request->allowMethod('delete');
         $this->User->id = $id;
-        if (!$this->User->exists()) {
+        if ( ! $this->User->exists()) {
             throw new NotFoundException(__('Invalid user'));
         }
-        if ($this->User->delete()) {
-            $this->Flash->success(__('User deleted'));
-            return $this->redirect(array('action' => 'index'));
+        if ( ! $this->User->delete()) {
+            throw new InternalErrorException(__('Server Error'));
         }
-        $this->Flash->error(__('User was not deleted'));
-        return $this->redirect(array('action' => 'index'));
+
+        $this->responseDeleted();
     }
 
+    public function addProfileImage()
+    {
+        $dir = new Folder(WWW_ROOT . 'img');
+    }
+
+    /**
+     * [POST]
+     * [PUBLIC]
+     * 
+     * Logs in the current user and returns a Jwt Token upon success
+     * Only allow activated accounts
+     * 
+     * @return json - containing Jwt Token
+     */
     public function login()
     {
         $this->request->allowMethod('post');
@@ -100,26 +119,17 @@ class UsersController extends AppController {
             throw new BadRequestException(__('Please activate your account first.'));
         }
 
-        if ( ! $this->Auth->login($user['User'])) {
-            throw new InternalErrorException();
-        }
-
-        $time = time();
-        $key = "example_key";
         $payload = [
-            "iss" => "Pipz",
-            "aud" => "Microblog",
-            "exp" => $time + 86400, // One day exp
-            "iat" => $time,
-            "nbf" => $time,
             "id" => $user["User"]["id"],
+            "first_name" => $user["User"]["first_name"],
+            "last_name" => $user["User"]["last_name"],
             "username" => $user["User"]["username"],
+            "email" => $user["User"]["email"],
+            "birthdate" => $user["User"]["birthdate"],
+            "sex" => $user["User"]["sex"],
             "role" => $user["User"]["role"],
         ];
-        $secretKey = 'sashagrey';
-        $jwt = JWT::encode($payload, $secretKey);
-
-        return $this->responseData($jwt);
+        return $this->responseData($this->jwtEncode($payload));
     }
 
     public function logout()
@@ -129,9 +139,11 @@ class UsersController extends AppController {
         return $this->responseOK();
     }
 
+    /**
+     * Activates the user by the its activation key
+     */
     public function activate($key)
     {
-        // TODO find id and is_activated only
         $user = $this->User->findByActivationKey($key);
         if ( ! $user) {
             echo 'Account was not found';
@@ -143,27 +155,4 @@ class UsersController extends AppController {
         echo 'User activated';
         die();
     }
-
-    public function me()
-    {
-        $this->request->allowMethod('get');
-        return $this->responseData($this->Auth->user());
-    }
-
-    public function accessDenied()
-    {
-        $this->jsonResponse(401);
-    }
-
-    public function isAuthorized($user) {
-
-        if (in_array($this->action, ['me', 'logout', 'edit'])) {
-            if ($this->Auth->user()) {
-                return true;
-            }
-        }
-
-        return parent::isAuthorized($user);
-    }
-
 }

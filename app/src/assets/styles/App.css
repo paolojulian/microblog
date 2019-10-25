@@ -1,0 +1,146 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+.App {
+    --primary: #2d9cdb;
+    --primary-dark: #006ea9;
+    --primary-light: #6fcdff;
+    --secondary: #eb5757;
+    --secondary-dark: #b3202e;
+    --secondary-light: #ff8984;
+    --grey: #fafafa;
+    --grey-light: #ffffff;
+    --grey-secondary: #eeeeee;
+    --grey-dark: #c7c7c7;
+    --black: #131313;
+    --black-light: #333333;
+    --green-primary: #059D58;
+    --green-dark: #006d2d;
+
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #eaeaea;
+    height: 100%;
+    min-height: 100vh;
+    color: var(--black);
+}
+
+.App-logo {
+    height: 40vmin;
+}
+
+.App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.App.content {
+    margin-top: 5rem;
+    background-color: #eaeaea;
+}
+
+ul li {
+    list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+button {
+    cursor: pointer;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	outline: inherit;
+}
+
+.clear {
+    clear: both;
+}
+
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
+h1 { 
+    font-size: 2.2em; 
+} 
+
+h2 { 
+    font-size: 2.0em;     
+} 
+
+h3 { 
+    font-size: 1.8em; 
+} 
+
+h4 { 
+    font-size: 1.6em;     
+} 
+
+h5 { 
+    font-size: 1.4em;     
+    font-weight: 400;
+} 
+
+p { 
+    font-size: 1.2em;     
+}
+
+p.small {
+    font-size: 0.9em;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.disabled {
+    color: rgba(0, 0, 0, 0.50);
+}
+.hidden {
+    visibility: hidden;
+}
+
+.is-invalid {
+    border: 1px solid var(--secondary);
+}
+
+.invalid-feedback {
+    color: var(--secondary);
+    font-size: 0.8rem;
+    text-align: left;
+}
+
+.center-absolute {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.text-link {
+    color: var(--secondary);
+    text-align: right;
+    font-size: 0.9rem;
+}
+
+.with-navbar {
+    padding-top: 2rem;
+}

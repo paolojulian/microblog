@@ -1,0 +1,16 @@
+.landing {
+    display: flex;
+    padding: 1rem;
+    text-align: center;
+    flex-wrap: wrap;
+}
+
+.profile, .posts, .right {
+    flex: 1 0 auto;
+    width: 200px;
+    margin: 0 0.5rem;
+}
+
+.write_post {
+    margin: auto;
+}

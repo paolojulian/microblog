@@ -1,0 +1,15 @@
+.form {
+    padding: 0 1rem;
+}
+
+form input[type=submit] {
+    width: 100%;
+    cursor: pointer;
+    padding: 0.5rem;
+    margin: 1rem 0;
+    border-radius: 10px;
+    background-color: var(--primary);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.30);
+    text-transform: uppercase;
+    color: var(--grey);
+}

@@ -1,0 +1,41 @@
+.profile_card {
+    display: flex;
+    padding: 1.5rem 2rem;
+}
+.profile_img {
+    flex: 1 0 auto;
+    text-align: left;
+}
+.profile_img img{
+    background-color: #f5eee5;
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+}
+.info {
+    text-align: left;
+}
+.last_name {
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    color: var(--secondary);
+}
+.first_name {
+    font-weight: 400;
+    font-size: 1.3rem;
+    text-transform: capitalize;
+}
+
+.username {
+    color: var(--secondary);
+}
+
+.follow {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+}
+
+.follow a {
+    color: var(--secondary);
+}

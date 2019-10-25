@@ -96,6 +96,10 @@ Configure::write('Dispatcher.filters', array(
 	'CacheDispatcher'
 ));
 
+Configure::write([
+	'jwt.key' => 'S@Sh@Gr3y'
+]);
+
 /**
  * Configures default file logging options
  */

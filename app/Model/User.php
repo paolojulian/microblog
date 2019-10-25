@@ -12,13 +12,16 @@ class User extends AppModel
 
     public $actsAs = ['Containable'];
     public $hasMany = [
-        'Follower' => [
+        'FollowerCount' => [
             'className' => 'Follower',
-            'foreignkey' => 'user_id'
+            'foreignKey' => 'following_id',
+            'counterCache' => [
+                'id' => ['id >', 0]
+            ]
         ],
-        'Following' => [
-            'className' => 'Follower',
-            'foreignkey' => 'following_id'
+        'Post' => [
+            'className' => 'Post',
+            'order' => 'Post.modified DESC'
         ]
     ];
 

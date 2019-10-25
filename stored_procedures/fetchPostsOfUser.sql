@@ -10,12 +10,7 @@ BEGIN
     (
 		SELECT posts.*, null as shared_by
 		FROM posts
-		WHERE user_id IN (
-			SELECT following_id
-            FROM followers
-            WHERE user_id = userId
-		)
-        OR user_id = userId
+		WHERE user_id = userId
 		AND retweet_post_id IS NULL
 		UNION
 		SELECT
@@ -29,12 +24,7 @@ BEGIN
 			b.user_id as shared_by
 		FROM posts a
 		LEFT JOIN posts b ON b.retweet_post_id = a.id
-		WHERE b.user_id IN (
-			SELECT following_id
-            FROM followers
-            WHERE user_id = userId
-		)
-        OR b.user_id = userId
+		WHERE b.user_id = userId
         LIMIT perPage
         OFFSET pageOffset
 	) post

@@ -3,7 +3,14 @@
 class PostsController extends AppController
 {
     public $components = ['RequestHandler'];
+    public $public = ['view'];
 
+    public function beforeFilter() {
+        parent::beforeFilter();
+        if (in_array($this->action, ['edit', 'delete'])) {
+            parent::isOwnedBy($this->Post, $this->request->user->id);
+        }
+    }
     /**
      * [GET]
      * [PRIVATE] - for logged in users only
@@ -18,7 +25,7 @@ class PostsController extends AppController
     {
         $this->request->allowMethod('get');
         return $this->responseData(
-            $this->Post->fetchPostsOfUser($this->Auth->user('id'))
+            $this->Post->fetchPostsOfUser($this->request->user->id)
         );
     }
 
@@ -50,7 +57,7 @@ class PostsController extends AppController
     public function add()
     {
         $this->request->allowMethod('post');
-        $this->request->data['user_id'] = $this->Auth->user('id');
+        $this->request->data['user_id'] = $this->request->user->id;
         if ( ! $this->Post->addPost($this->request->data)) {
             return $this->responseUnprocessableEntity('', $this->Post->validationErrors);
         }
@@ -70,7 +77,7 @@ class PostsController extends AppController
     public function share($id)
     {
         $this->request->allowMethod('post');
-        $this->Post->sharePost($id, $this->Auth->user('id'));
+        $this->Post->sharePost($id, $this->request->user->id);
         return $this->responseCreated();
     }
 
@@ -85,7 +92,7 @@ class PostsController extends AppController
     public function edit($id)
     {
         $this->request->allowMethod('put');
-        $this->request->data['user_id'] = $this->Auth->user('id');
+        $this->request->data['user_id'] = $this->request->user->id;
         if ( ! $this->Post->editPost($id, $this->request->data)) {
             return $this->responseUnprocessableEntity('', $this->Post->validationErrors);
         }
@@ -108,21 +115,5 @@ class PostsController extends AppController
         }
 
         return $this->responseDeleted();
-    }
-
-    public function isAuthorized($user)
-    {
-        if (in_array($this->action, ['share', 'add', 'index'])) {
-            if ($user) {
-                return true;
-            }
-        }
-        if (in_array($this->action, ['edit', 'delete'])) {
-            $postId = (int) $this->request->params['pass'][0];
-            if ($this->Post->isOwnedBy($postId, $user['id'])) {
-                return true;
-            }
-        }
-        return parent::isAuthorized($user);
     }
 }

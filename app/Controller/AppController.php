@@ -22,6 +22,8 @@
 App::uses('Controller', 'Controller');
 App::uses('User', 'Model');
 
+App::uses('JWT', 'Lib');
+
 /**
  * Application Controller
  *
@@ -32,40 +34,37 @@ App::uses('User', 'Model');
  * @link		https://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-    public $components = [
-        'Auth' => [
-            'authenticate' => [
-                'JwtAuth.JwtToken' => [
-                    'fields' => [
-                        'username' => 'username',
-                        'password' => 'password',
-                        'token' => 'public_key'
-                    ],
-                    'parameter' => '_token',
-                    'userModel' => 'User',
-                    'scope' => ['User.is_active' => 1],
-                    'pepper' => 'sneezing'
-                ],
-            ],
-            'unauthorizedRedirect' => [
-                'controller' => 'users',
-                'action' => 'accessDenied'
-            ],
-            'authorize' => ['controller'],
-        ]
-    ];
+    public $public = [];
     
     public function beforeFilter() {
-        $this->Auth->allow('index', 'view');
-    }
-    
-    public function isAuthorized($user) {
-        // Admin can access every action
-        if (isset($user['role']) && $user['role'] === 'ADMIN') {
-            return true;
+        if (in_array($this->action, $this->public)) {
+            return;
         }
-
+        try {
+            $decoded = self::getDecodedHeader();
+            // Check if post to be edited belongs to self
+            return true;
+        } catch (Exception $e) {
+            throw new ForbiddenException('Unauthorized');
+        }
         throw new ForbiddenException('Unauthorized');
+    }
+
+    public function getDecodedHeader()
+    {
+        try {
+            $httpAuthorization = $this->request->header('Authorization');
+            if ( ! isset($httpAuthorization) && empty($httpAuthorization)) {
+                throw new ForbiddenException('Unauthorized');
+            }
+            $secretKey = Configure::read('jwt.key');
+            $decoded = JWT::decode($httpAuthorization, $secretKey, ['HS256']);
+            $this->request->user = $decoded;
+            return $decoded;
+
+        } catch (Exception $e) {
+            throw new ForbiddenException('Unauthorized');
+        }
     }
 
     public function accessDenied()
@@ -123,5 +122,44 @@ class AppController extends Controller {
     protected function responseForbidden()
     {
         $this->jsonResponse(403);
+    }
+
+    public function jwtEncode($payload) {
+        $time = time();
+        $key = "example_key";
+        $payload['iss'] = "Pipz";
+        $payload['aud'] = "Microblog";
+        $payload['iat'] = $time;
+        $payload['nbf'] = $time;
+        $payload['exp'] = $time + 86400;// One day expiration
+        $secretKey = Configure::read('jwt.key');
+        return JWT::encode($payload, $secretKey, 'HS256');
+    }
+
+    public function jwtDecode($jwt)
+    {
+        if ( ! isset($jwt) && empty($jwt)) {
+            return false;
+        }
+
+        try {
+            $secretKey = Configure::read('jwt.key');
+            $decoded = JWT::decode($jwt, $secretKey, ['HS256']);
+            if ($decoded) {
+                return true;
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function isOwnedBy($model, $userId)
+    {
+        $reqId = (int) $this->request->params['pass'][0];
+        if ($model->isOwnedBy($req, $userId)) {
+            return true;
+        }
+
+        throw new ForbiddenException();
     }
 }

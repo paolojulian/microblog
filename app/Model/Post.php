@@ -8,6 +8,11 @@ class Post extends AppModel
             'required' => true
         ]
     ];
+    public $belongsTo = [
+        'User' => [
+            'className' => 'User',
+        ]
+    ];
 
     public function fetchPostsOfUser($userId, $pageNo = 1, $perPage = 5)
     {

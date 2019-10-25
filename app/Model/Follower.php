@@ -3,15 +3,10 @@
 class Follower extends AppModel
 {
     public $actsAs = array('Containable');
-    public $belongsTo = [
+    public $hasMany = [
         'User' => [
             'className' => 'User',
-            'foreignkey' => 'id'
         ],
-        'Following' => [
-            'className' => 'User',
-            'foreignkey' => 'id'
-        ]
     ];
 
     public $validate = [
@@ -24,6 +19,20 @@ class Follower extends AppModel
             'required' => true
         ]
     ];
+
+    public function countFollowers($userId)
+    {
+        return $this->find('count', [
+            'conditions' => ['following_id' => $userId]
+        ]);
+    }
+
+    public function countFollowing($userId)
+    {
+        return $this->find('count', [
+            'conditions' => ['user_id' => $userId]
+        ]);
+    }
 
     public function isOwnedBy($followerId, $user)
     {
