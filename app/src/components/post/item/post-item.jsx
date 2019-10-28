@@ -14,6 +14,10 @@ import { likePost } from '../../../store/actions/postActions'
 import PCard from '../../widgets/p-card'
 import ProfileImage from '../../widgets/profile-image'
 import PostEdit from '../edit'
+import PostDelete from '../delete'
+
+/** Consumer */
+import { ModalConsumer } from '../../widgets/p-modal/p-modal-context'
 
 const fromNow = date => {
     return moment(date).fromNow()
@@ -28,7 +32,9 @@ const PostItem = ({
     likes,
     comments,
     loggedin_id,
-    created
+    created,
+    fetchHandler,
+    ...props
 }) => {
     const dispatch = useDispatch()
     const [likeCount, setLikeCount] = useState(likes.length)
@@ -44,6 +50,11 @@ const PostItem = ({
             setLikeCount(likeCount + 1)
         }
         setIsLiked(!isLiked)
+    }
+
+    const onSuccessEdit = () => {
+        setIsEdit(false)
+        fetchHandler();
     }
 
     const renderBody = () => (
@@ -77,9 +88,15 @@ const PostItem = ({
                 >
                     <i className="fa fa-edit"/>
                 </div>}
-                {isOwned && <div className={styles.delete}>
-                    <i className="fa fa-trash"/>
-                </div>}
+                {isOwned && <ModalConsumer>
+                    {({ showModal }) => (
+                        <div className={styles.delete}
+                            onClick={() => showModal(PostDelete, { id, onSuccess: fetchHandler })}
+                        >
+                            <i className="fa fa-trash"/>
+                        </div>
+                    )}
+                </ModalConsumer>}
             </div>
 
             {isEdit
@@ -87,7 +104,7 @@ const PostItem = ({
                     id={id}
                     title={title}
                     body={body}
-                    onSuccess={() => setIsEdit(false)}
+                    onSuccess={onSuccessEdit}
                     />
                 : renderBody()}
 

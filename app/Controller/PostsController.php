@@ -27,9 +27,10 @@ class PostsController extends AppController
     public function index()
     {
         $this->request->allowMethod('get');
+        $page = isset($_GET['page']) ? $_GET['page'] : 1;
         return $this->responseData(
             // TODO Change to posts to display
-            $this->Post->fetchPostsToDisplay($this->request->user->id)
+            $this->Post->fetchPostsToDisplay($this->request->user->id, $page)
         );
     }
 
@@ -56,15 +57,17 @@ class PostsController extends AppController
      * 
      * Checks the posts created or shared by the user
      * 
-     * @param int $userId - PK users_tbl
+     * @param int $username - users.username (UNIQUE)
      * @return json
      */
-    public function user($userId)
+    public function user($username)
     {
         $this->request->allowMethod('get');
+        $this->loadModel('User');
+        $user = $this->User->findByUsername($username, 'id');
         return $this->responseData(
             // TODO Change to posts to display
-            $this->Post->fetchPostsOfUser($this->request->user->id)
+            $this->Post->fetchPostsOfUser($user['User']['id'])
         );
     }
 

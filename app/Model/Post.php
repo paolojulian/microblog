@@ -40,17 +40,9 @@ class Post extends AppModel
         $procedure = "CALL fetchPostsOfUser($userId, $perPage, $offset)";
         $data = $this->query($procedure);
         foreach ($data as $key => $item) {
-            $data[$key]['likes'] = $this->getLikes($item['post']['id']);
+            $data[$key]['Post']['likes'] = $this->getLikes($item['Post']['id']);
         }
         return $data;
-    }
-
-    public function getLikes($postId)
-    {
-        return array_values($this->Likes->find('list', [
-            'fields' => ['user_id'],
-            'conditions' => ['post_id' => $postId]
-        ]));
     }
 
     public function fetchPostsToDisplay($userId, $pageNo = 1, $perPage = 5)
@@ -76,6 +68,14 @@ class Post extends AppModel
             'order' => ['modified' => 'desc']
         ]);
         return $post;
+    }
+
+    public function getLikes($postId)
+    {
+        return array_values($this->Likes->find('list', [
+            'fields' => ['user_id'],
+            'conditions' => ['post_id' => $postId]
+        ]));
     }
 
     public function addPost($data)

@@ -129,6 +129,15 @@ class User extends AppModel
         ]
     ];
 
+    public function findByUsername($username, $fields = '*')
+    {
+        return $this->find('first', [
+            'recursive' => true,
+            'fields' => $fields,
+            'conditions' => ['username' => $username]
+        ]);
+    }
+
     public function addUser($data)
     {
         $this->set($data);

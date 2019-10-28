@@ -10,7 +10,8 @@ export default (state = initialState, action) => {
         case SET_PROFILE:
             return {
                 ...state,
-                ...action.payload
+                ...action.payload,
+                loading: false
             }
         case CLEAR_CURRENT_PROFILE:
             return initialState

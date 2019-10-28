@@ -2,7 +2,6 @@
     top: 2.5rem;
     left: 0;
     width: 100%;
-    padding: 1rem;
 }
 
 .profile {
@@ -13,7 +12,7 @@
 }
 
 .container {
-    margin-left: 400px;
+    margin-left: calc(400px + 1rem);
     display: flex;
 }
 

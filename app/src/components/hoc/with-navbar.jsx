@@ -8,7 +8,7 @@ const WithNavbar = OriginalComponent => {
             return (
                 <div className="with-navbar">
                     <Navbar/>
-                    <OriginalComponent/>
+                    <OriginalComponent {...this.props}/>
                 </div>
             )
         }

@@ -162,5 +162,5 @@ p.small {
 }
 
 .with-navbar {
-    padding-top: var(--navbar-height);
+    padding-top: calc(var(--navbar-height) + 1rem);
 }

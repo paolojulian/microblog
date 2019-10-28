@@ -1,0 +1,7 @@
+.profile_wrapper {
+    margin-top: 2.5rem 0;
+}
+.posts {
+    margin-left: calc(50% - 100px);
+    width: 600px;
+}

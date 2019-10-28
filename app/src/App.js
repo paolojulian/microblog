@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createContext } from 'react';
 import axios from 'axios'
 import { Provider } from 'react-redux'
 import jwtDecode from 'jwt-decode'
@@ -17,6 +17,10 @@ import Profile from './components/profile'
 import PostEdit from './components/post/edit'
 import Login from './components/auth/login'
 import Register from './components/auth/register'
+
+/** Context */
+import { ModalProvider } from './components/widgets/p-modal/p-modal-context'
+import ModalRoot from './components/widgets/p-modal/p-modal-root'
 
 if (localStorage.jwtToken) {
     try {
@@ -68,20 +72,23 @@ const App = () => {
         <Provider store={store}>
             <Router>
                 <div className="App">
-                    <Route exact path="/login" component={Login}/>
-                    <Route exact path="/register" component={Register}/>
-                    <Switch>
-                        <PrivateRoute exact path="/" component={Landing}/>
-                    </Switch>
-                    <Switch>
-                        <PrivateRoute exact path="/profile" component={Profile}/>
-                    </Switch>
-                    <Switch>
-                        <PrivateRoute exact path="/posts/edit/:id" component={PostEdit}/>
-                    </Switch>
-                    <Switch>
-                        <PrivateRoute path="/profiles/:username" component={Profile}/>
-                    </Switch>
+                    <ModalProvider>
+                        <ModalRoot/>
+                        <Route exact path="/login" component={Login}/>
+                        <Route exact path="/register" component={Register}/>
+                        <Switch>
+                            <PrivateRoute exact path="/" component={Landing}/>
+                        </Switch>
+                        <Switch>
+                            <PrivateRoute exact path="/profile/:username" component={Profile}/>
+                        </Switch>
+                        <Switch>
+                            <PrivateRoute exact path="/posts/edit/:id" component={PostEdit}/>
+                        </Switch>
+                        <Switch>
+                            <PrivateRoute path="/profiles/:username" component={Profile}/>
+                        </Switch>
+                    </ModalProvider>
                 </div>
             </Router>
         </Provider>
