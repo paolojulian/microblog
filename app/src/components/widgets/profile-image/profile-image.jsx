@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 /** Components */
@@ -7,28 +7,27 @@ import PImage from '../p-image'
 const ProfileImage = (props) => {
 
     const getSize = () => {
-        const validSizes = ['24', '32', '64', '128', '512', '1024'];
-        let size = 'x'
+        const validSizes = [24, 32, 64, 128, 512, 1024];
         if (validSizes.indexOf(props.size) === -1) {
-            return size + '64'
+            return 64
         }
-        return size + props.size
+        return props.size
     }
 
     return <PImage
         src={props.src}
-        fallback={`/app/webroot/img/profiles/default_avatar${getSize()}.png`}
+        fallback={`/app/webroot/img/profiles/default_avatarx${getSize()}.png`}
         {...props}
     />
 }
 
 ProfileImage.propTypes = {
     src: PropTypes.string,
-    size: PropTypes.string
+    size: PropTypes.number
 }
 
 ProfileImage.defaultProps = {
-    size: '128'
+    size: 128
 }
 
 export default ProfileImage

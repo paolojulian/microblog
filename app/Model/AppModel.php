@@ -19,7 +19,9 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
-App::uses('Model', 'Model');
+// App::uses('Model', 'Model');
+// App::uses('SoftDeletableModel', 'CakeSoftDelete.Model');
+App::uses('SoftDeletableModel', 'Model');
 
 /**
  * Application model for Cake.
@@ -29,6 +31,6 @@ App::uses('Model', 'Model');
  *
  * @package       app.Model
  */
-class AppModel extends Model {
+class AppModel extends SoftDeletableModel {
 
 }

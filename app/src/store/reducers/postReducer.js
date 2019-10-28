@@ -1,15 +1,33 @@
-import { SET_POSTS } from '../types';
+import { SET_POSTS, ADD_POSTS, CLEAR_POSTS, TOGGLE_LOADING_POST } from '../types';
 
-const initialState = []
+const initialState = {
+    isLoading: false,
+    list: []
+}
 
 export default (state = initialState, action) => {
 
     switch (action.type) {
         case SET_POSTS:
-            return [
+            return {
+                ...state.isLoading,
+                list: [...action.payload]
+            }
+        case ADD_POSTS:
+            return {
                 ...state,
-                ...action.payload
-            ]
+                list: [
+                    ...state.list,
+                    ...action.payload
+                ]
+            }
+        case TOGGLE_LOADING_POST:
+            return {
+                ...state,
+                isLoading: action.payload
+            }
+        case CLEAR_POSTS:
+            return initialState
         default:
             return state;
     }

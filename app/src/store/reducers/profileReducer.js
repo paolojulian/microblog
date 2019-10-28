@@ -1,6 +1,8 @@
 import { SET_PROFILE, CLEAR_CURRENT_PROFILE } from '../types';
 
-const initialState = {}
+const initialState = {
+    loading: true
+}
 
 export default (state = initialState, action) => {
 

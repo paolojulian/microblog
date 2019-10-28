@@ -1,8 +1,9 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import styles from './post-create.module.css'
-import { useSelector, connect } from 'react-redux'
+import { useDispatch, useSelector, connect } from 'react-redux'
 
 /** Redux Actions */
+import { CLEAR_ERRORS } from '../../../store/types'
 import { addPost } from '../../../store/actions/postActions'
 
 /** Components */
@@ -20,6 +21,8 @@ const PostCreate = ({
     addPost,
     ...props
 }) => {
+    const dispatch = useDispatch()
+    const stateErrors = useSelector(state => state.errors)
     /**
      * Toggler if component will show create post or display
      * a button that will open a create post card
@@ -29,7 +32,17 @@ const PostCreate = ({
     const title = useRef('')
     const body = useRef('')
 
-    const stateErrors = useSelector(state => state.errors);
+    useEffect(() => {
+        return () => {
+            dispatch({ type: CLEAR_ERRORS })
+        }
+    }, [])
+
+    useEffect(() => {
+        if (stateErrors) {
+            setErrors(stateErrors)
+        }
+    }, [stateErrors])
 
     const handleSubmit = e => {
         if (e) {
@@ -46,12 +59,7 @@ const PostCreate = ({
 
     const closeCreate = () => {
         setWillCreate(false)
-        resetForm()
-    }
-
-    const resetForm = () => {
-        title.current.value = ''
-        body.current.value = ''
+        dispatch({ type: CLEAR_ERRORS })
     }
 
     if ( ! willCreate) {
@@ -96,13 +104,14 @@ const PostCreate = ({
                 <div className={styles.action_btns}>
                     <PFab
                         type="submit"
-                        theme="secondary"
+                        theme="primary"
                         className={styles.action_btn}
                     >
                         <i className="fa fa-check"/>
                     </PFab>
 
-                    <PFab theme="accent"
+                    <PFab
+                        theme="secondary"
                         onClick={() => closeCreate()}
                         className={styles.action_btn}
                     >

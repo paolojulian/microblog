@@ -3,12 +3,13 @@ import styles from './landing.module.css'
 import { useDispatch } from 'react-redux'
 import WithNavbar from '../hoc/with-navbar';
 
-/** Redux actions */
+/** Redux */
 import { getProfile } from '../../store/actions/profileActions'
 
 /** Components */
 import PCard from '../widgets/p-card'
 import ProfileCard from './profile-card'
+import Posts from '../post'
 import PostCreate from '../post/create'
 
 const Landing = () => {
@@ -23,12 +24,14 @@ const Landing = () => {
             <div className={styles.profile}>
                 <ProfileCard size="fit"/>
             </div>
-            <div className={styles.posts}>
-                <PostCreate size="fit"/>
-                <Posts></Posts>
-            </div>
-            <div className={styles.right}>
-                <PCard size="fit"></PCard>
+            <div className={styles.container}>
+                <div className={styles.posts}>
+                    <PostCreate size="fit"/>
+                    <Posts/>
+                </div>
+                <div className={styles.suggestions}>
+                    <PCard size="fit"></PCard>
+                </div>
             </div>
         </div>
     )

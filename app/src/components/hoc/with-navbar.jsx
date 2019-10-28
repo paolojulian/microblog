@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 import Navbar from '../fragments/navbar'
 
@@ -15,10 +14,6 @@ const WithNavbar = OriginalComponent => {
         }
     }
     return NewComponent
-}
-
-WithNavbar.propTypes = {
-
 }
 
 export default WithNavbar

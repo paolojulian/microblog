@@ -156,10 +156,9 @@ class AppController extends Controller {
     public function isOwnedBy($model, $userId)
     {
         $reqId = (int) $this->request->params['pass'][0];
-        if ($model->isOwnedBy($req, $userId)) {
-            return true;
+        if ( ! $model->isOwnedBy($reqId, $userId)) {
+            throw new ForbiddenException();
         }
-
-        throw new ForbiddenException();
+        return true;
     }
 }

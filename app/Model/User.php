@@ -21,7 +21,8 @@ class User extends AppModel
         ],
         'Post' => [
             'className' => 'Post',
-            'order' => 'Post.modified DESC'
+            'order' => 'Post.modified DESC',
+            'fields' => ['username']
         ]
     ];
 
@@ -163,7 +164,8 @@ class User extends AppModel
     public function authenticate($data)
     {
         $user = $this->find('first', [
-             'conditions' => ['username' => $data['username']],
+            'recursive' => true,
+            'conditions' => ['username' => $data['username']],
         ]);
         if ( ! $user) {
             return false;

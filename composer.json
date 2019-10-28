@@ -19,7 +19,8 @@
 	},
 	"require": {
 		"php": ">=5.3.0",
-		"firebase/php-jwt": "^5.0"
+		"firebase/php-jwt": "^5.0",
+		"burriko/cake-soft-delete": "2.0.*@dev"
 	},
 	"suggest": {
 		"ext-openssl": "You need to install ext-openssl or ext-mcrypt to use AES-256 encryption",

@@ -63,7 +63,7 @@ FormTextArea.defaultProps = {
     type: 'text',
     theme: 'default',
     refs: null,
-    rows: 2
+    rows: 4
 }
 
 export default FormTextArea;

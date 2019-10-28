@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { useSelector } from 'react-redux'
-
 import WithNavbar from '../hoc/with-navbar'
 
 const Profile = () => {

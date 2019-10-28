@@ -2,38 +2,29 @@
 
 class Like extends AppModel
 {
-    public $actsAs = ['Containable'];
+    public $actsAs = ['SoftDeletable', 'Containable'];
     public $belongsTo = [
-        'User' => [
-            'className' => 'User',
-            'foreignkey' => 'id'
-        ],
         'Post' => [
             'className' => 'Post',
-            'foreignkey' => 'id'
         ]
     ];
 
-    public $validate = [
-        'post_id' => [
-            'notBlank' => [
-                'rule' => 'notBlank',
-                'required' => true
-            ],
-            'isUnique' => [
-                'rule' => ['isUnique', ['user_id'], false]
-            ]
-        ],
-        'user_id' => [
-            'notBlank' => [
-                'rule' => 'notBlank',
-                'required' => true
-            ],
-            'isUnique' => [
-                'rule' => ['isUnique', ['post_id'], false]
-            ]
-        ]
-    ];
+    public function likePost($data)
+    {
+        $this->set($data);
+        $likeId = $this->field('id', $data);
+        if (!!$likeId) {
+            $this->id = $likeId;
+            if ( ! $this->delete()) {
+                throw new InternalErrorException();
+            }
+        } else {
+            if ( ! $this->save()) {
+                throw new InternalErrorException();
+            }
+        }
+        return true;
+    }
 
     public function isOwnedBy($like, $user)
     {

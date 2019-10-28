@@ -3,7 +3,7 @@
 class PostsController extends AppController
 {
     public $components = ['RequestHandler'];
-    public $public = ['view'];
+    public $public = ['view', 'user'];
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -20,12 +20,16 @@ class PostsController extends AppController
      *  : Followed Post
      *  : Shared Post
      *  Ordered by created DESC
+     *  Limits by 5
+     * 
+     * @return json - array of posts
      */
     public function index()
     {
         $this->request->allowMethod('get');
         return $this->responseData(
-            $this->Post->fetchPostsOfUser($this->request->user->id)
+            // TODO Change to posts to display
+            $this->Post->fetchPostsToDisplay($this->request->user->id)
         );
     }
 
@@ -47,6 +51,24 @@ class PostsController extends AppController
     }
 
     /**
+     * [GET]
+     * [PUBLIC]
+     * 
+     * Checks the posts created or shared by the user
+     * 
+     * @param int $userId - PK users_tbl
+     * @return json
+     */
+    public function user($userId)
+    {
+        $this->request->allowMethod('get');
+        return $this->responseData(
+            // TODO Change to posts to display
+            $this->Post->fetchPostsOfUser($this->request->user->id)
+        );
+    }
+
+    /**
      * [POST]
      * [PRIVATE] - only for logged in user
      * 
@@ -59,6 +81,27 @@ class PostsController extends AppController
         $this->request->allowMethod('post');
         $this->request->data['user_id'] = $this->request->user->id;
         if ( ! $this->Post->addPost($this->request->data)) {
+            return $this->responseUnprocessableEntity('', $this->Post->validationErrors);
+        }
+
+        return $this->responseCreated();
+    }
+
+    /**
+     * [POST]
+     * [PRIVATE] - only for logged in user
+     * 
+     * Likes a post via the logged_in user
+     * 
+     * @param int $id - PK posts_tbl
+     * @return json
+     */
+    public function like($id)
+    {
+        $this->request->allowMethod('post');
+        $this->request->data['post_id'] = $id;
+        $this->request->data['user_id'] = $this->request->user->id;
+        if ( ! $this->Post->Likes->likePost($this->request->data)) {
             return $this->responseUnprocessableEntity('', $this->Post->validationErrors);
         }
 

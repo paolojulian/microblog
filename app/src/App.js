@@ -14,6 +14,7 @@ import { logoutUser, setCurrentUser } from './store/actions/authActions'
 import PrivateRoute from './components/widgets/private-route'
 import Landing from './components/landing'
 import Profile from './components/profile'
+import PostEdit from './components/post/edit'
 import Login from './components/auth/login'
 import Register from './components/auth/register'
 
@@ -74,6 +75,12 @@ const App = () => {
                     </Switch>
                     <Switch>
                         <PrivateRoute exact path="/profile" component={Profile}/>
+                    </Switch>
+                    <Switch>
+                        <PrivateRoute exact path="/posts/edit/:id" component={PostEdit}/>
+                    </Switch>
+                    <Switch>
+                        <PrivateRoute path="/profiles/:username" component={Profile}/>
                     </Switch>
                 </div>
             </Router>

@@ -1,14 +1,29 @@
 .landing {
-    display: flex;
+    top: 2.5rem;
+    left: 0;
+    width: 100%;
     padding: 1rem;
-    text-align: center;
-    flex-wrap: wrap;
 }
 
-.profile, .posts, .right {
-    flex: 1 0 auto;
-    width: 200px;
-    margin: 0 0.5rem;
+.profile {
+    position: fixed;
+    top: 3rem;
+    left: 0.5rem;
+    width: 400px;
+}
+
+.container {
+    margin-left: 400px;
+    display: flex;
+}
+
+.posts {
+    margin-right: 0.5rem;
+    width: 600px;
+}
+
+.suggestions {
+    flex: 1;
 }
 
 .write_post {

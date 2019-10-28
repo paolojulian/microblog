@@ -6,20 +6,42 @@
     background-color: var(--primary);
     color: var(--grey-light);
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+    transition: all 100ms ease-in-out;
+    margin: 0 0.175rem;
+}
+.p__fab:hover {
+    background-color: var(--grey-light);
+    color: var(--primary);
 }
 
 .primary {
     background-color: var(--primary);
 }
 
+.primary:hover {
+    color: var(--primary);
+}
+
 .secondary {
-    background-color: var(--green-primary);
+    background-color: var(--black-light);
+}
+
+.secondary:hover {
+    color: var(--black-light);
 }
 
 .accent {
     background-color: var(--secondary);
 }
 
+.accent:hover {
+    color: var(--secondary);
+}
+
 .danger {
     background-color: var(--secondary-dark);
+}
+
+.danger:hover {
+    color: var(--secondary-dark);
 }

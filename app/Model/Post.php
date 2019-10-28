@@ -2,23 +2,66 @@
 
 class Post extends AppModel
 {
+    public $actsAs = ['SoftDeletable'];
     public $validate = [
         'user_id' => [
             'rule' => 'notBlank',
             'required' => true
-        ]
+        ],
+        'title' => [
+            'rule' => 'notBlank',
+            'message' => 'Please enter a title for your post',
+            'required' => true
+        ],
+        'body' => [
+            'rule' => 'notBlank',
+            'message' => 'Please enter your message',
+            'required' => true
+        ],
+    ];
+
+    public $hasMany = [
+        'Likes' => [
+            'className' => 'Like',
+            'fields' => ['user_id'],
+            'conditions' =>['Likes.deleted' => null]
+        ],
     ];
     public $belongsTo = [
         'User' => [
             'className' => 'User',
-        ]
+            'fields' => ['username']
+        ],
     ];
 
     public function fetchPostsOfUser($userId, $pageNo = 1, $perPage = 5)
     {
         $offset = ($pageNo - 1) * $perPage;
         $procedure = "CALL fetchPostsOfUser($userId, $perPage, $offset)";
-        return $this->query($procedure);
+        $data = $this->query($procedure);
+        foreach ($data as $key => $item) {
+            $data[$key]['likes'] = $this->getLikes($item['post']['id']);
+        }
+        return $data;
+    }
+
+    public function getLikes($postId)
+    {
+        return array_values($this->Likes->find('list', [
+            'fields' => ['user_id'],
+            'conditions' => ['post_id' => $postId]
+        ]));
+    }
+
+    public function fetchPostsToDisplay($userId, $pageNo = 1, $perPage = 5)
+    {
+        $offset = ($pageNo - 1) * $perPage;
+        $procedure = "CALL fetchPostsToDisplay($userId, $perPage, $offset)";
+        $data = $this->query($procedure);
+        foreach ($data as $key => $item) {
+            $data[$key]['Post']['likes'] = $this->getLikes($item['Post']['id']);
+        }
+        return $data;
     }
 
     public function fetchPostsWithComments($postId)
@@ -76,11 +119,11 @@ class Post extends AppModel
         return true;
     }
 
-    public function isOwnedBy($post, $user)
+    public function isOwnedBy($postId, $userId)
     {
         $params = [
-            'id' => $post,
-            'user_id' => $user
+            'id' => $postId,
+            'user_id' => $userId
         ];
         return $this->field('id', $params) !== false;
     }
