@@ -38,11 +38,14 @@ const Register = ({
     });
 
     useEffect(() => {
-        if (stateErrors) {
-            setErrors(stateErrors)
-        }
         return () => {
             dispatch({ type: CLEAR_ERRORS })
+        }
+    }, [])
+
+    useEffect(() => {
+        if (stateErrors) {
+            setErrors(stateErrors)
         }
     }, [stateErrors])
 

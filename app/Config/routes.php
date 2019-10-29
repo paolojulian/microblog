@@ -39,9 +39,8 @@
  * Load all plugin routes. See the CakePlugin documentation on
  * how to customize the loading of plugin routes.
  */
-
 	CakePlugin::routes();
-	Router::mapResources(['posts', 'users', 'comments', 'followers', 'profiles']);
+	Router::mapResources(['posts', 'users', 'comments', 'followers']);
 	Router::parseExtensions('json');
 
 /**

@@ -5,7 +5,7 @@ CREATE PROCEDURE fetchPostsToDisplay(
     IN pageOffset int
 )
 BEGIN
-SELECT *, likes.id, comments.id FROM (
+SELECT * FROM (
 SELECT
 	a.*,
 	users.username,
@@ -17,6 +17,7 @@ ON users.id = a.user_id
 WHERE user_id IN (
 	SELECT following_id FROM followers
     WHERE user_id = userId
+    AND followers.deleted IS NULL
 )
 AND retweet_post_id IS NULL
 AND a.deleted IS NULL
@@ -45,17 +46,14 @@ LEFT JOIN users shared_user
 ON shared_user.id = b.user_id
 WHERE b.user_id IN (
 	SELECT following_id FROM followers
-    WHERE b.user_id = userId
+    WHERE user_id = userId
+    AND followers.deleted IS NULL
 )
 AND b.retweet_post_id IS NOT NULL
 and orig.deleted IS NULL
 ) Post
-LEFT JOIN likes
-ON likes.post_id = Post.id
-LEFT JOIN comments
-ON comments.post_id = Post.id
 ORDER BY created DESC
 LIMIT perPage
 OFFSET pageOffset;
-END //
+END
 DELIMITER ;

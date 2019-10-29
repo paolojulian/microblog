@@ -1,38 +1,51 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import styles from './profile-info.module.css'
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import styles from './profile-info.module.css';
+
+/** Redux */
+import { followUser } from '../../../store/actions/profileActions';
 
 /** Components */
-import PCard from '../../widgets/p-card'
-import ProfileImage from '../../widgets/profile-image'
-import PLoader from '../../widgets/p-loader'
+import PCard from '../../widgets/p-card';
+import ProfileImage from '../../widgets/profile-image';
+import PLoader from '../../widgets/p-loader';
 
 const ProfileInfo = () => {
-    const { user, loading } = useSelector(state => state.profile)
+    const dispatch = useDispatch();
+    const { user: profile, loading } = useSelector(state => state.profile)
+    const { id } = useSelector(state => state.auth.user)
+
+    const handleFollow = () => {
+        dispatch(followUser(profile.id))
+    }
 
     const renderBody = () => (
         <div className={styles.wrapper}>
             <div className={styles.profileDetails}>
-
+                {Number(id) !== Number(profile.id) && <button type="button"
+                    onClick={handleFollow}
+                >
+                    Follow
+                </button>}
             </div>
             <div className={styles.profileCredentials}>
                 <div className={styles.lastName}>
-                    {user.last_name}
+                    {profile.last_name}
                 </div>
                 <div className={styles.firstName}>
-                    {user.first_name}
+                    {profile.first_name}
                 </div>
                 <div className={styles.email}>
-                    {user.email}
+                    {profile.email}
                 </div>
                 <div className={styles.username}>
-                    @{user.username}
+                    @{profile.username}
                 </div>
             </div>
             <div className={styles.profileImage}>
                 <ProfileImage
-                    src={`/app/webroot/img/profiles/${user.id}/${user.username}x128.png`}
-                    alt={user.username}
+                    src={`/app/webroot/img/profiles/${profile.id}/${profile.username}x128.png`}
+                    alt={profile.username}
                 />
             </div>
         </div>

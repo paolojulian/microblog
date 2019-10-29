@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styles from './profile-update.module.css';
 
 /** Redux */
-import { getProfile } from '../../../store/actions/profileActions';
+import { getProfile, updateProfile } from '../../../store/actions/profileActions';
 
 /** Components */
 import WithNavbar from '../../hoc/with-navbar';
@@ -52,6 +52,13 @@ const ProfileUpdate = () => {
         if (e) {
             e.preventDefault();
         }
+        const form = {
+            first_name: firstName,
+            last_name: lastName,
+            email,
+            birthdate
+        }
+        dispatch(updateProfile(form));
     }
 
     const renderBody = () => (

@@ -2,7 +2,7 @@
 
 class Follower extends AppModel
 {
-    public $actsAs = ['SoftDeletable', 'Containable'];
+    public $actsAs = ['SoftDeletable'];
     public $hasMany = [
         'User' => [
             'className' => 'User',

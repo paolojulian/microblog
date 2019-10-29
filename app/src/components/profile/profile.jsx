@@ -17,7 +17,7 @@ const Profile = (props) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getProfile())
+        dispatch(getProfile(username))
         dispatch(getUserPosts(username))
         return () => {
             dispatch({ type: CLEAR_POSTS })

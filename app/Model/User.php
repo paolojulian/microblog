@@ -59,12 +59,12 @@ class User extends AppModel
         'username' => [
             'between' => [
                 'rule' => ['lengthBetween', 6, 20],
-                'required' => true,
+                'required' => 'create',
                 'message' => 'Between 6 to 20 characters only'
             ],
             'alphaNumeric' => [
                 'rule' => 'alphaNumeric',
-                'required' => true,
+                'required' => 'create',
                 'message' => 'Letters and Numbers only'
             ],
             'unique' => [
@@ -104,7 +104,7 @@ class User extends AppModel
             'valid' => [
                 'rule' => ['inList', self::SEX],
                 'message' => 'Please enter a valid sex.',
-                'required' => true
+                'required' => 'create'
             ]
         ],
         'password' => [
@@ -128,6 +128,15 @@ class User extends AppModel
             ]
         ]
     ];
+
+    public function findById($userId, $fields = '*')
+    {
+        return $this->find('first', [
+            'recursive' => true,
+            'fields' => $fields,
+            'conditions' => ['id' => $userId]
+        ]);
+    }
 
     public function findByUsername($username, $fields = '*')
     {

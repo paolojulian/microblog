@@ -18,7 +18,7 @@ class FollowersController extends AppController
                 'User.last_name',
                 'User.email'
             ],
-            'conditions' => ['following_id' => $this->Auth->user('id')]
+            'conditions' => ['following_id' => $this->request->user->id]
         ]);
         return $this->responseData($followers);
     }
@@ -30,15 +30,16 @@ class FollowersController extends AppController
         }
 
         $followerEntity = $this->Follower->find('first', [
+            'recursive' => true,
             'fields' => ['id'],
             'conditions' => [
                 'following_id' => $userId,
-                'user_id' => $this->Auth->user('id')
+                'user_id' => $this->request->user->id
             ]
         ]);
         if ( ! $followerEntity) {
             $data = [
-                'user_id' => $this->Auth->user('id'),
+                'user_id' => $this->request->user->id,
                 'following_id' => $userId
             ];
             $this->Follower->set($data);
