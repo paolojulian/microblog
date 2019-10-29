@@ -2,14 +2,13 @@ import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import styles from './profile.module.css'
 
-import WithNavbar from '../hoc/with-navbar'
-
 /** Redux */
 import { CLEAR_POSTS } from '../../store/types'
 import { getProfile } from '../../store/actions/profileActions'
 import { getUserPosts } from '../../store/actions/postActions'
 
 /** Components */
+import WithNavbar from '../hoc/with-navbar'
 import ProfileInfo from './info'
 import Post from '../post'
 

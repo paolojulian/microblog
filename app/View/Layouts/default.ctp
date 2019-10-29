@@ -3,7 +3,7 @@
 <head>
 	<?php echo $this->Html->charset(); ?>
 
-	<title>React Integrated CakePHP Application</title>
+	<title>Microblog 2</title>
 	<?php echo $this->Html->css('App') ?>
 	<?php echo $this->Html->css('Card') ?>
 	<?php echo $this->Html->css('Form') ?>
@@ -12,7 +12,7 @@
 
 <body>
 	<div id="app"></div>
-
+	<?= $this->Html->script('v-notifier'); ?>
 	<?= $this->Html->script('bundle'); ?>
 </body>
 </html>

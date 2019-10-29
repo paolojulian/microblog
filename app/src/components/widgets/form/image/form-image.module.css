@@ -1,0 +1,12 @@
+.formImage {
+    width: 100%;
+}
+
+.formImage img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.img, .input {
+    margin: 0.5rem 0;
+}

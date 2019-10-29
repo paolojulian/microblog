@@ -1,4 +1,5 @@
 .p__button {
+    position: relative;
     width: 100%;
     cursor: pointer;
     padding: 0.3rem;
@@ -8,7 +9,33 @@
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.30);
     text-transform: uppercase;
     color: var(--grey);
+    transition: all 100ms ease-in-out;
 }
+
+.p__button:hover {
+    background-color: var(--grey);
+}
+
+.p__button:hover.primary{
+    color: var(--primary);
+    box-shadow: inset 0 0 2px 1px var(--primary);
+}
+
+.p__button:hover.secondary{
+    color: var(--green-primary);
+    border: 1px solid var(--green-primary);
+}
+
+.p__button:hover.accent{
+    color: var(--secondary);
+    border: 1px solid var(--secondary);
+}
+
+.p__button:hover.danger{
+    color: var(--secondary-dark);
+    border: 1px solid var(--secondary-dark);
+}
+
 .primary {
     background-color: var(--primary);
 }

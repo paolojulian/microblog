@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import styles from './landing.module.css'
-import { useDispatch } from 'react-redux'
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import styles from './landing.module.css';
 import WithNavbar from '../hoc/with-navbar';
 
 /** Redux */
@@ -34,6 +35,14 @@ const Landing = () => {
         <div className={styles.landing}>
             <div className={styles.profile}>
                 <ProfileCard size="fit"/>
+                <div className={styles.editProfile}>
+                    <Link to="/settings/update-profile">
+                        <PCard size="fit">
+                            <i className="fa fa-gear"></i>
+                            &nbsp;Edit Profile
+                        </PCard>
+                    </Link>
+                </div>
             </div>
             <div className={styles.container}>
                 <div className={styles.posts}>

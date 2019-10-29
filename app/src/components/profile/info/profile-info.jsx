@@ -5,13 +5,10 @@ import styles from './profile-info.module.css'
 /** Components */
 import PCard from '../../widgets/p-card'
 import ProfileImage from '../../widgets/profile-image'
+import PLoader from '../../widgets/p-loader'
 
 const ProfileInfo = () => {
     const { user, loading } = useSelector(state => state.profile)
-
-    const renderLoader = () => (
-        <i className="fa fa-spinner fa-spin"></i>
-    )
 
     const renderBody = () => (
         <div className={styles.wrapper}>
@@ -44,7 +41,7 @@ const ProfileInfo = () => {
     return (
         <div className={styles.profileInfo}>
             <PCard size="lg">
-                {loading ? renderLoader(): renderBody()}
+                {loading ? <PLoader/>: renderBody()}
             </PCard>
         </div>
     )

@@ -5,7 +5,7 @@ const PLoader = () => {
         <div style={{
             padding: '1.5rem 0'
         }}>
-            <i className="fa fa-spinner fa-2x fa-spin"/>
+            <i className="fa fa-spinner fa-2x fa-pulse"/>
         </div>
     )
 }

@@ -11,6 +11,10 @@
     width: 400px;
 }
 
+.editProfile {
+    margin: 0.5rem 0;
+}
+
 .container {
     margin-left: calc(400px + 1rem);
     display: flex;

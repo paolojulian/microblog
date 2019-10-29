@@ -15,6 +15,7 @@ const ProfileImage = (props) => {
     }
 
     return <PImage
+        style={{ width: getSize()+'px', height: getSize()+'px', borderRadius: '50%' }}
         src={props.src}
         fallback={`/app/webroot/img/profiles/default_avatarx${getSize()}.png`}
         {...props}

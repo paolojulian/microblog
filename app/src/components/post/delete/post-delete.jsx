@@ -37,13 +37,12 @@ const PostDelete = ({
     }
 
     return (
-        <form onSubmit={handleDelete}>
-            <PModal type="submit"
-                onRequestClose={onRequestClose}
-            >
-                Are you sure you want to delete your post?
-            </PModal>
-        </form>
+        <PModal type="submit"
+            onRequestSubmit={handleDelete}
+            onRequestClose={onRequestClose}
+        >
+            Are you sure you want to delete your post?
+        </PModal>
     )
 };
 
