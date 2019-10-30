@@ -6,38 +6,8 @@ class LikesController extends AppController
 
     public function like($postId = null)
     {
-        if ( ! $this->request->is('post')) {
-            throw new MethodNotAllowedException();
-        }
-
-        $likeEntity = $this->Like->find('first', [
-            'fields' => ['id'],
-            'conditions' => [
-                'Like.post_id' => $postId,
-                'Like.user_id' => $this->Auth->user('id')
-            ]
-        ]);
-
-        $data = [
-            'post_id' => $postId,
-            'user_id' => $this->Auth->user('id'),
-        ];
-
-        if ( ! $likeEntity) {
-            $this->Like->set($data);
-            if ( ! $this->Like->validates()) {
-                return $this->responseUnprocessableEntity('', $this->Like->validationErrors);
-            }
-
-            if ( ! $this->Like->save($data)) {
-                throw new InternalErrorException();
-            }
-        } else {
-            if ( ! $this->Like->delete($likeEntity['Like']['id'])) {
-                throw new InternalErrorException();
-            }
-        }
-
+        $this->request->allowMethod('post');
+        $this->Like->likePost($postId, $this->request->user->id);
         return $this->responseOK();
     }
 

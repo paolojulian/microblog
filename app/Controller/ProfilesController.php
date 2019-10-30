@@ -28,6 +28,10 @@ class ProfilesController extends AppController
         );
         return $this->responseData([
             'user' => $user["User"],
+            'isFollowing' => $this->Follower->isFollowing(
+                $this->request->user->id,
+                $user['User']['id']
+            ),
             'totalFollowers' => $this->Follower->countFollowers($user['User']['id']),
             'totalFollowing' => $this->Follower->countFollowing($user['User']['id']),
         ]);
@@ -50,6 +54,10 @@ class ProfilesController extends AppController
         );
         return $this->responseData([
             'user' => $user["User"],
+            'isFollowing' => $this->Follower->isFollowing(
+                $this->request->user->id,
+                $user['User']['id']
+            ),
             'totalFollowers' => $this->Follower->countFollowers($this->request->user->id),
             'totalFollowing' => $this->Follower->countFollowing($this->request->user->id),
         ]);

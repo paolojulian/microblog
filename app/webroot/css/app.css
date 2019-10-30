@@ -161,6 +161,16 @@ p.small {
     -o-user-drag: none;
 }
 
+.username {
+    cursor: pointer;
+    color: var(--secondary);
+    user-select: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+}
+
 .with-navbar {
     padding-top: calc(var(--navbar-height) + 1rem);
 }

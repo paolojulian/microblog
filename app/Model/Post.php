@@ -14,9 +14,16 @@ class Post extends AppModel
             'required' => true
         ],
         'body' => [
-            'rule' => 'notBlank',
-            'message' => 'Please enter your message',
-            'required' => true
+            'notBlank' => [
+                'rule' => ['notBlank'],
+                'required' => true,
+                'message' => 'Please enter your message'
+            ],
+            'maxlength' => [
+                'rule' => ['maxLength', 140],
+                'message' => 'Only 140 characters is allowed.',
+                'required' => true
+            ],
         ],
     ];
 
@@ -26,7 +33,14 @@ class Post extends AppModel
             'fields' => ['user_id'],
             'conditions' =>['Likes.deleted' => null]
         ],
+        'Comments' => [
+            'className' => 'Comment',
+            'conditions' =>['Comments.deleted' => null],
+            'order' => 'Comments.created DESC',
+            'limit' => 10,
+        ],
     ];
+
     public $belongsTo = [
         'User' => [
             'className' => 'User',
@@ -58,15 +72,26 @@ class Post extends AppModel
 
     public function fetchPostsWithComments($postId)
     {
-        $post = $this->Post->findById($postId);
+        $post = $this->findById($postId);
         if ( ! $post) {
             throw new NotFoundException(__('Invalid post'));
         }
-        $commentModel = ClassRegistry::init('Comment');
-        $post['Post']['comments'] = $commentModel->find('all', [
-            'conditions' => ['post_id' => $postId],
-            'order' => ['modified' => 'desc']
-        ]);
+        // foreach ($post['Likes'] as $key => $like) {
+        //     $post['Post']['likes'][] = $like['user_id'];
+        //     $post['Likes'][$key]['username'] = $this->User->field(
+        //         'username',
+        //         ['User.id' => $like['user_id']]
+        //     );
+        // }
+        $post['Post']['likes'] = array_map(function ($like) {
+            return $like['user_id'];
+        }, $post['Likes']);
+        foreach ($post['Comments'] as $key => $comment) {
+            $post['Comments'][$key]['username'] = $this->User->field(
+                'username',
+                ['User.id' => $comment['user_id']]
+            );
+        }
         return $post;
     }
 
@@ -105,14 +130,16 @@ class Post extends AppModel
 
     public function sharePost($postId, $userId)
     {
+        $post = $this->hasAny(['id' => $postId]);
+        if ( ! $post) {
+            throw new NotFoundException();
+        }
+        $this->validator()->remove('title');
+        $this->validator()->remove('body');
         $this->set([
             'retweet_post_id' => $postId,
             'user_id' => $userId
         ]);
-        $post = $this->findById($postId);
-        if ( ! $post) {
-            throw new NotFoundException();
-        }
         if ( ! $this->save()) {
             throw new InternalErrorException();
         }

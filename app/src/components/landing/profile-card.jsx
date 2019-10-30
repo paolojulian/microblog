@@ -24,7 +24,7 @@ const ProfileCard = (props) => {
         <div className={styles.profile_card}>
             <div className={styles.profile_img}>
                 <ProfileImage
-                    src={`/app/webroot/img/profiles/${user.id}/${user.username}x64.png`}
+                    src={`${user.id}/${user.username}x64.png`}
                     alt={user.username}
                 />
             </div>

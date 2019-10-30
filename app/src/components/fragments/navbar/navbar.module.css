@@ -43,7 +43,7 @@ nav ul li:not(.search) {
 
 @media all and (max-width: 600px) {  
   nav ul {  
-    flex-wrap: wrap;  
+    /* flex-wrap: wrap;   */
   }  
     
   nav ul li {  

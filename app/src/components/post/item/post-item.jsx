@@ -15,6 +15,7 @@ import PCard from '../../widgets/p-card'
 import ProfileImage from '../../widgets/profile-image'
 import PostEdit from '../edit'
 import PostDelete from '../delete'
+import PostShare from '../share'
 
 /** Consumer */
 import { ModalConsumer } from '../../widgets/p-modal/p-modal-context'
@@ -29,11 +30,15 @@ const PostItem = ({
     body,
     user_id,
     creator,
+    created,
     likes,
     comments,
     loggedin_id,
-    created,
     fetchHandler,
+    ownerId,
+    imageName,
+    shared_by,
+    shared_by_username,
     ...props
 }) => {
     const dispatch = useDispatch()
@@ -41,6 +46,7 @@ const PostItem = ({
     const [isLiked, setIsLiked] = useState(likes.indexOf(loggedin_id) !== -1)
     const [isEdit, setIsEdit] = useState(false)
     const isOwned = Number(loggedin_id) === Number(user_id)
+    const isCreator = Number(loggedin_id) === Number(ownerId)
 
     const handleLike = () => {
         dispatch(likePost(id))
@@ -57,8 +63,25 @@ const PostItem = ({
         fetchHandler();
     }
 
+    const renderSharedBy = () => {
+        if ( ! shared_by) return '';
+        if ( ! shared_by_username) return '';
+
+        return (
+            <div className={styles.sharedBy}>
+                Shared By:&nbsp;
+                <Link to={`/profiles/${shared_by_username}`}>
+                    <span className="text-link">
+                        @{shared_by_username}&nbsp;
+                    </span>
+                </Link>
+            </div>
+        )
+    }
+
     const renderBody = () => (
         <div className={styles.body}>
+            {renderSharedBy()}
             <Link to={`/profiles/${creator}`}>
                 <span className="text-link">
                     @{creator}&nbsp;
@@ -76,24 +99,45 @@ const PostItem = ({
 
             <div className={styles.profile_header}>
                 <ProfileImage
-                    src={`/app/webroot/img/profiles/${user_id}/${creator}x32.png`}
+                    src={`${ownerId}/${imageName}x32.png`}
                     size={32}
                     alt={creator}
                 />
                 <div className={styles.title}>
-                    {title}
+                    <Link to={`/posts/${id}`}>
+                        {title}
+                    </Link>
                 </div>
-                {isOwned && <div className={styles.edit}
+                {isOwned && isCreator && <div className={styles.edit}
                     onClick={() => setIsEdit(!isEdit)}
                 >
                     <i className="fa fa-edit"/>
                 </div>}
-                {isOwned && <ModalConsumer>
+                {isOwned && isCreator && <ModalConsumer>
                     {({ showModal }) => (
                         <div className={styles.delete}
-                            onClick={() => showModal(PostDelete, { id, onSuccess: fetchHandler })}
+                            onClick={() => showModal(PostDelete, {
+                                id,
+                                creator,
+                                onSuccess: fetchHandler
+                            })}
                         >
                             <i className="fa fa-trash"/>
+                        </div>
+                    )}
+                </ModalConsumer>}
+                {!isOwned && !isCreator && <ModalConsumer>
+                    {({ showModal }) => (
+                        <div className={styles.share}
+                            onClick={() => showModal(PostShare, {
+                                id,
+                                title,
+                                body,
+                                creator,
+                                onSuccess: fetchHandler
+                            })}
+                        >
+                            <i className="fa fa-share-square"/>
                         </div>
                     )}
                 </ModalConsumer>}

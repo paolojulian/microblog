@@ -1,8 +1,9 @@
 "use strict";
-const htpp = require('http');
+const http = require('http');
 const url = require('url');
 const WebSocketServer = require('websocket').server;
-let server = htpp.createServer((request, response) => {
+const API_KEY = 'TEST';
+let server = http.createServer((request, response) => {
     /**
      * Receives POST parameter for notification
      */
@@ -20,7 +21,6 @@ let server = htpp.createServer((request, response) => {
 
 	        request.on('end', () => {
 				const POST = querystring.parse(body);
-				console.log(POST)
 	            callback(POST);
 	        });
         }
@@ -40,10 +40,11 @@ let server = htpp.createServer((request, response) => {
         return;
     }
 });
-server.listen(8080);
+server.listen(8081);
 
 var websocketServer = new WebSocketServer({
-	httpServer: server
+    httpServer: server,
+    autoAcceptConnections: true
 });
 global.clients = {}; // store the connections
 
@@ -64,6 +65,7 @@ const websocketRequest = request => {
 websocketServer.on("request", websocketRequest);
 
 const notifyUser = (userId, message) => {
+    console.log(message);
 	if (clients[Number(userId)]) {
 		clients[Number(userId)].sendUTF(message)
 	}

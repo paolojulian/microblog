@@ -15,7 +15,7 @@ const VNotification = () => {
     }, [isAuthenticated])
 
     const connectWebSocket = (userId) => {
-        let websocket = new WebSocket(`ws://127.0.0.1:8080/notifications?id=${userId}`);
+        let websocket = new WebSocket(`ws://127.0.0.1:8081?id=${userId}`);
         websocket.onopen = e => {
             console.log('Connected');
         }
@@ -30,7 +30,7 @@ const VNotification = () => {
         };
         websocket.onerror = (err) => {
             console.error('Socket encountered error: ', err.message, 'Closing socket');
-            this.websocket.close();
+            websocket.close();
         };
     }
     

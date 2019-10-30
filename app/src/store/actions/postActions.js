@@ -6,8 +6,8 @@ import { SET_POSTS, ADD_POSTS, TOGGLE_LOADING_POST } from '../types';
  */
 export const getPostById = (postId) => async dispatch => {
     try {
-        await axios.get(`/posts/${postId}.json`)
-        return Promise.resolve()
+        const res = await axios.get(`/posts/${postId}.json`)
+        return Promise.resolve(res.data.data)
     } catch (e) {
         return Promise.reject()
     }
@@ -20,6 +20,34 @@ export const getPosts = (page = 1) => async dispatch => {
     try {
         dispatch({ type: TOGGLE_LOADING_POST, payload: true })
         const res = await axios.get(`/posts.json?page=${page}`)
+        // Will override all posts
+        if (page === 1) {
+            dispatch({
+                type: SET_POSTS,
+                payload: res.data.data
+            })
+        // Add additional posts (vertical pagination)
+        } else {
+            dispatch({
+                type: ADD_POSTS,
+                payload: res.data.data
+            })
+        }
+        return Promise.resolve()
+    } catch (e) {
+        return Promise.reject()
+    } finally {
+        dispatch({ type: TOGGLE_LOADING_POST, payload: false })
+    }
+}
+
+/**
+ * Fetches the posts of username passed
+ */
+export const getUserPosts = (username, page = 1) => async dispatch => {
+    try {
+        dispatch({ type: TOGGLE_LOADING_POST, payload: true })
+        const res = await axios.get(`/posts/user/${username}.json`)
         // Will override all posts
         if (page === 1) {
             dispatch({
@@ -55,34 +83,6 @@ export const addPost = (post) => async dispatch => {
 }
 
 /**
- * Fetches the posts of username passed
- */
-export const getUserPosts = (username, page = 1) => async dispatch => {
-    try {
-        dispatch({ type: TOGGLE_LOADING_POST, payload: true })
-        const res = await axios.get(`/posts/user/${username}.json`)
-        // Will override all posts
-        if (page === 1) {
-            dispatch({
-                type: SET_POSTS,
-                payload: res.data.data
-            })
-        // Add additional posts (vertical pagination)
-        } else {
-            dispatch({
-                type: ADD_POSTS,
-                payload: res.data.data
-            })
-        }
-        return Promise.resolve()
-    } catch (e) {
-        return Promise.reject()
-    } finally {
-        dispatch({ type: TOGGLE_LOADING_POST, payload: false })
-    }
-}
-
-/**
  * Edits a post by the current user
  */
 export const editPost = (postId, post) => async dispatch => {
@@ -107,6 +107,18 @@ export const deletePost = (postId) => async dispatch => {
 }
 
 /**
+ * Shares a post by another user
+ */
+export const sharePost = (postId) => async dispatch => {
+    try {
+        await axios.post(`/posts/share/${postId}.json`)
+        return Promise.resolve()
+    } catch (e) {
+        return Promise.reject()
+    }
+}
+
+/**
  * Likes a post
  */
 export const likePost = (postId) => async dispatch => {
@@ -116,5 +128,4 @@ export const likePost = (postId) => async dispatch => {
     } catch (e) {
         return Promise.reject()
     }
-
 }

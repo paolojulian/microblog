@@ -74,7 +74,7 @@ const ProfileUpdate = () => {
                     )}
                 </ModalConsumer>
                 <ProfileImage
-                    src={`/app/webroot/img/profiles/${user.id}/${user.username}x128.png`}
+                    src={`${user.id}/${user.username}x128.png`}
                     alt={user.username}
                 />
             </div>

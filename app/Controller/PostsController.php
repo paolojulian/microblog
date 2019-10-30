@@ -3,7 +3,6 @@
 class PostsController extends AppController
 {
     public $components = ['RequestHandler'];
-    public $public = ['view', 'user'];
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -36,7 +35,7 @@ class PostsController extends AppController
 
     /**
      * [GET]
-     * [PUBLIC]
+     * [PRIVATE] - for logged in user only
      * 
      * Fetches a post along with its comments
      * 
@@ -53,7 +52,7 @@ class PostsController extends AppController
 
     /**
      * [GET]
-     * [PUBLIC]
+     * [PRIVATE] - only for logged in user
      * 
      * Checks the posts created or shared by the user
      * 
@@ -102,9 +101,7 @@ class PostsController extends AppController
     public function like($id)
     {
         $this->request->allowMethod('post');
-        $this->request->data['post_id'] = $id;
-        $this->request->data['user_id'] = $this->request->user->id;
-        if ( ! $this->Post->Likes->likePost($this->request->data)) {
+        if ( ! $this->Post->Likes->likePost($id, $this->request->user->id)) {
             return $this->responseUnprocessableEntity('', $this->Post->validationErrors);
         }
 
@@ -147,7 +144,7 @@ class PostsController extends AppController
 
     /**
      * [DELETE]
-     * [PRIVATE] - can only delete self posts
+     * [PRIVATE] - can only delete own posts
      * 
      * Deletes a post or a shared post
      * 

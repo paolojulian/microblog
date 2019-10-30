@@ -18,6 +18,7 @@ import Landing from './components/landing'
 import Profile from './components/profile'
 import ProfileUpdate from './components/profile/update'
 import PostEdit from './components/post/edit'
+import PostView from './components/post/view'
 import VNofication from './components/widgets/v-notification'
 
 /** Context */
@@ -43,6 +44,7 @@ if (localStorage.jwtToken) {
     }
 }
 
+axios.defaults.headers.common['Content-Type'] = 'application/json'
 axios.interceptors.response.use(config => {
     return config;
 }, err => {
@@ -89,6 +91,9 @@ const App = () => {
                         </Switch>
                         <Switch>
                             <PrivateRoute exact path="/posts/edit/:id" component={PostEdit}/>
+                        </Switch>
+                        <Switch>
+                            <PrivateRoute exact path="/posts/:id" component={PostView}/>
                         </Switch>
                     </ModalProvider>
                     <VNofication/>

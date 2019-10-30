@@ -20,6 +20,19 @@ class Follower extends AppModel
         ]
     ];
 
+    /**
+     * Checks if user follows a certain user
+     * @param int $userId
+     * @param int $followingId
+     */
+    public function isFollowing($userId, $followingId)
+    {
+        return $this->hasAny([
+            'user_id' => $userId,
+            'following_id' => $followingId
+        ]);
+    }
+
     public function countFollowers($userId)
     {
         return $this->find('count', [

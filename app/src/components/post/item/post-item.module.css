@@ -54,6 +54,10 @@
 	outline: inherit;
 }
 
+.sharedBy {
+    margin: 1rem 0;
+}
+
 .actions .like:hover,
 .actions .like.active {
     color: var(--blue);
@@ -67,7 +71,7 @@
     color: var(--secondary);
 }
 
-.edit, .delete {
+.edit, .delete, .share {
     cursor: pointer;
     margin: 0 0.175rem;
 }
