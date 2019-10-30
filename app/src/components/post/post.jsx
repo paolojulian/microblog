@@ -21,8 +21,10 @@ const Post = ({ fetchHandler }) => {
                 title={Post.title}
                 body={Post.body}
                 likes={Post.likes}
+                comments={Post.comments}
                 user_id={Post.user_id}
                 creator={Post.username}
+                avatarUrl={Post.avatar_url}
                 ownerId={Post.shared_by ? Post.shared_by : Post.user_id}
                 imageName={Post.shared_by_username ? Post.shared_by_username : Post.username}
                 shared_by={Post.shared_by}

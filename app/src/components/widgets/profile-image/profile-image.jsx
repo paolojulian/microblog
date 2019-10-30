@@ -8,19 +8,11 @@ const profilesURL = '/app/webroot/img/profiles/';
 
 const ProfileImage = (props) => {
 
-    const getSize = () => {
-        const validSizes = [24, 32, 64, 128, 512, 1024];
-        if (validSizes.indexOf(props.size) === -1) {
-            return 64
-        }
-        return props.size
-    }
-
     return <PImage
         {...props}
-        style={{ width: getSize()+'px', height: getSize()+'px', borderRadius: '50%' }}
-        fallback={`${profilesURL}default_avatarx${getSize()}.png`}
-        src={profilesURL + props.src}
+        style={{ width: props.size+'px', height: props.size+'px', borderRadius: '50%' }}
+        fallback={`${profilesURL}default_avatarx${props.size}.png`}
+        src={`${props.src}x${props.size}.png`}
     />
 }
 

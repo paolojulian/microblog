@@ -174,3 +174,11 @@ p.small {
 .with-navbar {
     padding-top: calc(var(--navbar-height) + 1rem);
 }
+
+.alert-disabled {
+    padding: 1rem 0;
+    text-align: center;
+    color: var(--black-disabled);
+    font-size: 0.9rem;
+    font-style: italic;
+}

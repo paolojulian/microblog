@@ -1,30 +1,37 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 
-/** Redux Actions */
+/** Redux */
 import { logoutUser } from '../../../store/actions/authActions'
+
+/** Components */
+import SearchBar from './search-bar'
 
 import styles from './navbar.module.css'
 
 const Navbar = ({
-    logoutUser,
     history
 }) => {
+
+    const dispatch = useDispatch();
+
+    const handleLogout = e => {
+        if (e) e.preventDefault();
+        dispatch(logoutUser(history));
+    }
+
     return (
         <nav>
             <ul className={styles.container}>
                 <li>Logo</li>
                 <li className={styles.search}>
-                    <input type="text"
-                        placeholder="Search"
-                        name="search_bar"
-                        />
+                    <SearchBar/>
                 </li>
                 <Link to="/"><li>Home</li></Link>
                 <li>Notifications</li>
-                <li onClick={() => logoutUser(history)}>
+                <li onClick={handleLogout}>
                     Logout
                 </li>
             </ul>
@@ -32,4 +39,4 @@ const Navbar = ({
     )
 }
 
-export default connect(null, { logoutUser })(withRouter(Navbar));
+export default withRouter(Navbar);

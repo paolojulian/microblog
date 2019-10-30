@@ -3,3 +3,8 @@
     width: 600px;
     max-width: 97%;
 }
+
+.createComment {
+    margin: 0.5rem 0;
+    padding: -0.5rem 0;
+}

@@ -129,3 +129,27 @@ export const likePost = (postId) => async dispatch => {
         return Promise.reject()
     }
 }
+
+/**
+ * Add a comment to a certain post
+ */
+export const addComment = (comment) => async dispatch => {
+    try {
+        await axios.post(`/comments.json`, comment)
+        return Promise.resolve()
+    } catch (e) {
+        return Promise.reject()
+    }
+}
+
+/**
+ * Deletes a comment
+ */
+export const deleteComment = (commentId) => async dispatch => {
+    try {
+        await axios.delete(`/comments/${commentId}.json`)
+        return Promise.resolve()
+    } catch (e) {
+        return Promise.reject()
+    }
+}

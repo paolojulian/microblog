@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from './p-modal.module.css'
+import PropTypes from 'prop-types'
 
 /** Components */
 import PFab from '../p-fab'
@@ -57,5 +58,15 @@ const PModal = ({
         </div>
     )
 };
+
+PModal.propTypes = {
+    onRequestClose: PropTypes.func.isRequired,
+    onRequestSubmit: PropTypes.func,
+    type: PropTypes.string
+}
+
+PModal.defaultProps = {
+    type: 'alert'
+}
 
 export default PModal;

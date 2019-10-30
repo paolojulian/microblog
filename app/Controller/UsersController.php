@@ -28,6 +28,21 @@ class UsersController extends AppController {
     }
 
     /**
+     * [GET] /users/search/:searchText.json
+     * [PRIVATE] - only for loggedin user
+     * 
+     * @return json - array of users
+     */
+    public function search($searchText)
+    {
+        $users = $this->User->searchUser(
+            $this->request->user->id,
+            $searchText
+        );
+        return $this->responseData($users);
+    }
+
+    /**
      * [POST]
      * [PUBLIC]
      * 

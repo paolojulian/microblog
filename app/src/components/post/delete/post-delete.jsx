@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 /** Redux */
 import { deletePost } from '../../../store/actions/postActions'
@@ -11,7 +11,6 @@ const PostDelete = ({
     id,
     onRequestClose,
     onSuccess,
-    ...props
 }) => {
 
     const [isSuccess, setIsSuccess] = useState(false);

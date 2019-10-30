@@ -8,7 +8,7 @@
     position: fixed;
     top: 3rem;
     left: 0.5rem;
-    width: 400px;
+    width: 350px;
 }
 
 .editProfile {
@@ -16,7 +16,7 @@
 }
 
 .container {
-    margin-left: calc(400px + 1rem);
+    margin-left: calc(350px + 1rem);
     display: flex;
 }
 

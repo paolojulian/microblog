@@ -24,7 +24,7 @@ class ProfilesController extends AppController
         $this->loadModel('User');
         $user = $this->User->findByUsername(
             $username,
-            'id, username, first_name, last_name, email, birthdate, sex'
+            'id, username, first_name, last_name, email, birthdate, sex, avatar_url'
         );
         return $this->responseData([
             'user' => $user["User"],
@@ -50,7 +50,7 @@ class ProfilesController extends AppController
         $this->loadModel('User');
         $user = $this->User->findById(
             $this->request->user->id, 
-            'id, username, first_name, last_name, email, birthdate, sex'
+            'id, username, first_name, last_name, email, birthdate, sex, avatar_url'
         );
         return $this->responseData([
             'user' => $user["User"],
@@ -67,22 +67,32 @@ class ProfilesController extends AppController
     {
         $this->request->allowMethod('post');
         try {
+            $this->loadModel('User');
             $id = $this->request->user->id;
-            $username = $this->request->user->username;
-            $path = WWW_ROOT . "/img/profiles/$id/";
+            $user = $this->User->findById($id);
+            $username = $user['User']['username'];
+            $imageName = $username . time();
+            $imgpath = "/img/profiles/$id/";
+            $basepath = "/app/webroot$imgpath";
+            $fullpath = WWW_ROOT . $imgpath;
             $image = FileUploadHelper::uploadImg(
-                $path, // file path
-                $file = $_FILES['profile_img'], // file
-                $imageName = $username.".png" // file name
+                $fullpath,
+                $file = $_FILES['profile_img'],
+                $imageName.'.png'
             );
-            $imageResizer = new ImageResizerHelper("profiles/$id/$imageName");
-            $imageResizer->multipleResizeMaxWidth(
-                "profiles/$id/$username",
+            $imageResizer = new ImageResizerHelper("profiles/$id/$imageName.png");
+            $imageResizer->multipleResizeMaxHeight(
+                "profiles/$id/$imageName",
                 [256, 128, 64, 32, 24]
+            );
+
+            $this->User->updateAvatar(
+                $id,
+                $basepath.$imageName
             );
             return $this->responseOk();
         } catch (Exception $e) {
-            throw new InternalErrorException(__('Unable to upload file'));
+            throw new InternalErrorException($e->getMessage());
         }
     }
 }

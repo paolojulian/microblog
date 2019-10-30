@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { search } from '../../utils/search';
 import { SET_PROFILE, TOGGLE_LOADING_PROFILE } from '../types';
 
 /**
@@ -62,6 +63,19 @@ export const followUser = (userId) => async dispatch => {
     try {
         const res = await axios.post(`/followers/follow/${userId}.json`);
         return Promise.resolve(res.data.data);
+    } catch (e) {
+        return Promise.reject();
+    }
+}
+
+/**
+ * Uploads the image of the current user logged in
+ * @param searchText - text to use for matching the desired user
+ */
+export const searchUser = (searchText) => async dispatch => {
+    try {
+        const data = await search(`/users/search/${searchText}.json`);
+        return Promise.resolve(data);
     } catch (e) {
         return Promise.reject();
     }

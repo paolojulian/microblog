@@ -25,7 +25,31 @@ class Comment extends AppModel
         ]
     ];
 
-    public function isOwnedBy($comment, $user) {
+    public function addComment($data)
+    {
+        $this->set($data);
+        if ( ! $this->validates()) {
+            return false;
+        }
+        if ( ! $this->save()) {
+            throw new InternalErrorException();
+        }
+        return true;
+    }
+    
+    /**
+     * Counts the number of comments in a post
+     */
+    public function countPerPost($postId)
+    {
+        return $this->find('count', [
+            'recursive' => -1,
+            'conditions' => ['post_id' => $postId]
+        ]);
+    }
+
+    public function isOwnedBy($comment, $user)
+    {
         $params = [
             'id' => $comment,
             'user_id' => $user

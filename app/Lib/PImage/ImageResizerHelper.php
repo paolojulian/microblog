@@ -10,6 +10,14 @@ class ImageResizerHelper extends ImageHelper
     private $resizedWidth;
     private $resizedHeight;
 
+    public function multipleResizeMaxHeight($basename, $sizes)
+    {
+        foreach ($sizes as $size) {
+            $this->resizeTo(0, $size, 'maxheight');
+            $this->saveImage($basename."x$size.png");
+        }
+    }
+
     public function multipleResizeMaxWidth($basename, $sizes)
     {
         foreach ($sizes as $size) {

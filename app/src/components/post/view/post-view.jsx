@@ -11,6 +11,7 @@ import { getPostById } from '../../../store/actions/postActions';
 import PLoader from '../../widgets/p-loader';
 import PostItem from '../item';
 import PostComment from '../comment';
+import CommentCreate from '../comment/create';
 import WithNavbar from '../../hoc/with-navbar';
 
 const PostView = (props) => {
@@ -20,20 +21,24 @@ const PostView = (props) => {
 
     const [isLoading, setIsLoading] = useState(true);
     const [post, setPost] = useState({});
-    const [username, setUsername] = useState('');
+    const [profile, setProfile] = useState('');
     const [comments, setComments] = useState([]);
 
     useEffect(() => {
         setIsLoading(true);
+        reloadPost();
+    }, []);
+
+    const reloadPost = () => {
         dispatch(getPostById(id))
             .then(({Comments, Post, User}) => {
                 setPost(Post);
                 setComments(Comments);
-                setUsername(User.username);
+                setProfile(User);
             })
             .catch()
             .then(() => setIsLoading(false));
-    }, []);
+    }
 
     return (
         isLoading
@@ -45,15 +50,25 @@ const PostView = (props) => {
                     title={post.title}
                     body={post.body}
                     user_id={post.user_id}
-                    creator={username}
+                    avatarUrl={profile.avatar_url}
+                    creator={profile.username}
                     created={post.created}
                     likes={post.likes}
+                    comments={post.comments}
                     loggedin_id={user.id}
                     fetchHandler={() => {}}
                 />
+                <div className={styles.createComment}>
+                    <CommentCreate
+                        postId={Number(post.id)}
+                        userId={Number(user.id)}
+                        onRequestSuccess={reloadPost}
+                    />
+                </div>
                 <div className={styles.comments}>
                     <PostComment
                         comments={comments}
+                        reloadPost={reloadPost}
                     />
                 </div>
             </div>

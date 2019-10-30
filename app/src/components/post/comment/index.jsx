@@ -6,17 +6,20 @@ import styles from './post-comment.module.css';
 import CommentItem from './item';
 
 const PostComment = ({
+    reloadPost,
     comments
 }) => {
 
-    const renderComments = comments.map(comment => (
+    const renderComments = comments.reverse().map(comment => (
         <CommentItem
             key={comment.id}
             id={Number(comment.id)}
             body={comment.body}
-            userId={Number(comment.userId)}
+            userId={Number(comment.user_id)}
             username={comment.username}
+            avatarUrl={comment.avatarUrl}
             created={comment.created}
+            reloadPost={reloadPost}
         />
     ));
 
@@ -28,7 +31,8 @@ const PostComment = ({
 }
 
 PostComment.propTypes = {
-    comments: PropTypes.array.isRequired
+    comments: PropTypes.array.isRequired,
+    reloadPost: PropTypes.func.isRequired
 }
 
 export default PostComment

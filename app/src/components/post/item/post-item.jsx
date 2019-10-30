@@ -30,15 +30,16 @@ const PostItem = ({
     body,
     user_id,
     creator,
-    created,
-    likes,
-    comments,
-    loggedin_id,
-    fetchHandler,
-    ownerId,
-    imageName,
     shared_by,
     shared_by_username,
+    likes,
+    avatarUrl,
+    comments,
+    loggedin_id,
+    created,
+    ownerId,
+    imageName,
+    fetchHandler,
     ...props
 }) => {
     const dispatch = useDispatch()
@@ -99,7 +100,7 @@ const PostItem = ({
 
             <div className={styles.profile_header}>
                 <ProfileImage
-                    src={`${ownerId}/${imageName}x32.png`}
+                    src={avatarUrl}
                     size={32}
                     alt={creator}
                 />
@@ -163,13 +164,15 @@ const PostItem = ({
                         &nbsp;{likeCount}
                     </i>
                 </button>
-                <button type="button"
-                    className={styles.comment}
-                >
-                    <i className="fa fa-comment">
-                        &nbsp;{comments}
-                    </i>
-                </button>
+                <Link to={`/posts/${id}`}>
+                    <button type="button"
+                        className={styles.comment}
+                    >
+                        <i className="fa fa-comment">
+                            &nbsp;{comments}
+                        </i>
+                    </button>
+                </Link>
             </div>
         </PCard>
     )

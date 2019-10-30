@@ -69,7 +69,7 @@ const ProfileInfo = () => {
             </div>
             <div className={styles.profileImage}>
                 <ProfileImage
-                    src={`${profile.id}/${profile.username}x128.png`}
+                    src={profile.avatar_url}
                     alt={profile.username}
                 />
             </div>

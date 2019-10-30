@@ -24,7 +24,7 @@ const ProfileCard = (props) => {
         <div className={styles.profile_card}>
             <div className={styles.profile_img}>
                 <ProfileImage
-                    src={`${user.id}/${user.username}x64.png`}
+                    src={user.avatar_url}
                     alt={user.username}
                 />
             </div>
@@ -43,13 +43,13 @@ const ProfileCard = (props) => {
                 <div className={styles.follow}>
                     <div className={styles.followers}>
                         <label>Followers: </label>
-                        <Link to="/profiles/followers">
+                        <Link to="/followers">
                             {totalFollowers}
                         </Link>
                     </div>
                     <div className={styles.following}>
                         <label>Following: </label>
-                        <Link to="/profiles/following">
+                        <Link to="/following">
                             {totalFollowing}
                         </Link>
                     </div>

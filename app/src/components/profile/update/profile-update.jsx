@@ -69,12 +69,12 @@ const ProfileUpdate = () => {
                         <div className={styles.profileImgOverlay}
                             onClick={() => showModal(ProfileUploadImage, { user, profileImgSrc })}
                         >
-                            Edit Image
+                            Update
                         </div>
                     )}
                 </ModalConsumer>
                 <ProfileImage
-                    src={`${user.id}/${user.username}x128.png`}
+                    src={user.avatar_url}
                     alt={user.username}
                 />
             </div>

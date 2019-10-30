@@ -26,7 +26,7 @@ const VNotification = () => {
             console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
             setTimeout(() => {
                 connectWebSocket(userId);
-            }, 1000);
+            }, 10000);
         };
         websocket.onerror = (err) => {
             console.error('Socket encountered error: ', err.message, 'Closing socket');

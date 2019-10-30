@@ -44,7 +44,7 @@ class Post extends AppModel
     public $belongsTo = [
         'User' => [
             'className' => 'User',
-            'fields' => ['username']
+            'fields' => ['username', 'avatar_url']
         ],
     ];
 
@@ -53,9 +53,7 @@ class Post extends AppModel
         $offset = ($pageNo - 1) * $perPage;
         $procedure = "CALL fetchPostsOfUser($userId, $perPage, $offset)";
         $data = $this->query($procedure);
-        foreach ($data as $key => $item) {
-            $data[$key]['Post']['likes'] = $this->getLikes($item['Post']['id']);
-        }
+        $this->getLikesAndComments($data);
         return $data;
     }
 
@@ -64,10 +62,16 @@ class Post extends AppModel
         $offset = ($pageNo - 1) * $perPage;
         $procedure = "CALL fetchPostsToDisplay($userId, $perPage, $offset)";
         $data = $this->query($procedure);
+        $this->getLikesAndComments($data);
+        return $data;
+    }
+
+    private function getLikesAndComments(&$data)
+    {
         foreach ($data as $key => $item) {
             $data[$key]['Post']['likes'] = $this->getLikes($item['Post']['id']);
+            $data[$key]['Post']['comments'] = $this->Comments->countPerPost($item['Post']['id']);
         }
-        return $data;
     }
 
     public function fetchPostsWithComments($postId)
@@ -83,14 +87,18 @@ class Post extends AppModel
         //         ['User.id' => $like['user_id']]
         //     );
         // }
+        $post['Post']['comments'] = $this->Comments->countPerPost($post['Post']['id']);
         $post['Post']['likes'] = array_map(function ($like) {
             return $like['user_id'];
         }, $post['Likes']);
         foreach ($post['Comments'] as $key => $comment) {
-            $post['Comments'][$key]['username'] = $this->User->field(
-                'username',
-                ['User.id' => $comment['user_id']]
-            );
+            $commentUser = $this->User->find('first', [
+                'recursive' => -1,
+                'fields' => ['username', 'avatar_url'],
+                'conditions' => ['id' => $comment['user_id']]
+            ]);
+            $post['Comments'][$key]['username'] = $commentUser['User']['username'];
+            $post['Comments'][$key]['avatarUrl'] = $commentUser['User']['avatar_url'];
         }
         return $post;
     }

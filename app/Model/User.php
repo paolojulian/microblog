@@ -132,7 +132,7 @@ class User extends AppModel
     public function findById($userId, $fields = '*')
     {
         return $this->find('first', [
-            'recursive' => true,
+            'recursive' => -1,
             'fields' => $fields,
             'conditions' => ['id' => $userId]
         ]);
@@ -144,6 +144,34 @@ class User extends AppModel
             'recursive' => true,
             'fields' => $fields,
             'conditions' => ['username' => $username]
+        ]);
+    }
+
+    /**
+     * TODO
+     * For a better searching of user, display users with mutual
+     * followers first
+     * 
+     * @param int $userId - user logged in shouldnt be included in the search
+     * @param string $searchText - text to be searched
+     */
+    public function searchUser($userId, $searchText)
+    {
+        $searchText = trim($searchText);
+        return $this->find('all', [
+            'recursive' => -1,
+            'fields' => ['id', 'username', 'first_name', 'last_name', 'avatar_url'],
+            'conditions' => [
+                'OR' => [
+                    'username LIKE' => "%$searchText%",
+                    'first_name LIKE' => "%$searchText%",
+                    'last_name LIKE' => "%$searchText%",
+                ],
+                'id !=' => $userId,
+                'deleted' => null,
+                'is_activated' => 1
+            ],
+            'order' => 'created DESC'
         ]);
     }
 
@@ -163,6 +191,15 @@ class User extends AppModel
     {
         $this->id = $userId;
         if ( ! $this->saveField('is_activated', b'1')) {
+            throw new InternalErrorException();
+        }
+        return true;
+    }
+
+    public function updateAvatar($userId, $fullpath)
+    {
+        $this->id = $userId;
+        if ( ! $this->saveField('avatar_url', $fullpath)) {
             throw new InternalErrorException();
         }
         return true;
