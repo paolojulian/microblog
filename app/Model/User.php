@@ -155,7 +155,7 @@ class User extends AppModel
      * @param int $userId - user logged in shouldnt be included in the search
      * @param string $searchText - text to be searched
      */
-    public function searchUser($userId, $searchText)
+    public function searchUser($userId, $searchText, $page = 1)
     {
         $searchText = trim($searchText);
         return $this->find('all', [
@@ -164,14 +164,15 @@ class User extends AppModel
             'conditions' => [
                 'OR' => [
                     'username LIKE' => "%$searchText%",
-                    'first_name LIKE' => "%$searchText%",
-                    'last_name LIKE' => "%$searchText%",
+                    "concat_ws(' ', first_name, last_name) LIKE" => "%$searchText%",
                 ],
                 'id !=' => $userId,
                 'deleted' => null,
                 'is_activated' => 1
             ],
-            'order' => 'created DESC'
+            'order' => 'created DESC',
+            'limit' => 5,
+            'page' => $page
         ]);
     }
 
@@ -238,5 +239,5 @@ class User extends AppModel
 		$value = array_values($data);
 		$comparewithvalue = $value[0];
 		return $this->data[$this->name][$compareField] === $comparewithvalue;
-	}
+    }
 }

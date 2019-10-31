@@ -67,7 +67,7 @@ Cache::config('default', array('engine' => 'File'));
  * CakePlugin::load('DebugKit'); // Loads a single plugin named DebugKit
  */
 CakePlugin::load('CakeSoftDelete');
-CakePlugin::load('DebugKit');
+// CakePlugin::load('DebugKit');
 // CakePlugin::loadAll();
 
 /**

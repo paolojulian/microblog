@@ -4,6 +4,10 @@ class LikesController extends AppController
 {
     public $components = ['RequestHandler'];
 
+    public function beforeFilter() {
+        parent::beforeFilter();
+    }
+
     public function like($postId = null)
     {
         $this->request->allowMethod('post');
@@ -36,21 +40,5 @@ class LikesController extends AppController
         }
 
         return $this->responseOK();
-    }
-
-    public function isAuthorized($user)
-    {
-        switch ($this->action) {
-            case 'like':
-                // No break
-            case 'unlike':
-                if ($this->Auth->user()) {
-                    return true;
-                }
-                break;
-            default:
-                break;
-        }
-        return parent::isAuthorized($user);
     }
 }

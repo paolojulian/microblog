@@ -15,7 +15,7 @@ const VNotification = () => {
     }, [isAuthenticated])
 
     const connectWebSocket = (userId) => {
-        let websocket = new WebSocket(`ws://127.0.0.1:8081?id=${userId}`);
+        let websocket = new WebSocket(`ws://127.0.0.1:4567?id=${userId}`);
         websocket.onopen = e => {
             console.log('Connected');
         }
@@ -37,12 +37,12 @@ const VNotification = () => {
     const showNotification = (message) => {
         /** Add webcomponents, located in webroot/js/v-notifier.js */
         let notif = document.createElement('v-notifier')
-        notificationContainer.appendChild(notif);
+        notificationContainer.current.appendChild(notif);
         notif.message = message;
     }
 
     return (
-        <div className={styles.notification}
+        <div className={styles.wrapper}
             ref={notificationContainer}
         >
         </div>

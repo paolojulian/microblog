@@ -30,7 +30,7 @@ class Notification extends AppModel
     {
         if ( ! $created) return true;
         /** Send to websocket server */
-        $ch = curl_init('http://localhost:8081');
+        $ch = curl_init('http://127.0.0.1:8080');
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         $jsonData = json_encode([
             'id' => $this->data[$this->alias]['receiver_id'],
@@ -39,7 +39,8 @@ class Notification extends AppModel
         $query = http_build_query(['data' => $jsonData]);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = json_decode(curl_exec($ch),true);
+        $response = curl_exec($ch);
+        debug(curl_error($ch));
         curl_close($ch);
         return true;
     }

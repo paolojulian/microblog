@@ -31,12 +31,3 @@
 .username {
     color: var(--secondary);
 }
-
-.follow {
-    margin-top: 1rem;
-    font-size: 1.2rem;
-}
-
-.follow a {
-    color: var(--secondary);
-}

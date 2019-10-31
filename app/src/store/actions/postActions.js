@@ -33,7 +33,7 @@ export const getPosts = (page = 1) => async dispatch => {
                 payload: res.data.data
             })
         }
-        return Promise.resolve()
+        return Promise.resolve(res.data.data)
     } catch (e) {
         return Promise.reject()
     } finally {

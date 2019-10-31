@@ -4,23 +4,40 @@ class FollowersController extends AppController
 {
     public $components = ['RequestHandler'];
 
+    public function beforeFilter() {
+        parent::beforeFilter();
+    }
+
     /**
      * Fetches all followers
      */
     public function index()
     {
-        $followers = $this->Follower->find('all', [
-            'contain' => ['User'],
-            'fields' => [
-                'user_id',
-                'User.username',
-                'User.first_name',
-                'User.last_name',
-                'User.email'
-            ],
-            'conditions' => ['following_id' => $this->request->user->id]
-        ]);
-        return $this->responseData($followers);
+        $this->request->allowMethod('get');
+        try {
+            switch ($this->request->query('type')) {
+                case 'follower':
+                    $followers = $this->Follower->fetchFollowersOfUser(
+                        $this->request->query('userId'),
+                        $this->request->query('page'),
+                        $this->request->user->id
+                    );
+                    break;
+                case 'following':
+                    $followers = $this->Follower->fetchFollowedByUser(
+                        $this->request->query('userId'),
+                        $this->request->query('page'),
+                        $this->request->user->id
+                    );
+                    break;
+                default:
+                    throw new BadRequestException(__('Invalid Type Given'));
+                    break;
+            }
+            return $this->responseData($followers);
+        } catch (Exception $e) {
+            throw new InternalErrorException(__($e->getMessage()));
+        }
     }
 
     public function follow($userId = null)
@@ -57,21 +74,5 @@ class FollowersController extends AppController
         }
 
         return $this->responseOK();
-    }
-
-    public function isAuthorized($user)
-    {
-        switch ($this->action) {
-            case 'index':
-                // No break
-            case 'follow':
-                if ($this->Auth->user()) {
-                    return true;
-                }
-                break;
-            default:
-                break;
-        }
-        return parent::isAuthorized($user);
     }
 }

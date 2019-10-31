@@ -10,6 +10,7 @@ import { followUser } from '../../../store/actions/profileActions';
 import PCard from '../../widgets/p-card';
 import ProfileImage from '../../widgets/profile-image';
 import PLoader from '../../widgets/p-loader';
+import PFollowing from '../../widgets/p-following';
 
 const ProfileInfo = () => {
     const dispatch = useDispatch();
@@ -32,18 +33,11 @@ const ProfileInfo = () => {
         <div className={styles.wrapper}>
 
             <div className={styles.profileDetails}>
-                <div className={styles.followers}>
-                    Followers:&nbsp;
-                    <span className={styles.followerLink}>
-                        {totalFollowers}
-                    </span>
-                </div>
-                <div className={styles.following}>
-                    Following:&nbsp;
-                    <span className={styles.followerLink}>
-                        {totalFollowing}
-                    </span>
-                </div>
+                <PFollowing
+                    userId={Number(profile.id)}
+                    totalFollowers={totalFollowers}
+                    totalFollowing={totalFollowing}
+                />
                 {Number(id) !== Number(profile.id) &&
                 <div className={classnames(styles.followBtn, {
                     [styles.active]: stateIsFollowing

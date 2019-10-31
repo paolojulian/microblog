@@ -35,7 +35,7 @@ App::uses('JWT', 'Lib');
  */
 class AppController extends Controller {
     public $public = [];
-    public $components = ['DebugKit.Toolbar'];
+    // public $components = ['DebugKit.Toolbar'];
     
     public function beforeFilter() {
         if (in_array($this->action, $this->public)) {

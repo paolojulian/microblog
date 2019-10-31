@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 /** Redux */
-import { uploadProfileImg } from '../../../store/actions/profileActions';
+import { uploadProfileImg, getProfile } from '../../../store/actions/profileActions';
 import { CLEAR_ERRORS } from '../../../store/types.js'
 
 /** Components */
@@ -17,6 +17,7 @@ const ProfileUploadImage = ({
 }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
+    const [isSuccess, setSuccess] = useState(false);
     const { errors } = useSelector(state => state);
     const dispatch = useDispatch();
     const imgRef = useRef();
@@ -36,7 +37,8 @@ const ProfileUploadImage = ({
         setIsLoading(true);
         dispatch(uploadProfileImg(img))
             .then(() => {
-                alert('success');
+                dispatch(getProfile());
+                setSuccess(true);
                 setIsLoading(false)
             })
             .catch(() => setIsError(true));
@@ -45,6 +47,10 @@ const ProfileUploadImage = ({
     const render = () => {
         if (isError) {
             return <div className="italic">Oops Something went wrong.</div>
+        }
+
+        if (isSuccess) {
+            return <div className="text-success">Image Uploaded Successfully</div>
         }
 
         if (isLoading) {
@@ -59,7 +65,7 @@ const ProfileUploadImage = ({
 
     return (
         <PModal
-            type="submit"
+            type={isSuccess || isLoading || isError ? 'button': 'submit'}
             header="Change Profile Image"
             onRequestSubmit={submitHandler}
             onRequestClose={onRequestClose}>

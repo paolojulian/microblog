@@ -29,7 +29,8 @@ let server = http.createServer((request, response) => {
     if (request.method === 'POST') {
         getPostParam(request, (POST) => {
 			try {
-				const {id, message} = JSON.parse(POST.data)
+                const {id, message} = JSON.parse(POST.data)
+                console.log(POST.data);
 				notifyUser(id, message);
 				response.writeHead(200);
 			} catch (e) {
@@ -40,13 +41,13 @@ let server = http.createServer((request, response) => {
         return;
     }
 });
-server.listen(8081);
+server.listen(4567, '127.0.0.1');
+
+global.clients = {}; // store the connections
 
 var websocketServer = new WebSocketServer({
-    httpServer: server,
-    autoAcceptConnections: true
+    httpServer: server
 });
-global.clients = {}; // store the connections
 
 const websocketRequest = request => {
     // start the connection

@@ -4,6 +4,7 @@ import styles from './profile-update.module.css';
 
 /** Redux */
 import { getProfile, updateProfile } from '../../../store/actions/profileActions';
+import { CLEAR_ERRORS } from '../../../store/types.js'
 
 /** Components */
 import WithNavbar from '../../hoc/with-navbar';
@@ -13,6 +14,7 @@ import PButton from '../../widgets/p-button';
 import ProfileImage from '../../widgets/profile-image';
 import FormInput from '../../widgets/form/input';
 import ProfileUploadImage from '../upload-img';
+import ServerError from '../../widgets/server-error';
 
 /** Consumer */
 import { ModalConsumer } from '../../widgets/p-modal/p-modal-context'
@@ -26,9 +28,18 @@ const ProfileUpdate = () => {
     const [profileImgSrc, setProfileImgSrc] = useState(null);
     const { user, loading } = useSelector(state => state.profile);
     const { errors } = useSelector(state => state);
+    const [isLoading, setLoading] = useState(false);
+    const [isSuccess, setSuccess] = useState(false);
+    const [serverError, setServerError] = useState(false);
+
+    let successTimeout = null;
+    let errorTimeout = null;
 
     useEffect(() => {
         dispatch(getProfile())
+        return () => {
+            clearTimeout(successTimeout);
+        }
     }, []);
 
     useEffect(() => {
@@ -42,23 +53,53 @@ const ProfileUpdate = () => {
                 require(`../../../../webroot/img/profiles/${user.id}/${user.username}.png`);
                 setProfileImgSrc(src);
             } catch (e) {
-                console.error(e);
                 setProfileImgSrc(null);
             }
         }
     }, [loading])
 
-    const submitHandler = e => {
+    const submitHandler = async e => {
         if (e) {
             e.preventDefault();
         }
+        setLoading(true);
+        setServerError(false);
         const form = {
             first_name: firstName,
             last_name: lastName,
             email,
             birthdate
         }
-        dispatch(updateProfile(form));
+        try {
+            await dispatch(updateProfile(form))
+            handleSuccess();
+        } catch (e) {
+            handleError(e);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const handleSuccess = () => {
+        clearTimeout(successTimeout);
+        dispatch(getProfile());
+        setSuccess(true)
+        dispatch({ type: CLEAR_ERRORS });
+        successTimeout = setTimeout(() => {
+            setSuccess(false)
+        }, 5000)
+    }
+
+    const handleError = (e) => {
+        clearTimeout(errorTimeout);
+        setSuccess(false)
+        if ( ! e || ! e.request || e.request.status !== 422) {
+            setServerError(true);
+        }
+        setTimeout(() => {
+            setServerError(false);
+            dispatch({ type: CLEAR_ERRORS });
+        }, 5000);
     }
 
     const renderBody = () => (
@@ -67,7 +108,10 @@ const ProfileUpdate = () => {
                 <ModalConsumer>
                     {({ showModal }) => (
                         <div className={styles.profileImgOverlay}
-                            onClick={() => showModal(ProfileUploadImage, { user, profileImgSrc })}
+                            onClick={() => showModal(ProfileUploadImage, {
+                                user,
+                                profileImgSrc,
+                            })}
                         >
                             Update
                         </div>
@@ -113,12 +157,17 @@ const ProfileUpdate = () => {
                     onChange={e => setBirthdate(e.target.value)}
                 />
 
+                {serverError ? <ServerError/> : ''}
+                {isSuccess ? (<div className="text-success">Profile successfully updated!</div>) : ''}
+
                 <PButton
                     type="submit"
                     theme="primary"
+                    isLoading={isLoading}
                 >
                     UPDATE
                 </PButton>
+
             </form>
         </div>
     )

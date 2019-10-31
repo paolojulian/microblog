@@ -86,7 +86,7 @@ class PostsController extends AppController
             return $this->responseUnprocessableEntity('', $this->Post->validationErrors);
         }
 
-        return $this->responseCreated();
+        return $this->responseCreated($this->Post);
     }
 
     /**

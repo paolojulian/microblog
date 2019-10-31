@@ -7,6 +7,7 @@ const PButton = ({
     type,
     theme,
     children,
+    isLoading,
     ...props
 }) => {
 
@@ -20,7 +21,7 @@ const PButton = ({
                 [styles.danger]: theme === 'danger',
             })}
         >
-            {children}
+            {isLoading ? <i className="fa fa-spinner fa-spin"/> : children}
         </button>
     )
 }
@@ -29,10 +30,12 @@ PButton.propTypes = {
     children: PropTypes.any.isRequired,
     type: PropTypes.string,
     theme: PropTypes.string,
+    isLoading: PropTypes.bool
 }
 
 PButton.defaultProps = {
-    type: 'button'
+    type: 'button',
+    isLoading: false
 }
 
 export default PButton

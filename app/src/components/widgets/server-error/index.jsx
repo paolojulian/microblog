@@ -2,12 +2,14 @@ import React from 'react';
 
 const ServerError = () => (
     <div style={{
-        color: 'var(--black-disabled)',
+        color: 'var(--secondary)',
         fontStyle: 'italic',
         fontSize: '0.9rem'
     }}>
         Oops.. Something went wrong
-        <p>Please try again later.</p>
+        <div>
+            Please try again later.
+        </div>
     </div>
 );
 

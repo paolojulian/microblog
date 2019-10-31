@@ -32,7 +32,7 @@ export const updateProfile = (data) => async dispatch => {
         const res = await axios.put('/users/edit.json', data);
         return Promise.resolve(res.data.data)
     } catch (e) {
-        return Promise.reject()
+        return Promise.reject(e)
     }
 }
 
@@ -78,5 +78,21 @@ export const searchUser = (searchText) => async dispatch => {
         return Promise.resolve(data);
     } catch (e) {
         return Promise.reject();
+    }
+}
+
+/**
+ * Fetch the followers or followed users
+ * @param userId - user followers/followed to be seen
+ * @param type - [follower/following] only
+ */
+export const fetchFollow = (userId, type, page = 1) => async dispatch => {
+    try {
+        const res = await axios.get(`/followers.json`, {
+            params: {userId, type, page}
+        });
+        return Promise.resolve(res.data.data);
+    } catch (e) {
+        return Promise.reject(e);
     }
 }

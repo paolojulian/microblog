@@ -33,4 +33,13 @@ App::uses('SoftDeletableModel', 'Model');
  */
 class AppModel extends SoftDeletableModel {
 
+    public function beforeValidate($options = [])
+    {
+        foreach ($this->data[$this->alias] as $key => $value) {
+            if (is_string($value)) {
+                $this->data[$this->alias][$key] = trim($value);
+            }
+        }
+    }
+
 }

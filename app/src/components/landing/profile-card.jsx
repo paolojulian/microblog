@@ -8,6 +8,7 @@ import { getProfile } from '../../store/actions/profileActions';
 
 /** Components */
 import PCard from '../widgets/p-card';
+import PFollowing from '../widgets/p-following';
 import PLoader from '../widgets/p-loader';
 import ProfileImage from '../widgets/profile-image';
 
@@ -30,7 +31,9 @@ const ProfileCard = (props) => {
             </div>
             <div className={styles.info}>
                 <div className={styles.last_name}>
-                    {user.last_name}
+                    <Link to={`/profiles/${user.username}`}>
+                        {user.last_name}
+                    </Link>
                 </div>
                 <div className={styles.first_name}>
                     {user.first_name}
@@ -40,20 +43,11 @@ const ProfileCard = (props) => {
                         @{user.username}
                     </Link>
                 </div>
-                <div className={styles.follow}>
-                    <div className={styles.followers}>
-                        <label>Followers: </label>
-                        <Link to="/followers">
-                            {totalFollowers}
-                        </Link>
-                    </div>
-                    <div className={styles.following}>
-                        <label>Following: </label>
-                        <Link to="/following">
-                            {totalFollowing}
-                        </Link>
-                    </div>
-                </div>
+                <PFollowing
+                    userId={Number(user.id)}
+                    totalFollowers={totalFollowers}
+                    totalFollowing={totalFollowing}
+                />
             </div>
         </div>
     )

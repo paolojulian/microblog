@@ -3,9 +3,13 @@
 class Follower extends AppModel
 {
     public $actsAs = ['SoftDeletable'];
-    public $hasMany = [
+    public $belongsTo = [
         'User' => [
             'className' => 'User',
+        ],
+        'Following' => [
+            'className' => 'User',
+            'foreignKey' => 'following_id'
         ],
     ];
 
@@ -31,6 +35,65 @@ class Follower extends AppModel
             'user_id' => $userId,
             'following_id' => $followingId
         ]);
+    }
+
+    public function fetchFollowersOfUser($userId, $page, $loggedInUser)
+    {
+        $perPage = 10;
+        $followers = $this->find('all', [
+            'contain' => ['User'],
+            'fields' => [
+                'User.id',
+                'User.username',
+                'User.first_name',
+                'User.last_name',
+                'User.avatar_url'
+            ],
+            'order' => 'Follower.created DESC',
+            'conditions' => [
+                'following_id' => $userId
+            ],
+            'limit' => $perPage,
+            'page' => $page,
+        ]);
+
+        foreach ($followers as $key => $follower) {
+            $followers[$key]['User']['is_following'] = $this->isFollowing(
+                $loggedInUser,
+                $follower['User']['id']
+            );
+        }
+
+        return $followers;
+    }
+
+    public function fetchFollowedByUser($userId, $page, $loggedInUser)
+    {
+        $perPage = 10;
+        $followers = $this->find('all', [
+            'contain' => ['Following'],
+            'fields' => [
+                'Following.id',
+                'Following.username',
+                'Following.first_name',
+                'Following.last_name',
+                'Following.avatar_url'
+            ],
+            'order' => 'Follower.created DESC',
+            'conditions' => [
+                'Follower.user_id' => $userId
+            ],
+            'limit' => $perPage,
+            'page' => $page,
+        ]);
+
+        foreach ($followers as $key => $follower) {
+            $followers[$key]['Following']['is_following'] = $this->isFollowing(
+                $loggedInUser,
+                $follower['Following']['id']
+            );
+        }
+        return $followers;
     }
 
     public function countFollowers($userId)

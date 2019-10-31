@@ -20,6 +20,7 @@ import ProfileUpdate from './components/profile/update'
 import PostEdit from './components/post/edit'
 import PostView from './components/post/view'
 import VNofication from './components/widgets/v-notification'
+import NoMatch from './components/nomatch/index.jsx'
 
 /** Context */
 import { ModalProvider } from './components/widgets/p-modal/p-modal-context'
@@ -84,6 +85,9 @@ const App = () => {
                             <PrivateRoute exact path="/" component={Landing}/>
                         </Switch>
                         <Switch>
+                            <PrivateRoute exact path="/home" component={Landing}/>
+                        </Switch>
+                        <Switch>
                             <PrivateRoute exact path="/profiles/:username" component={Profile}/>
                         </Switch>
                         <Switch>
@@ -97,6 +101,7 @@ const App = () => {
                         </Switch>
                     </ModalProvider>
                     <VNofication/>
+                    <Route exact path="/not-found" component={NoMatch} />
                 </div>
             </Router>
         </Provider>

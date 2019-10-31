@@ -149,6 +149,11 @@ p.small {
     transform: translate(-50%, -50%);
 }
 
+.text-success {
+    color: var(--green-primary);
+    padding: 0.5rem 0;
+}
+
 .text-link {
     cursor: pointer;
     color: var(--secondary);

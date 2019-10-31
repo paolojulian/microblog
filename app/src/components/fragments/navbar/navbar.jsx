@@ -12,7 +12,8 @@ import SearchBar from './search-bar'
 import styles from './navbar.module.css'
 
 const Navbar = ({
-    history
+    history,
+    location
 }) => {
 
     const dispatch = useDispatch();
@@ -22,6 +23,14 @@ const Navbar = ({
         dispatch(logoutUser(history));
     }
 
+    const reloadOrNavigate = () => {
+        if (location.pathname === '/home') {
+            history.push('/');
+        } else {
+            history.push('/home');
+        }
+    };
+
     return (
         <nav>
             <ul className={styles.container}>
@@ -29,7 +38,7 @@ const Navbar = ({
                 <li className={styles.search}>
                     <SearchBar/>
                 </li>
-                <Link to="/"><li>Home</li></Link>
+                <span onClick={reloadOrNavigate}><li>Home</li></span>
                 <li>Notifications</li>
                 <li onClick={handleLogout}>
                     Logout
