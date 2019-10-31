@@ -26,7 +26,7 @@ class PostsController extends AppController
     public function index()
     {
         $this->request->allowMethod('get');
-        $page = isset($_GET['page']) ? $_GET['page'] : 1;
+        $page = $this->request->query('page');
         return $this->responseData(
             // TODO Change to posts to display
             $this->Post->fetchPostsToDisplay($this->request->user->id, $page)
@@ -62,11 +62,15 @@ class PostsController extends AppController
     public function user($username)
     {
         $this->request->allowMethod('get');
+        $page = $this->request->query('page');
         $this->loadModel('User');
         $user = $this->User->findByUsername($username, 'id');
         return $this->responseData(
             // TODO Change to posts to display
-            $this->Post->fetchPostsOfUser($user['User']['id'])
+            $this->Post->fetchPostsOfUser(
+                $user['User']['id'],
+                $page
+            )
         );
     }
 

@@ -39,11 +39,20 @@ class Mysql extends DboSource {
  *
  * @var array
  */
+	// protected $_baseConfig = array(
+	// 	'persistent' => true,
+	// 	'host' => 'localhost',
+	// 	'login' => 'user',
+	// 	'password' => 'qwe123',
+	// 	'database' => 'microblog',
+	// 	'port' => '3306',
+	// 	'flags' => array()
+	// );
 	protected $_baseConfig = array(
 		'persistent' => true,
 		'host' => 'localhost',
-		'login' => 'user',
-		'password' => 'qwe123',
+		'login' => 'root',
+		'password' => '',
 		'database' => 'microblog',
 		'port' => '3306',
 		'flags' => array()

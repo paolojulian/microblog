@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styles from './landing.module.css';
@@ -17,10 +17,6 @@ import PostCreate from '../post/create'
 
 const Landing = () => {
     const dispatch = useDispatch()
-    const [page, setPage] = useState(1)
-    const container = useRef(null)
-    const [isLoading, setIsLoading] = useState(false);
-    const [isLast, setIsLast] = useState(false);
 
     useEffect(() => {
         dispatch(getProfile())
@@ -30,41 +26,7 @@ const Landing = () => {
         }
     }, [])
 
-    useEffect(() => {
-        if ( ! isLast) {
-            window.addEventListener('scroll', listenOnScroll);
-        }
-        return () => {
-            window.removeEventListener('scroll', listenOnScroll);
-        };
-    }, [isLoading, page, isLast])
-
-    const listenOnScroll = () => {
-        if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
-            if (isLast) return;
-            if ( ! isLoading) {
-                setIsLoading(true)
-                fetchHandler(page + 1)
-                    .then(() => setIsLoading(false));
-            }
-        }
-    }
-
-    const fetchHandler = async (n = 1) => {
-        try {
-            const res = await dispatch(getPosts(n));
-            if (res.length > 0) {
-                setPage(n);
-            } else {
-                setIsLast(true);
-            }
-            return Promise.resolve();
-        } catch (e) {
-            if (page > 1) {
-                setPage(page - 1);
-            }
-        }
-    }
+    const fetchHandler = (n = 1) => dispatch(getPosts(n));
 
     return (
         <div className={styles.landing}>
@@ -79,9 +41,7 @@ const Landing = () => {
                     </Link>
                 </div>
             </div>
-            <div className={styles.container}
-                ref={container}
-            >
+            <div className={styles.container}>
                 <div className={styles.posts}>
                     <PostCreate size="fit"/>
                     <Posts

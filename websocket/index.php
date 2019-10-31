@@ -1,15 +1,17 @@
 <?php
-    $ch = curl_init('http://127.0.0.1:8080');
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-    $jsonData = json_encode([
-        'id' => 11,
-        'message' => 'Someone has liked your <a href="/profiles/chefpipz">post</a>'
-    ]);
-    $query = http_build_query(['data' => $jsonData]);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec($ch);
-    curl_close($ch);
+var_dump(file_get_contents('php://input'));
+die();
+    // $ch = curl_init('http://127.0.0.1:8080');
+    // curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    // $jsonData = json_encode([
+    //     'id' => 11,
+    //     'message' => 'Someone has liked your <a href="/profiles/chefpipz">post</a>'
+    // ]);
+    // $query = http_build_query(['data' => $jsonData]);
+    // curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
+    // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    // $response = curl_exec($ch);
+    // curl_close($ch);
 ?>
 
 <!DOCTYPE html>

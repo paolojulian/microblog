@@ -47,7 +47,7 @@ export const getPosts = (page = 1) => async dispatch => {
 export const getUserPosts = (username, page = 1) => async dispatch => {
     try {
         dispatch({ type: TOGGLE_LOADING_POST, payload: true })
-        const res = await axios.get(`/posts/user/${username}.json`)
+        const res = await axios.get(`/posts/user/${username}.json?page=${page}`)
         // Will override all posts
         if (page === 1) {
             dispatch({
@@ -61,9 +61,9 @@ export const getUserPosts = (username, page = 1) => async dispatch => {
                 payload: res.data.data
             })
         }
-        return Promise.resolve()
+        return Promise.resolve(res.data.data)
     } catch (e) {
-        return Promise.reject()
+        return Promise.reject(e)
     } finally {
         dispatch({ type: TOGGLE_LOADING_POST, payload: false })
     }

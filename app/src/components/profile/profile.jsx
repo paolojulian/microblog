@@ -33,17 +33,13 @@ const Profile = (props) => {
         };
     }, [])
 
-    const fetchHandler = () => {
-        dispatch(getUserPosts(username))
-    }
+    const fetchHandler = (page = 1) => dispatch(getUserPosts(username, page))
 
     return isMounted ? (
         <div className={styles.profile_wrapper}>
             <ProfileInfo/>
             <div className={styles.posts}>
-                <Post
-                    fetchHandler={fetchHandler}
-                />
+                <Post fetchHandler={fetchHandler}/>
             </div>
         </div>
     ) : (

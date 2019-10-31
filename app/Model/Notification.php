@@ -40,7 +40,6 @@ class Notification extends AppModel
         curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($ch);
-        debug(curl_error($ch));
         curl_close($ch);
         return true;
     }
