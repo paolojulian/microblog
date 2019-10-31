@@ -21,8 +21,6 @@ class Like extends AppModel
         ];
         $this->set($data);
         $likeId = $this->field('id', $data);
-        $Notification = ClassRegistry::init('Notification');
-        $Post = ClassRegistry::init('Post');
         if (!!$likeId) {
             $this->id = $likeId;
             if ( ! $this->delete()) {
@@ -32,12 +30,19 @@ class Like extends AppModel
             if ( ! $this->save()) {
                 throw new InternalErrorException();
             }
+            $Notification = ClassRegistry::init('Notification');
+            $Post = ClassRegistry::init('Post');
+            $User = ClassRegistry::init('User');
+            $username = $User->field('username', ['id' => $userId]);
             $receiver_id = $Post->field('user_id', ['id' => $data['post_id']]);
-            $Notification->addNotification([
-                'receiver_id' => $receiver_id,
-                'user_id' => $userId,
-                'message' => 'Someone has liked your post'
-            ]);
+            $postId = $data['post_id'];
+            if ($receiver_id != $userId) {
+                $Notification->addNotification([
+                    'receiver_id' => $receiver_id,
+                    'user_id' => $userId,
+                    'message' => "@$username has liked your <a class='text-link' href='/posts/$postId'>post</a>"
+                ]);
+            }
         }
         return true;
     }

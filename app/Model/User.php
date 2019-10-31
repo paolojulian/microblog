@@ -75,12 +75,12 @@ class User extends AppModel
         'email' => [
             'required' => [
                 'rule' => ['email'],
-                'required' => true,
+                'required' => 'create',
                 'message' => 'Kindly provide your email for verification.'
             ],
             'maxlength' => [
                 'rule' => ['maxLength', 50],
-                'required' => true,
+                'required' => 'create',
                 'message' => 'Only 50 characters is allowed.'
             ],
             'unique' => [

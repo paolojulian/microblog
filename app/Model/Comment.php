@@ -34,6 +34,19 @@ class Comment extends AppModel
         if ( ! $this->save()) {
             throw new InternalErrorException();
         }
+        $Notification = ClassRegistry::init('Notification');
+        $Post = ClassRegistry::init('Post');
+        $User = ClassRegistry::init('User');
+        $username = $User->field('username', ['id' => $data['user_id']]);
+        $receiver_id = $Post->field('user_id', ['id' => $data['post_id']]);
+        $postId = $data['post_id'];
+        if ($receiver_id != $data['user_id']) {
+            $Notification->addNotification([
+                'receiver_id' => $receiver_id,
+                'user_id' => $data['user_id'],
+                'message' => "@$username has commented on your <a class='text-link' href='/posts/$postId'>post</a>"
+            ]);
+        }
         return true;
     }
     

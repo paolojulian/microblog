@@ -1,4 +1,4 @@
-CREATE DEFINER=`skip-grants user`@`skip-grants host` PROCEDURE `fetchPostsOfUser`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `fetchPostsOfUser`(
 	IN userId int,
     IN perPage int,
     IN pageOffset int
@@ -52,6 +52,5 @@ and orig.deleted IS NULL
 
 ORDER BY created DESC
 LIMIT perPage
-OFFSET pageOffset
-;
+OFFSET pageOffset;
 END

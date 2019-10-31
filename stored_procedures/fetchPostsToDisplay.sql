@@ -9,6 +9,7 @@ SELECT * FROM (
     SELECT
         a.*,
         users.username,
+		users.avatar_url,
         null as shared_by,
         null as shared_by_username
     FROM posts a
@@ -19,6 +20,7 @@ SELECT * FROM (
         WHERE user_id = userId
         AND followers.deleted IS NULL
     )
+    OR user_id = userId
     AND retweet_post_id IS NULL
     AND a.deleted IS NULL
 
@@ -35,6 +37,7 @@ SELECT * FROM (
         b.deleted,
         b.likes_count,
         users.username,
+		users.avatar_url,
         b.user_id as shared_by,
         shared_user.username as shared_by_username
     FROM posts b
@@ -49,6 +52,7 @@ SELECT * FROM (
         WHERE user_id = userId
         AND followers.deleted IS NULL
     )
+    OR b.user_id = userId
     AND b.retweet_post_id IS NOT NULL
     and orig.deleted IS NULL
 ) Post

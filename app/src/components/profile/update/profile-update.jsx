@@ -67,7 +67,7 @@ const ProfileUpdate = () => {
         const form = {
             first_name: firstName,
             last_name: lastName,
-            email,
+            // email,
             birthdate
         }
         try {
@@ -140,14 +140,14 @@ const ProfileUpdate = () => {
                     value={lastName}
                     onChange={e => setLastName(e.target.value)}
                 />
-                <FormInput
+                {/* <FormInput
                     type="email"
                     placeholder="Email"
                     name="email"
                     error={errors.email}
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                />
+                /> */}
                 <FormInput
                     type="date"
                     placeholder="Birthdate"

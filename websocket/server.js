@@ -41,7 +41,7 @@ let server = http.createServer((request, response) => {
         return;
     }
 });
-server.listen(4567, '127.0.0.1');
+server.listen(8080, '127.0.0.1');
 
 global.clients = {}; // store the connections
 
