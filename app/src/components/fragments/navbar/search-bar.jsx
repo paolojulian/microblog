@@ -11,18 +11,6 @@ import ProfileImage from '../../widgets/profile-image'
 
 import styles from './navbar.module.css'
 
-const fake = [
-    {username: 'chefpipz', first_name: 'Paolo Vincent', last_name: 'Julian',
-        avatar_url: '/app/webroot/img/profiles/11/chefpipz'
-    },
-    {username: 'clients', first_name: 'Siakaman', last_name: 'Tamad',
-        avatar_url: '/app/webroot/img/profiles/8/client1572422600'
-    },
-    {username: 'client', first_name: 'Jhonna', last_name: 'Gines',
-        avatar_url: '/app/webroot/img/profiles/7/clients1572418926'
-    },
-];
-
 const SearchBar = () => {
 
     const dispatch = useDispatch();
@@ -53,9 +41,8 @@ const SearchBar = () => {
         }
         dispatch(searchUser(searchText.current.value))
             .then(data => {
-                if (data) {
-                    setUsers(data)
-                }
+                if ( ! data) return;
+                setUsers(data)
             });
     }
 

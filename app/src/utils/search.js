@@ -9,6 +9,7 @@ const makeRequestCreator = () => {
       // Cancel the previous request before making a new request
       cancel.cancel();
     }
+
     // Create a new CancelToken
     cancel = axios.CancelToken.source();
     try {
