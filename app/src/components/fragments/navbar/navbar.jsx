@@ -39,7 +39,9 @@ const Navbar = ({
                     <SearchBar/>
                 </li>
                 <span onClick={reloadOrNavigate}><li>Home</li></span>
-                <li>Notifications</li>
+                <li>
+                    <i className="fa fa-bell"/>
+                </li>
                 <li onClick={handleLogout}>
                     Logout
                 </li>

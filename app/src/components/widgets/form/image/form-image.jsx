@@ -23,12 +23,23 @@ const FormImage = ({
         }
     }
 
+    const removeImg = () => {
+        refs.current.value = '';
+        setImgSrc('');
+    }
+
     return (
         <div className={styles.formImage}>
             {!!imgSrc && <div className={styles.img}>
+                <div className={styles.removeImg}
+                    onClick={removeImg}
+                >
+                    &#10006;
+                </div>
                 <img
                     src={imgSrc}
                     alt={name}
+                    accept="image/png, image/jpeg"
                     {...props}
                     />
             </div>}

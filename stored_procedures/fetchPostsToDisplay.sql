@@ -15,12 +15,12 @@ SELECT * FROM (
     FROM posts a
     LEFT JOIN users
     ON users.id = a.user_id
-    WHERE user_id IN (
+    WHERE (user_id IN (
         SELECT following_id FROM followers
         WHERE user_id = userId
         AND followers.deleted IS NULL
     )
-    OR user_id = userId
+    OR user_id = userId)
     AND retweet_post_id IS NULL
     AND a.deleted IS NULL
 
@@ -32,26 +32,26 @@ SELECT * FROM (
         orig.body,
         b.retweet_post_id,
         orig.user_id,
+        orig.img_path,
         b.created,
         b.modified,
         b.deleted,
-        b.likes_count,
         users.username,
-		users.avatar_url,
+		shared_user.avatar_url,
         b.user_id as shared_by,
         shared_user.username as shared_by_username
     FROM posts b
-    INNER JOIN posts orig
+	INNER JOIN posts orig
     ON b.retweet_post_id = orig.id
     LEFT JOIN users
     ON users.id = orig.user_id
     LEFT JOIN users shared_user
     ON shared_user.id = b.user_id
-    WHERE b.user_id IN (
+    WHERE (b.user_id IN (
         SELECT following_id FROM followers
         WHERE user_id = userId
         AND followers.deleted IS NULL
-    )
+    ))
     OR b.user_id = userId
     AND b.retweet_post_id IS NOT NULL
     and orig.deleted IS NULL

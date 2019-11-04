@@ -2,6 +2,7 @@
 
 class Comment extends AppModel
 {
+    public $actsAs = ['SoftDeletable', 'Containable'];
     public $validate = [
         'user_id' => [
             'rule' => 'notBlank',
@@ -25,6 +26,13 @@ class Comment extends AppModel
         ]
     ];
 
+    public $belongsTo = [
+        'User' => [
+            'className' => 'User',
+            'fields' => ['username', 'avatar_url']
+        ],
+    ];
+
     public function addComment($data)
     {
         $this->set($data);
@@ -44,10 +52,34 @@ class Comment extends AppModel
             $Notification->addNotification([
                 'receiver_id' => $receiver_id,
                 'user_id' => $data['user_id'],
-                'message' => "@$username has commented on your <a class='text-link' href='/posts/$postId'>post</a>"
+                'message' => "
+                    <span class='username'>
+                        <a href='/profiles/$username'>
+                        @$username
+                        </a>
+                    </span>
+                    has commented on your
+                    <a class='text-link' href='/posts/$postId'>post</a>
+                "
             ]);
         }
         return true;
+    }
+
+    public function paginateComment($postId, $page = 1)
+    {
+        $perPage = 10;
+        $data = $this->find('all', [
+            'conditions' => ['post_id' => $postId],
+            'order' => 'Comments.created DESC',
+            'limit' => $perPage,
+            'page' => $page,
+        ]);
+        foreach ($data as $key => $item) {
+            $data[$key]['Comments']['username'] = $data[$key]['User']['username'];
+            $data[$key] = $data[$key]['Comments'];
+        }
+        return $data;
     }
     
     /**

@@ -35,6 +35,7 @@ class UsersController extends AppController {
      */
     public function search($searchText)
     {
+        $this->request->allowMethod('get');
         $users = $this->User->searchUser(
             $this->request->user->id,
             $searchText

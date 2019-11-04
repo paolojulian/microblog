@@ -21,6 +21,7 @@ import PostEdit from './components/post/edit'
 import PostView from './components/post/view'
 import VNofication from './components/widgets/v-notification'
 import NoMatch from './components/nomatch/index.jsx'
+import PSearch from './components/search'
 
 /** Context */
 import { ModalProvider } from './components/widgets/p-modal/p-modal-context'
@@ -98,6 +99,9 @@ const App = () => {
                         </Switch>
                         <Switch>
                             <PrivateRoute exact path="/posts/:id" component={PostView}/>
+                        </Switch>
+                        <Switch>
+                            <PrivateRoute exact path="/search/:searchText" component={PSearch}/>
                         </Switch>
                     </ModalProvider>
                     <VNofication/>

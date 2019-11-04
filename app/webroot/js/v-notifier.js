@@ -2,6 +2,7 @@ const template = document.createElement('template');
 template.innerHTML = `
     <style>
         :host {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         }
         .v-notifier {
             border-radius: 5px;
@@ -27,6 +28,32 @@ template.innerHTML = `
         }
         .close:hover {
             color: #131313;
+        }
+        a {
+            color: inherit;
+            text-decoration: inherit;
+        }
+        .username {
+            cursor: pointer;
+            color: #eb5757;
+            font-style: italic;
+            font-size: 0.9rem;
+            user-select: none;
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+        }
+        .text-link {
+            cursor: pointer;
+            color: #eb5757;
+            text-align: right;
+            font-size: 0.9rem;
+            user-select: none;
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
         }
     </style>
     <div class="v-notifier">

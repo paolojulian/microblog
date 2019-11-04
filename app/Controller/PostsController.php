@@ -2,7 +2,10 @@
 
 class PostsController extends AppController
 {
-    public $components = ['RequestHandler'];
+    public $components = [
+        'RequestHandler',
+        'PostHandler'
+    ];
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -86,11 +89,45 @@ class PostsController extends AppController
     {
         $this->request->allowMethod('post');
         $this->request->data['user_id'] = $this->request->user->id;
+        $this->request->data['img_path'] = '';
+        if (isset($_FILES['img']) && !!$_FILES['img']) {
+            $this->request->data['img_path'] = $this->PostHandler->uploadImage(
+                $_FILES['img'],
+                $this->request->user->id,
+                $this->request->data
+            );
+        }
         if ( ! $this->Post->addPost($this->request->data)) {
             return $this->responseUnprocessableEntity('', $this->Post->validationErrors);
         }
 
         return $this->responseCreated($this->Post);
+    }
+
+    /**
+     * [PUT]
+     * [PRIVATE] - can only edit own posts
+     * 
+     * Edits the title and body of a post
+     * 
+     * @return json
+     */
+    public function edit($id)
+    {
+        $this->request->allowMethod('post');
+        $this->request->data['user_id'] = $this->request->user->id;
+        $this->request->data['img_path'] = '';
+        if (isset($_FILES['img']) && !!$_FILES['img']) {
+            $this->request->data['img_path'] = $this->PostHandler->uploadImage(
+                $_FILES['img'],
+                $this->request->user->id,
+                $this->request->data
+            );
+        }
+        if ( ! $this->Post->editPost($id, $this->request->data)) {
+            return $this->responseUnprocessableEntity('', $this->Post->validationErrors);
+        }
+        return $this->responseOk();
     }
 
     /**
@@ -129,21 +166,21 @@ class PostsController extends AppController
     }
 
     /**
-     * [PUT]
-     * [PRIVATE] - can only edit own posts
+     * [GET]
+     * [PRIVATE] - only for logged in user
      * 
-     * Edits the title and body of a post
+     * Fetches comments by post
      * 
+     * @param int $id - PK posts table
      * @return json
      */
-    public function edit($id)
+    public function comments($id)
     {
-        $this->request->allowMethod('put');
-        $this->request->data['user_id'] = $this->request->user->id;
-        if ( ! $this->Post->editPost($id, $this->request->data)) {
-            return $this->responseUnprocessableEntity('', $this->Post->validationErrors);
-        }
-        return $this->responseOk();
+        $this->request->allowMethod('get');
+        $page = $this->request->query('page');
+        return $this->responseData(
+            $this->Post->Comments->paginateComment($id, $page)
+        );
     }
 
     /**

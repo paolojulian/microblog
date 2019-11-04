@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './post-view.module.css';
 
 /** Redux */
-import { getPostById } from '../../../store/actions/postActions';
+import { getPostById, getCommentsByPost } from '../../../store/actions/postActions';
 
 /** Components */
 import PLoader from '../../widgets/p-loader';
@@ -13,6 +12,7 @@ import PostItem from '../item';
 import PostComment from '../comment';
 import CommentCreate from '../comment/create';
 import WithNavbar from '../../hoc/with-navbar';
+import OnScrollPaginate from '../../utils/on-scroll-paginate'
 
 const PostView = (props) => {
     const { id } = props.match.params;
@@ -23,21 +23,43 @@ const PostView = (props) => {
     const [post, setPost] = useState({});
     const [profile, setProfile] = useState('');
     const [comments, setComments] = useState([]);
+    const [isShared, setShared] = useState(false);
+    /** Only if post is a shared Post */
+    const [originalPost, setOriginalPost] = useState({});
 
     useEffect(() => {
         setIsLoading(true);
         reloadPost();
-    }, []);
+    }, [props.match.params]);
 
     const reloadPost = () => {
         dispatch(getPostById(id))
-            .then(({Comments, Post, User}) => {
+            .then(({Comments, Post, User, isShared, ...response}) => {
                 setPost(Post);
                 setComments(Comments);
                 setProfile(User);
+                setShared(isShared);
+                if (isShared) {
+                    console.log(response.Original)
+                    setOriginalPost(response.Original);
+                }
             })
             .catch()
             .then(() => setIsLoading(false));
+    }
+
+    const getComments = async(pageNo = 1) => {
+        try {
+            const res = await dispatch(getCommentsByPost(id, pageNo))
+            if (pageNo === 1) {
+                setComments(res)
+            } else {
+                setComments([...comments, ...res])
+            }
+            return Promise.resolve(res);
+        } catch (e) {
+            return Promise.reject(e);
+        }
     }
 
     return (
@@ -47,15 +69,19 @@ const PostView = (props) => {
             <div className={styles.wrapper}>
                 <PostItem
                     id={post.id}
-                    title={post.title}
-                    body={post.body}
+                    title={isShared ? originalPost.Post.title: post.title}
+                    body={isShared ? originalPost.Post.body: post.body}
+                    creator={isShared ? originalPost.User.username : profile.username}
+                    shared_by={isShared ? post.user_id: null}
+                    shared_by_username={isShared ? profile.username: null}
                     user_id={post.user_id}
                     avatarUrl={profile.avatar_url}
-                    creator={profile.username}
                     created={post.created}
+                    imgPath={post.img_path}
                     likes={post.likes}
                     comments={post.comments}
                     loggedin_id={user.id}
+                    retweet_post_id={post.retweet_post_id}
                     fetchHandler={() => {}}
                 />
                 <div className={styles.createComment}>
@@ -65,12 +91,15 @@ const PostView = (props) => {
                         onRequestSuccess={reloadPost}
                     />
                 </div>
-                <div className={styles.comments}>
+                <OnScrollPaginate
+                    className={styles.comments}
+                    fetchHandler={getComments}
+                >
                     <PostComment
                         comments={comments}
                         reloadPost={reloadPost}
                     />
-                </div>
+                </OnScrollPaginate>
             </div>
         )
     );

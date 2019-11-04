@@ -2,7 +2,7 @@
 
 class Post extends AppModel
 {
-    public $actsAs = ['SoftDeletable'];
+    public $actsAs = ['SoftDeletable', 'Containable'];
     public $validate = [
         'user_id' => [
             'rule' => 'notBlank',
@@ -35,9 +35,9 @@ class Post extends AppModel
         ],
         'Comments' => [
             'className' => 'Comment',
-            'conditions' =>['Comments.deleted' => null],
             'order' => 'Comments.created DESC',
             'limit' => 10,
+            'conditions' =>['Comments.deleted' => null],
         ],
     ];
 
@@ -76,17 +76,10 @@ class Post extends AppModel
 
     public function fetchPostsWithComments($postId)
     {
-        $post = $this->findById($postId);
-        if ( ! $post) {
+        if ( ! $post = $this->findById($postId)) {
             throw new NotFoundException(__('Invalid post'));
         }
-        // foreach ($post['Likes'] as $key => $like) {
-        //     $post['Post']['likes'][] = $like['user_id'];
-        //     $post['Likes'][$key]['username'] = $this->User->field(
-        //         'username',
-        //         ['User.id' => $like['user_id']]
-        //     );
-        // }
+        $post['isShared'] = $post['Post']['retweet_post_id'] != null;
         $post['Post']['comments'] = $this->Comments->countPerPost($post['Post']['id']);
         $post['Post']['likes'] = array_map(function ($like) {
             return $like['user_id'];
@@ -99,6 +92,21 @@ class Post extends AppModel
             ]);
             $post['Comments'][$key]['username'] = $commentUser['User']['username'];
             $post['Comments'][$key]['avatarUrl'] = $commentUser['User']['avatar_url'];
+        }
+
+        // Check if post is a shared post
+        // Gets information about the shared post instead
+        if ($post['isShared']) {
+            $originalPost = $this->find('first', [
+                'recursive' => -1,
+                'contain' => ['User.username'],
+                'conditions' => ['Post.id' => $post['Post']['retweet_post_id']]
+            ]);
+            if ( ! $originalPost) {
+                throw new NotFoundException(__('Invalid post'));
+            }
+            $post['Original'] = $originalPost;
+            return $post;
         }
         return $post;
     }
@@ -150,6 +158,26 @@ class Post extends AppModel
         ]);
         if ( ! $this->save()) {
             throw new InternalErrorException();
+        }
+        $Notification = ClassRegistry::init('Notification');
+        $User = ClassRegistry::init('User');
+        $username = $User->field('username', ['id' => $userId]);
+        $receiver_id = $this->field('user_id', ['id' => $postId]);
+        $postId = $postId;
+        if ($receiver_id != $userId) {
+            $Notification->addNotification([
+                'receiver_id' => $receiver_id,
+                'user_id' => $userId,
+                'message' => "
+                    <span class='username'>
+                        <a href='/profiles/$username'>
+                        @$username
+                        </a>
+                    </span>
+                    has shared your 
+                    <a class='text-link' href='/posts/$postId'>post</a>
+                "
+            ]);
         }
         return true;
     }

@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import styles from './post-create.module.css'
 import { useDispatch, useSelector, connect } from 'react-redux'
+import { withRouter } from 'react-router-dom';
 
 /** Redux Actions */
 import { CLEAR_ERRORS } from '../../../store/types'
@@ -11,6 +12,7 @@ import PCard from '../../widgets/p-card'
 import PFab from '../../widgets/p-fab'
 import FormInput from '../../widgets/form/input'
 import FormTextarea from '../../widgets/form/textarea'
+import FormImage from '../../widgets/form/image'
 
 const initialError = {
     title: '',
@@ -31,6 +33,7 @@ const PostCreate = ({
     const [errors, setErrors] = useState(initialError)
     const title = useRef('')
     const body = useRef('')
+    const img = useRef('')
 
     useEffect(() => {
         return () => {
@@ -51,9 +54,10 @@ const PostCreate = ({
         setErrors(initialError)
         const form = {
             title: title.current.value,
-            body: body.current.value
+            body: body.current.value,
+            img: img.current.files[0]
         }
-        addPost(form)
+        addPost(form, props.history)
             .then(() => { closeCreate() })
     }
 
@@ -100,6 +104,11 @@ const PostCreate = ({
                     error={errors.body}
                 />
 
+                <FormImage
+                    name="profile_image"
+                    refs={img}
+                />
+
                 <br />
                 <div className={styles.action_btns}>
                     <PFab
@@ -124,4 +133,4 @@ const PostCreate = ({
     )
 }
 
-export default connect(null, { addPost })(PostCreate)
+export default connect(null, { addPost })(withRouter(PostCreate))

@@ -42,6 +42,18 @@ export const getPosts = (page = 1) => async dispatch => {
 }
 
 /**
+ * Fetches the comments of given post
+ */
+export const getCommentsByPost = (postId, page=1) => async dispatch => {
+    try {
+        const res = await axios.get(`/posts/comments/${postId}.json?page=${page}`)
+        return Promise.resolve(res.data.data)
+    } catch (e) {
+        return Promise.reject(e)
+    }
+}
+
+/**
  * Fetches the posts of username passed
  */
 export const getUserPosts = (username, page = 1) => async dispatch => {
@@ -72,13 +84,23 @@ export const getUserPosts = (username, page = 1) => async dispatch => {
 /**
  * Adds a post by the current user
  */
-export const addPost = (post) => async dispatch => {
+export const addPost = (post, history) => async dispatch => {
     try {
-        await axios.post('/posts.json', post)
-        await dispatch(getPosts());
+        let config = {}
+        const formData = new FormData();
+        formData.append('title', post.title);
+        formData.append('body', post.body);
+        if (post.img) {
+            config.headers = {
+                'content-type': 'multipart/form-data'
+            }
+            formData.append('img', post.img);
+        }
+        await axios.post('/posts.json', formData, config)
+        window.location.href = "/"
         return Promise.resolve()
     } catch (e) {
-        return Promise.reject()
+        return Promise.reject(e)
     }
 }
 
@@ -87,7 +109,17 @@ export const addPost = (post) => async dispatch => {
  */
 export const editPost = (postId, post) => async dispatch => {
     try {
-        await axios.put(`/posts/${postId}.json`, post)
+        let config = {}
+        const formData = new FormData();
+        formData.append('title', post.title);
+        formData.append('body', post.body);
+        if (post.img) {
+            config.headers = {
+                'content-type': 'multipart/form-data'
+            }
+            formData.append('img', post.img);
+        }
+        await axios.post(`/posts/edit/${postId}.json`, formData, config)
         return Promise.resolve()
     } catch (e) {
         return Promise.reject()

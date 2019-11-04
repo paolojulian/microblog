@@ -90,7 +90,9 @@ const PFollowModal = ({
     }
 
     return (
-        <PModal onRequestClose={onRequestClose}>
+        <PModal onRequestClose={onRequestClose}
+            header={type === 'follower' ? 'Followers': 'Following'}
+        >
             {isLoading ? <PLoader /> : renderBody()}
         </PModal>
     )

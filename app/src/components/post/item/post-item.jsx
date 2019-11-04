@@ -26,21 +26,21 @@ const fromNow = date => {
 
 const PostItem = ({
     id,
-    title,
+    avatarUrl,
     body,
-    user_id,
+    comments,
+    created,
     creator,
+    fetchHandler,
+    imgPath,
+    likes,
+    loggedin_id,
+    ownerId,
+    retweet_post_id,
     shared_by,
     shared_by_username,
-    likes,
-    avatarUrl,
-    comments,
-    loggedin_id,
-    created,
-    ownerId,
-    imageName,
-    fetchHandler,
-    ...props
+    title,
+    user_id,
 }) => {
     const dispatch = useDispatch()
     const [likeCount, setLikeCount] = useState(likes.length)
@@ -64,31 +64,46 @@ const PostItem = ({
         fetchHandler();
     }
 
-    const renderSharedBy = () => {
-        if ( ! shared_by) return '';
-        if ( ! shared_by_username) return '';
+    const renderUsername = () => {
+        if (shared_by && shared_by_username) {
+            return (
+                <span>
+                    <Link to={`/profiles/${shared_by_username}`}>
+                        <span className="username">
+                            @{shared_by_username}&nbsp;
+                        </span>
+                    </Link>
+                    shared a&nbsp;
+                    <Link to={`/posts/${retweet_post_id}`}>
+                        <span className="username">
+                            post
+                        </span>
+                    </Link>
+                    &nbsp;by&nbsp;
+                    <Link to={`/profiles/${creator}`}>
+                        <span className="username">
+                            @{creator}
+                        </span>
+                    </Link>
+                </span>
+            )
+        }
 
         return (
-            <div className={styles.sharedBy}>
-                Shared By:&nbsp;
-                <Link to={`/profiles/${shared_by_username}`}>
-                    <span className="text-link">
-                        @{shared_by_username}&nbsp;
-                    </span>
-                </Link>
-            </div>
+            <Link to={`/profiles/${creator}`}>
+                <span className="text-link">
+                    @{creator}
+                </span>
+            </Link>
         )
     }
 
     const renderBody = () => (
         <div className={styles.body}>
-            {renderSharedBy()}
-            <Link to={`/profiles/${creator}`}>
-                <span className="text-link">
-                    @{creator}&nbsp;
-                </span>
-            </Link>
             {body}
+            {!!imgPath && <div className={styles.postImg}>
+                <img src={imgPath + 'x512.png'} alt={title}/>
+            </div>}
         </div>
     )
 
@@ -106,8 +121,11 @@ const PostItem = ({
                 />
                 <div className={styles.title}>
                     <Link to={`/posts/${id}`}>
-                        {title}
+                        <span className={styles.titleText}>
+                            {title}
+                        </span>
                     </Link>
+                    {renderUsername()}
                 </div>
                 {isOwned && isCreator && <div className={styles.edit}
                     onClick={() => setIsEdit(!isEdit)}
@@ -149,6 +167,7 @@ const PostItem = ({
                     id={id}
                     title={title}
                     body={body}
+                    imgPath={imgPath}
                     onSuccess={onSuccessEdit}
                     />
                 : renderBody()}

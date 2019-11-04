@@ -16,6 +16,7 @@ const SearchBar = () => {
     const dispatch = useDispatch();
     const searchText = useRef('');
     const [users, setUsers] = useState([]);
+    const [posts, setPosts] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
     const [noData, setNoData] = useState(false);
 
@@ -57,6 +58,17 @@ const SearchBar = () => {
             });
     }
 
+    const handleKeyPress = e => {
+        const re = /^[a-z0-9_ ]*$/i
+        if (!re.test(e.key)) {
+            e.preventDefault();
+        }
+    }
+
+    const getSearchText = () => {
+        return searchText.current.value.replace(/[\W_]+/g," ");
+    }
+
     const renderSearching = () => {
         if (noData) return (
             <div className="alert-disabled">
@@ -91,6 +103,10 @@ const SearchBar = () => {
                 </div>
             </div>
         </Link>
+    )); 
+    
+    const renderPosts = () => posts.map(post => (
+        <div>post</div>
     ));
 
     return (
@@ -101,14 +117,22 @@ const SearchBar = () => {
                     name="search_bar"
                     ref={searchText}
                     onChange={handleChange}
+                    onKeyPress={handleKeyPress}
                     autoComplete="off"
+                    onPaste={e => e.preventDefault()}
                     />
             </form>
             <div className={classNames(styles.searchList, {
                 [styles.active]: isSearching
             })}>
                 <div className={styles.searchContent}>
-                    {users.length > 0  ? renderUsers(): renderSearching()}
+                    {users.length > 0 ? renderUsers(): renderSearching()}
+                    {posts.length > 0 && renderPosts()}
+                    {users.length > 0 && <Link to={`/search/${getSearchText()}`}>
+                        <div className={styles.viewMore}>
+                            View More
+                        </div>
+                    </Link>}
                 </div>
             </div>
         </div>

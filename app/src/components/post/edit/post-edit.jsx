@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import styles from './post-edit.module.css'
 import { useDispatch, useSelector, connect } from 'react-redux'
 
@@ -10,11 +10,7 @@ import { editPost } from '../../../store/actions/postActions'
 import PFab from '../../widgets/p-fab'
 import FormInput from '../../widgets/form/input'
 import FormTextarea from '../../widgets/form/textarea'
-
-// const initialError = {
-//     title: '',
-//     body: ''
-// }
+import FormImage from '../../widgets/form/image'
 
 const PostEdit = ({
     editPost,
@@ -22,8 +18,10 @@ const PostEdit = ({
     onSuccess,
     ...props
 }) => {
+
     const dispatch = useDispatch()
     const { errors } = useSelector(state => state)
+    const imgRef = useRef()
     const [title, setTitle] = useState(props.title);
     const [body, setBody] = useState(props.body);
 
@@ -39,7 +37,8 @@ const PostEdit = ({
         }
         const form = {
             title,
-            body
+            body,
+            img: imgRef.current.files[0]
         }
         editPost(id, form)
             .then(() => { close() })
@@ -69,6 +68,13 @@ const PostEdit = ({
                 value={body}
                 onChange={e => setBody(e.target.value)}
             />
+
+            <FormImage
+                name="profile_image"
+                refs={imgRef}
+                initSrc={props.imgPath ? props.imgPath + 'x256.png' : ''}
+            />
+
             <div className={styles.actions}>
                 <PFab
                     type="submit"

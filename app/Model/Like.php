@@ -40,7 +40,15 @@ class Like extends AppModel
                 $Notification->addNotification([
                     'receiver_id' => $receiver_id,
                     'user_id' => $userId,
-                    'message' => "@$username has liked your <a class='text-link' href='/posts/$postId'>post</a>"
+                    'message' => "
+                        <span class='username'>
+                            <a href='/profiles/$username'>
+                            @$username
+                            </a>
+                        </span>
+                        has liked your
+                        <a class='text-link' href='/posts/$postId'>post</a>
+                    "
                 ]);
             }
         }

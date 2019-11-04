@@ -157,6 +157,7 @@ class User extends AppModel
      */
     public function searchUser($userId, $searchText, $page = 1)
     {
+        $perPage = 5;
         $searchText = trim($searchText);
         return $this->find('all', [
             'recursive' => -1,
@@ -171,7 +172,7 @@ class User extends AppModel
                 'is_activated' => 1
             ],
             'order' => 'created DESC',
-            'limit' => 5,
+            'limit' => $perPage,
             'page' => $page
         ]);
     }

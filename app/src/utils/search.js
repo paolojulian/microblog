@@ -4,7 +4,7 @@ const resources = {};
 const makeRequestCreator = () => {
   let cancel;
 
-  return async query => {
+  return async (query, config = {}) => {
     if (cancel) {
       // Cancel the previous request before making a new request
       cancel.cancel();
@@ -17,7 +17,7 @@ const makeRequestCreator = () => {
         // Return result if it exists
         return resources[query];
       }
-      const res = await axios(query, { cancelToken: cancel.token });
+      const res = await axios(query, { ...config, cancelToken: cancel.token });
 
       const result = res.data.data;
       // Store response

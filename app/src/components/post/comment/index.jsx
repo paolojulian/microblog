@@ -10,9 +10,10 @@ const PostComment = ({
     comments
 }) => {
 
-    const renderComments = comments.reverse().map(comment => (
+    // const renderComments = comments.reverse().map((comment, i) => (
+    const renderComments = comments.map((comment, i) => (
         <CommentItem
-            key={comment.id}
+            key={i}
             id={Number(comment.id)}
             body={comment.body}
             userId={Number(comment.user_id)}
