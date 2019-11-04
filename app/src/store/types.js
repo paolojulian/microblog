@@ -12,6 +12,7 @@ export const CLEAR_CURRENT_PROFILE = "CLEAR_CURRENT_PROFILE";
 export const CLEAR_PROFILES = "CLEAR_PROFILES";
 
 /** TODO Posts */
+export const SET_PAGE = "SET_PAGE";
 export const SET_POSTS = "SET_POSTS";
 export const TOGGLE_LOADING_POST = "IS_LOADING_POST";
 export const ADD_POSTS = "ADD_POSTS";

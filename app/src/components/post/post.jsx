@@ -9,7 +9,7 @@ import PostItem from './item'
 import OnScrollPaginate from '../utils/on-scroll-paginate'
 
 const Post = ({ fetchHandler }) => {
-    const { list: posts } = useSelector(state => state.post)
+    const { list: posts, page } = useSelector(state => state.post)
     const { id } = useSelector(state => state.auth.user)
     
     const renderPosts = () => posts.map(({ Post }, i) => {
@@ -41,6 +41,7 @@ const Post = ({ fetchHandler }) => {
             className={styles.posts}
             id="posts"
             fetchHandler={fetchHandler}
+            page={page}
         >
             {renderPosts()}
         </OnScrollPaginate>

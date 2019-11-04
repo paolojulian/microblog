@@ -4,11 +4,13 @@ import PropTypes from 'prop-types'
 import PLoader from '../widgets/p-loader'
 
 const Post = ({ fetchHandler, ...props }) => {
-    const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [isLast, setIsLast] = useState(false);
 
     useEffect(() => {
+        if (props.page === 1) {
+            setIsLast(false);
+        }
         if ( ! isLast) {
             window.addEventListener('scroll', listenOnScroll);
         } else {
@@ -17,21 +19,19 @@ const Post = ({ fetchHandler, ...props }) => {
         return () => {
             window.removeEventListener('scroll', listenOnScroll);
         };
-    }, [isLoading, page, isLast])
+    }, [isLoading, props.page, isLast])
 
     const handleScrollDown = async (pageNo = 1) => {
         try {
             const res = await fetchHandler(pageNo);
             if (res.length > 0) {
-                setPage(pageNo);
+                setIsLast(false);
             } else {
                 setIsLast(true);
             }
             return Promise.resolve();
         } catch (e) {
-            if (page > 1) {
-                setPage(page - 1);
-            }
+            setIsLast(true);
         }
     }
 
@@ -40,7 +40,7 @@ const Post = ({ fetchHandler, ...props }) => {
             if (isLast) return;
             if ( ! isLoading) {
                 setIsLoading(true)
-                handleScrollDown(page + 1)
+                handleScrollDown(props.page + 1)
                     .then(() => setIsLoading(false));
             }
         }
@@ -56,6 +56,11 @@ const Post = ({ fetchHandler, ...props }) => {
 
 Post.propTypes = {
     fetchHandler: PropTypes.func.isRequired,
+    page: PropTypes.number
+}
+
+Post.defaultProps = {
+    page: 1
 }
 
 export default Post

@@ -31,7 +31,7 @@ const Profile = (props) => {
         return () => {
             dispatch({ type: CLEAR_POSTS })
         };
-    }, [])
+    }, [props.match.params])
 
     const fetchHandler = (page = 1) => dispatch(getUserPosts(username, page))
 

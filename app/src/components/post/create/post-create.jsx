@@ -30,7 +30,7 @@ const PostCreate = ({
      * a button that will open a create post card
      */
     const [willCreate, setWillCreate] = useState(false)
-    const [errors, setErrors] = useState(initialError)
+    const [errors, setErrors] = useState({ ...initialError })
     const title = useRef('')
     const body = useRef('')
     const img = useRef('')
@@ -68,7 +68,7 @@ const PostCreate = ({
 
     if ( ! willCreate) {
         return (
-            <PCard {...props}>
+            <PCard>
                 <span className="text-link italic"
                     onClick={() => setWillCreate(true)}
                 >
@@ -80,7 +80,7 @@ const PostCreate = ({
     }
 
     return (
-        <PCard {...props}>
+        <PCard>
             <span className="text-link italic"
                 onClick={closeCreate}
             >

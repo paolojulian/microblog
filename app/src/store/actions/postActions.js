@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SET_POSTS, ADD_POSTS, TOGGLE_LOADING_POST } from '../types';
+import { SET_PAGE, SET_POSTS, ADD_POSTS, TOGGLE_LOADING_POST } from '../types';
 
 /**
  * Fetches a post by id
@@ -19,6 +19,7 @@ export const getPostById = (postId) => async dispatch => {
 export const getPosts = (page = 1) => async dispatch => {
     try {
         dispatch({ type: TOGGLE_LOADING_POST, payload: true })
+        console.log(page);
         const res = await axios.get(`/posts.json?page=${page}`)
         // Will override all posts
         if (page === 1) {
@@ -33,6 +34,10 @@ export const getPosts = (page = 1) => async dispatch => {
                 payload: res.data.data
             })
         }
+        dispatch({
+            type: SET_PAGE,
+            payload: page
+        });
         return Promise.resolve(res.data.data)
     } catch (e) {
         return Promise.reject()
@@ -73,8 +78,17 @@ export const getUserPosts = (username, page = 1) => async dispatch => {
                 payload: res.data.data
             })
         }
+        dispatch({
+            type: SET_PAGE,
+            payload: page
+        });
         return Promise.resolve(res.data.data)
     } catch (e) {
+        console.error(e);
+        dispatch({
+            type: SET_PAGE,
+            payload: 1
+        });
         return Promise.reject(e)
     } finally {
         dispatch({ type: TOGGLE_LOADING_POST, payload: false })
@@ -97,7 +111,7 @@ export const addPost = (post, history) => async dispatch => {
             formData.append('img', post.img);
         }
         await axios.post('/posts.json', formData, config)
-        window.location.href = "/"
+        await dispatch(getPosts());
         return Promise.resolve()
     } catch (e) {
         return Promise.reject(e)

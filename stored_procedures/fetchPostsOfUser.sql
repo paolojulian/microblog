@@ -26,12 +26,12 @@ SELECT
     orig.body,
     b.retweet_post_id,
     orig.user_id,
+	orig.img_path,
     b.created,
     b.modified,
     b.deleted,
-    orig.img_path,
     users.username,
-    users.avatar_url,
+    shared_user.avatar_url,
     b.user_id as shared_by,
     shared_user.username as shared_by_username
 FROM posts b
