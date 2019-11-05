@@ -1,23 +1,25 @@
 <?php
 
 App::uses('AppController', 'Controller');
+App::uses('Security', 'Utility');
 App::uses('Folder', 'Utility');
 App::uses('File', 'Utility');
 
 class UsersController extends AppController {
     public $components = [
         'RequestHandler',
-        'UserHandler'
+        'UserHandler',
     ];
     public $public = ['register', 'activate', 'login', 'accessDenied'];
 
     public function beforeFilter() {
         parent::beforeFilter();
     }
-
-    public function index() {
-    }
-
+    
+    /**
+     * TODO
+     * Don't know if this is used
+     */
     public function view($id = null) {
         $this->request->allowMethod('get');
         $this->User->id = $id;
@@ -55,11 +57,17 @@ class UsersController extends AppController {
     public function register() {
         $this->request->allowMethod('post');
 
-        $this->request->data['activation_key'] = time();
-        if ( ! $this->User->addUser($this->request->data)) {
-            return $this->responseUnprocessableEntity('', $this->User->validationErrors);
+        try {
+            $timeStr = str_replace("0.", "", microtime());
+            $timeStr = str_replace(" ", "", $timeStr);
+            $this->request->data['activation_key'] = Security::hash('lkkasdjfalj').'_'.$timeStr;
+            if ( ! $this->User->addUser($this->request->data)) {
+                return $this->responseUnprocessableEntity('', $this->User->validationErrors);
+            }
+            $this->UserHandler->sendActivationMail($this->request->data);
+        } catch (Exception $e) {
+            throw new InternalErrorException(__($e->getMessage()));
         }
-        $this->UserHandler->sendActivationMail($this->request->data);
 
         return $this->responseOK();
     }
@@ -74,18 +82,12 @@ class UsersController extends AppController {
     public function edit() {
         $this->request->allowMethod('put');
 
-        $this->User->id = $this->request->user->id;
-        if (!$this->User->exists()) {
-            throw new NotFoundException(__('Invalid user'));
-        }
-
-        $this->User->set($this->request->data);
-        if ( ! $this->User->validates()) {
-            return $this->responseUnprocessableEntity('', $this->User->validationErrors);
-        }
-
-        if ( ! $this->User->save($this->request->data)) {
-            throw new InternalErrorException();
+        try {
+            if ( ! $this->User->editUser($this->request->user->id, $this->request->data)) {
+                return $this->responseUnprocessableEntity('', $this->User->validationErrors);
+            }
+        } catch (Exception $e) {
+            throw new InternalErrorException(__($e->getMessage()));
         }
 
         return $this->responseOK();
@@ -148,6 +150,11 @@ class UsersController extends AppController {
         return $this->responseData($this->jwtEncode($payload));
     }
 
+    /**
+     * [POST]
+     * [PRIVATE] - for logged in users only
+     * Logout the user currently logged in
+     */
     public function logout()
     {
         $this->request->allowMethod('post');
@@ -156,19 +163,21 @@ class UsersController extends AppController {
     }
 
     /**
+     * [GET]
+     * [PUBLIC]
+     * A link is given to a user
      * Activates the user by the its activation key
      */
     public function activate($key)
     {
         $user = $this->User->findByActivationKey($key);
         if ( ! $user) {
-            echo 'Account was not found';
-            die();
+            die('Account was not found');
         }
         if ( ! $user['User']['is_activated']) {
             $this->User->activateUser($user['User']['id']);
         }
         echo 'User activated';
-        die();
+        $this->redirect('/');
     }
 }

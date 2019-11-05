@@ -56,9 +56,9 @@ const Landing = () => {
                     <PostCreate size="fit"/>
                     <Posts fetchHandler={fetchHandler}/>
                 </div>
-                <div className={styles.suggestions}>
-                    <PCard size="fit"></PCard>
-                </div>
+            </div>
+            <div className={styles.right}>
+                <PCard size="fit"></PCard>
             </div>
         </div>
     )

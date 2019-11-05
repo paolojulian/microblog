@@ -11,7 +11,7 @@ const TextMock = () => (
     }}></div>
 )
 
-const ImageMock = ({ size }) => (
+const RoundedMock = ({ size }) => (
     <div style={{
         backgroundColor: 'var(--black-disabled)',
         width: size,
@@ -23,7 +23,7 @@ const ImageMock = ({ size }) => (
 const Profile = () => (
     <div className={styles.profile}>
         <div className={styles.profileImg}>
-            <ImageMock size="7rem"/>
+            <RoundedMock size="7rem"/>
         </div>
         <div className={styles.profileInfo}>
             <TextMock/>
@@ -61,6 +61,7 @@ const LandingLoading = () => {
         <div className={styles.landing}>
             <Profile/>
             <div className={styles.container}>
+                <Post/>
                 <Post/>
                 <Post/>
             </div>

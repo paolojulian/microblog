@@ -21,10 +21,16 @@ import { ModalConsumer } from '../../widgets/p-modal/p-modal-context'
 
 const ProfileUpdate = () => {
     const dispatch = useDispatch();
+    // Form
+    const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [birthdate, setBirthdate] = useState('');
+    const [password, setPassword] = useState('');
+    const [oldPassword, setOldPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
     const [profileImgSrc, setProfileImgSrc] = useState(null);
     const { user, loading } = useSelector(state => state.profile);
     const { errors } = useSelector(state => state);
@@ -44,6 +50,7 @@ const ProfileUpdate = () => {
 
     useEffect(() => {
         if ( ! loading) {
+            setUsername(user.username);
             setFirstName(user.first_name);
             setLastName(user.last_name);
             setEmail(user.email);
@@ -64,11 +71,17 @@ const ProfileUpdate = () => {
         }
         setLoading(true);
         setServerError(false);
-        const form = {
+        let form = {
+            username,
             first_name: firstName,
             last_name: lastName,
             // email,
             birthdate
+        };
+        if (oldPassword) {
+            form.password = password;
+            form.old_password = oldPassword;
+            form.confirm_password = confirmPassword;
         }
         try {
             await dispatch(updateProfile(form))
@@ -127,6 +140,14 @@ const ProfileUpdate = () => {
                 onSubmit={submitHandler}
             >
                 <FormInput
+                    placeholder="Username"
+                    name="username"
+                    info="A unique handler for your profile"
+                    error={errors.username}
+                    value={username}
+                    onChange={e => setUsername(e.target.value)}
+                />
+                <FormInput
                     placeholder="First Name"
                     name="first_name"
                     error={errors.first_name}
@@ -148,6 +169,7 @@ const ProfileUpdate = () => {
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                 /> */}
+
                 <FormInput
                     type="date"
                     placeholder="Birthdate"
@@ -156,6 +178,33 @@ const ProfileUpdate = () => {
                     value={birthdate}
                     onChange={e => setBirthdate(e.target.value)}
                 />
+
+                <FormInput
+                    type="password"
+                    placeholder="Old Password"
+                    name="old_password"
+                    error={errors.old_password}
+                    value={oldPassword}
+                    onChange={e => setOldPassword(e.target.value)}
+                />
+
+                {!!oldPassword && <FormInput
+                    type="password"
+                    placeholder="New Password"
+                    name="password"
+                    error={errors.password}
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                />}
+
+                {!!oldPassword && <FormInput
+                    type="password"
+                    placeholder="Confirm Password"
+                    name="confirm_password"
+                    error={errors.confirm_password}
+                    value={confirmPassword}
+                    onChange={e => setConfirmPassword(e.target.value)}
+                />}
 
                 {serverError ? <ServerError/> : ''}
                 {isSuccess ? (<div className="text-success">Profile successfully updated!</div>) : ''}

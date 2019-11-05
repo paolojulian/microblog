@@ -26,6 +26,9 @@ class ProfilesController extends AppController
             $username,
             'id, username, first_name, last_name, email, birthdate, sex, avatar_url'
         );
+        if ( ! $user) {
+            throw new NotFoundException(__('User not found'));
+        }
         return $this->responseData([
             'user' => $user["User"],
             'isFollowing' => $this->Follower->isFollowing(

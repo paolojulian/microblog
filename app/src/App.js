@@ -101,7 +101,7 @@ const App = () => {
                             <PrivateRoute exact path="/posts/:id" component={PostView}/>
                         </Switch>
                         <Switch>
-                            <PrivateRoute exact path="/search/:searchText" component={PSearch}/>
+                            <PrivateRoute exact path="/search" component={PSearch}/>
                         </Switch>
                     </ModalProvider>
                     <VNofication/>

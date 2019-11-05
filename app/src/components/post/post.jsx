@@ -24,6 +24,7 @@ const Post = ({ fetchHandler }) => {
                 creator={Post.username}
                 fetchHandler={fetchHandler}
                 imgPath={Post.img_path}
+                isShared={!!Post.shared_by && !!Post.shared_by_username}
                 likes={Post.likes}
                 loggedin_id={id}
                 ownerId={Post.shared_by ? Post.shared_by : Post.user_id}

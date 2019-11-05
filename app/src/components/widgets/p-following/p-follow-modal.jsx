@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import styles from './p-follow.module.css';
-import { Link } from 'react-router-dom';
 
 /** Redux */
 import { fetchFollow } from '../../../store/actions/profileActions';
-import { followUser } from '../../../store/actions/profileActions';
 
 /** Components */
 import PModal from '../../widgets/p-modal';
 import PLoader from '../../widgets/p-loader';
-import ProfileImage from '../profile-image/profile-image';
+import UserItem from '../user';
+import ModalScrollPaginate from '../../utils/modal-scroll-paginate';
 
 const availableTypes = ['follower', 'following'];
 const PFollowModal = ({
@@ -20,9 +19,11 @@ const PFollowModal = ({
     onRequestClose,
 }) => {
     const dispatch = useDispatch();
+    const usersRef = useRef('');
     const [isLoading, setLoading] = useState(true);
     const [isError, setError] = useState(false);
     const [users, setUsers] = useState([]);
+    const [page, setPage] = useState(1);
 
     if (availableTypes.indexOf(type) === -1) {
         console.log('Invalid Type Given: ' + type);
@@ -32,8 +33,8 @@ const PFollowModal = ({
     useEffect(() => {
         const init = async () => {
             try {
-                const users = await dispatch(fetchFollow(userId, type));
-                setUsers(users);
+                setLoading(true);
+                await handleFetchFollow();
             } catch (e) {
                 setError(true);
             } finally {
@@ -41,56 +42,46 @@ const PFollowModal = ({
             }
         }
         init();
-    }, [])
+    }, []);
 
-    const handleFollow = (id, itemIndex) => {
-        dispatch(followUser(id))
-            .then(() => {
-                let objectName = type === 'follower' ? 'User' : 'Following';
-                let usersHold = [...users];
-                usersHold[itemIndex][objectName]['is_following'] = true;
-                setUsers(usersHold);
-            })
+    const handleFetchFollow = async (page = 1) => {
+        try {
+            const res = await dispatch(fetchFollow(userId, type, page))
+            setUsers([...users, ...res]);
+            setPage(page);
+            return Promise.resolve(res);
+        } catch (e) {
+            return Promise.reject(e);
+        }
     }
 
     const renderBody = () => {
-        if (users.length === 0) return <div className="disabled">No User/s</div>
-        return users.map((item, i) => {
-            let user = type === 'follower' ? item.User : item.Following;
-            return (
-                <div key={user.id}
-                    className={styles.user}
-                >
-                    <div className={styles.avatar}>
-                        <ProfileImage
-                            src={user.avatar_url}
-                            size={32}
-                        />
-                    </div>
-                    <div className={styles.info}>
-                        <div className={styles.name}>
-                            {user.first_name + ' ' + user.last_name}
-                        </div>
-                        <div className="username">
-                            <Link to={`/profiles/${user.username}`}
-                                onClick={onRequestClose}
-                            >
-                                @{user.username}
-                            </Link>
-                        </div>
-                    </div>
-                    { ! user.is_following && <div className={styles.follow}
-                        onClick={() => handleFollow(user.id, i)}
-                    >
-                        <i className="fa fa-heart"></i>
-                    </div>}
-                </div>
-            );
-        })
+        if (isError) return <div className="disabled">Oops. Something went wrong</div>
+        if (isLoading) return <PLoader/>
+        if ( ! users && users.length === 0) return <div className="disabled">No User/s</div>
+        return (
+            <ModalScrollPaginate
+                page={page}
+                fetchHandler={handleFetchFollow}
+                className={styles.users}
+                bodyRef={usersRef}
+            >
+                {users.map((item, i) => {
+                    let user = type === 'follower' ? item.User : item.Following;
+                    return <UserItem
+                        key={user.id + i}
+                        user={user}
+                        onRequestClose={onRequestClose}
+                    />
+                })}
+            </ModalScrollPaginate>
+        )
     }
 
     return (
-        <PModal onRequestClose={onRequestClose}
+        <PModal
+            className={styles.modal}
+            onRequestClose={onRequestClose}
             header={type === 'follower' ? 'Followers': 'Following'}
         >
             {isLoading ? <PLoader /> : renderBody()}

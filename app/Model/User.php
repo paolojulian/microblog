@@ -57,14 +57,19 @@ class User extends AppModel
             ],
         ],
         'username' => [
+            'notBlank' => [
+                'rule' => 'notBlank',
+                'message' => 'Please enter your username.',
+                'required' => true,
+            ],
             'between' => [
                 'rule' => ['lengthBetween', 6, 20],
-                'required' => 'create',
+                'required' => true,
                 'message' => 'Between 6 to 20 characters only'
             ],
             'alphaNumeric' => [
                 'rule' => 'alphaNumeric',
-                'required' => 'create',
+                'required' => true,
                 'message' => 'Letters and Numbers only'
             ],
             'unique' => [
@@ -141,9 +146,18 @@ class User extends AppModel
     public function findByUsername($username, $fields = '*')
     {
         return $this->find('first', [
-            'recursive' => true,
+            'recursive' => -1,
             'fields' => $fields,
             'conditions' => ['username' => $username]
+        ]);
+    }
+
+    public function findByActivationKey($key, $fields = '*')
+    {
+        return $this->find('first', [
+            'recursive' => -1,
+            'fields' => $fields,
+            'conditions' => ['activation_key' => $key]
         ]);
     }
 
@@ -207,14 +221,38 @@ class User extends AppModel
         return true;
     }
 
-    public function beforeSave($options = [])
+    public function editUser($userId, $data)
     {
-        if ( ! isset($this->data[$this->alias]['password'])) return true;
+        $this->id = $userId;
+        $user = $this->findById($this->id);
+        if ( ! $user) {
+            throw new NotFoundException(__('Invalid user'));
+        }
 
-        $passwordHasher = new BlowfishPasswordHasher();
-        $this->data[$this->alias]['password'] = $passwordHasher->hash(
-            $this->data[$this->alias]['password']
-        );
+        // Add validation if the user decides to change his password
+        if (isset($data['old_password']) && ! empty($data['old_password'])) {
+            $passwordHasher = new BlowfishPasswordHasher();
+            if ( ! $passwordHasher->check($data['old_password'], $user['User']['password'])) {
+                $this->validationErrors['old_password'] = 'You entered a wrong password';
+                return false;
+            }
+            $this->validator()
+                ->getField('password')
+                ->getRule('minLength')
+                ->required = true;
+        } else if (isset($data['password'])) {
+            throw new BadMethodCallException(__("Passing password to form data without old password"));
+        }
+
+        $this->set($data);
+        if ( ! $this->validates()) {
+            return false;
+        }
+
+        if ( ! $this->save()) {
+            throw new InternalErrorException();
+        }
+
         return true;
     }
 
@@ -240,5 +278,16 @@ class User extends AppModel
 		$value = array_values($data);
 		$comparewithvalue = $value[0];
 		return $this->data[$this->name][$compareField] === $comparewithvalue;
+    }
+
+    public function beforeSave($options = [])
+    {
+        if ( ! isset($this->data[$this->alias]['password'])) return true;
+
+        $passwordHasher = new BlowfishPasswordHasher();
+        $this->data[$this->alias]['password'] = $passwordHasher->hash(
+            $this->data[$this->alias]['password']
+        );
+        return true;
     }
 }

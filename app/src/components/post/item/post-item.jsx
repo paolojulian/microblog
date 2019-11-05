@@ -16,6 +16,7 @@ import ProfileImage from '../../widgets/profile-image'
 import PostEdit from '../edit'
 import PostDelete from '../delete'
 import PostShare from '../share'
+import LikesModal from '../likes'
 
 /** Consumer */
 import { ModalConsumer } from '../../widgets/p-modal/p-modal-context'
@@ -33,6 +34,7 @@ const PostItem = ({
     creator,
     fetchHandler,
     imgPath,
+    isShared,
     likes,
     loggedin_id,
     ownerId,
@@ -145,7 +147,7 @@ const PostItem = ({
                         </div>
                     )}
                 </ModalConsumer>}
-                {!isOwned && !isCreator && <ModalConsumer>
+                {!isOwned && !isCreator && !isShared && <ModalConsumer>
                     {({ showModal }) => (
                         <div className={styles.share}
                             onClick={() => showModal(PostShare, {
@@ -173,20 +175,32 @@ const PostItem = ({
                 : renderBody()}
 
             <div className={styles.actions}>
-                <button type="button"
-                    className={classnames(styles.like, {
-                        [styles.active]: isLiked
-                    })}
-                    onClick={handleLike}
-                >
-                    <i className="fa fa-thumbs-up">
-                        &nbsp;{likeCount}
-                    </i>
-                </button>
+                <span>
+                    {likeCount > 0 && <ModalConsumer>
+                        {({ showModal }) => (
+                        <button type="button"
+                            onClick={() => showModal(LikesModal, { postId: Number(id) })}
+                        >
+                            Likes
+                        </button>
+                        )}
+                    </ModalConsumer>}
+                    <button type="button"
+                        className={classnames(styles.like, {
+                            [styles.active]: isLiked
+                        })}
+                        onClick={handleLike}
+                    >
+                        <i className="fa fa-thumbs-up">
+                            &nbsp;{likeCount}
+                        </i>
+                    </button>
+                </span>
                 <Link to={`/posts/${id}`}>
                     <button type="button"
                         className={styles.comment}
                     >
+                        Comments&nbsp;
                         <i className="fa fa-comment">
                             &nbsp;{comments}
                         </i>
@@ -204,6 +218,7 @@ PostItem.propTypes = {
     creator: PropTypes.string,
     created: PropTypes.string,
     modified: PropTypes.string,
+    isShared: PropTypes.bool,
     loggedin_id: PropTypes.string,
     likes: PropTypes.array,
     comments: PropTypes.number,
@@ -211,7 +226,8 @@ PostItem.propTypes = {
 
 PostItem.defaultProps = {
     likes: [],
-    comments: 0
+    comments: 0,
+    isShared: false
 }
 
 export default PostItem

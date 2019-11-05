@@ -9,7 +9,7 @@ class Like extends AppModel
         ],
         'User' => [
             'className' => 'User',
-            'fields' => 'username'
+            'fields' => ['id', 'username', 'first_name', 'last_name', 'avatar_url']
         ]
     ];
 
@@ -53,6 +53,27 @@ class Like extends AppModel
             }
         }
         return true;
+    }
+
+    public function paginateLikes($userId, $postId, $page = 1)
+    {
+        $perPage = 20;
+        $data = $this->find('all', [
+            'contain' => ['User'],
+            'conditions' => ['post_id' => $postId],
+            'order' => 'Likes.created DESC',
+            'limit' => $perPage,
+            'page' => $page,
+        ]);
+        $followerModel = ClassRegistry::init('Follower');
+        foreach ($data as $key => $item) {
+            $data[$key]['User']['is_following'] = true;
+            $item = $item['User'];
+            if ($userId != $item['id']) {
+                $data[$key]['User']['is_following'] = $followerModel->isFollowing($userId, $item['id']);
+            }
+        }
+        return $data;
     }
 
     public function afterSave($created, $options = [])

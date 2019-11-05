@@ -15,7 +15,7 @@ const PFollowing = ({
             {({ showModal }) => (
             <div style={{
                 margin: '1rem 0',
-                fontSize: '1.2rem'
+                fontSize: '1.05rem'
             }}>
                 <div>
                     <label>Followers: </label>

@@ -7,9 +7,10 @@ import WithNavbar from '../hoc/with-navbar'
 
 const PSearch = (props) => {
     const { searchText } = props.match.params;
+    console.log(props.location.search);
 
     return (
-        <div>Hi</div>
+        <div>{searchText}</div>
     )
 }
 

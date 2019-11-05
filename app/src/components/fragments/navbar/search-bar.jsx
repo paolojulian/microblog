@@ -77,7 +77,8 @@ const SearchBar = () => {
         );
         return (
             <div className="alert-disabled">
-                Searching..
+                <i className="fa fa-spinner fa-spin"></i>
+                &nbsp;Searching..
             </div>
         )
     };
@@ -128,7 +129,7 @@ const SearchBar = () => {
                 <div className={styles.searchContent}>
                     {users.length > 0 ? renderUsers(): renderSearching()}
                     {posts.length > 0 && renderPosts()}
-                    {users.length > 0 && <Link to={`/search/${getSearchText()}`}>
+                    {users.length > 0 && <Link to={`/search?searchText=${getSearchText()}`}>
                         <div className={styles.viewMore}>
                             View More
                         </div>

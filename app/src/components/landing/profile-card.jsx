@@ -1,10 +1,7 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styles from './profile-card.module.css';
-
-/** Redux */
-import { getProfile } from '../../store/actions/profileActions';
 
 /** Components */
 import PCard from '../widgets/p-card';
@@ -13,13 +10,9 @@ import PLoader from '../widgets/p-loader';
 import ProfileImage from '../widgets/profile-image';
 
 const ProfileCard = (props) => {
-    const dispatch = useDispatch();
     const { user, loading } = useSelector(state => state.profile);
     const { totalFollowers, totalFollowing } = useSelector(state => state.profile)
 
-    useEffect(() => {
-        dispatch(getProfile())
-    }, []);
 
     const renderBody = () => (
         <div className={styles.profile_card}>
@@ -28,21 +21,23 @@ const ProfileCard = (props) => {
                     src={user.avatar_url}
                     alt={user.username}
                 />
+                <div className={styles.credentials}>
+                    <div className={styles.last_name}>
+                        <Link to={`/profiles/${user.username}`}>
+                            {user.last_name}
+                        </Link>
+                    </div>
+                    <div className={styles.first_name}>
+                        {user.first_name}
+                    </div>
+                    <div className={styles.username}>
+                        <Link to={`/profiles/${user.username}`}>
+                            @{user.username}
+                        </Link>
+                    </div>
+                </div>
             </div>
             <div className={styles.info}>
-                <div className={styles.last_name}>
-                    <Link to={`/profiles/${user.username}`}>
-                        {user.last_name}
-                    </Link>
-                </div>
-                <div className={styles.first_name}>
-                    {user.first_name}
-                </div>
-                <div className={styles.username}>
-                    <Link to={`/profiles/${user.username}`}>
-                        @{user.username}
-                    </Link>
-                </div>
                 <PFollowing
                     userId={Number(user.id)}
                     totalFollowers={totalFollowers}

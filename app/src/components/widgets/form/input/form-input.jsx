@@ -30,18 +30,16 @@ const FormInput = ({
                 disabled={disabled}
                 {...props}
                 />
-            {info && <small className="form-info">{info}</small>}
-            {
-                error && <div className="invalid-feedback">
-                    {
-                        typeof error === 'string'
-                            ? `* ${error}`
-                            : typeof error[0] === 'string'
-                                ? `* ${error[0]}`
-                                : ``
-                    }
-                </div>
-            }
+            {info && <div className={styles.formInfo}>{info}</div>}
+            {error && <div className="invalid-feedback">
+                {
+                    typeof error === 'string'
+                        ? `* ${error}`
+                        : typeof error[0] === 'string'
+                            ? `* ${error[0]}`
+                            : ``
+                }
+            </div>}
         </div>
     )
 }

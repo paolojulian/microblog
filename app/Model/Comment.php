@@ -68,7 +68,7 @@ class Comment extends AppModel
 
     public function paginateComment($postId, $page = 1)
     {
-        $perPage = 10;
+        $perPage = 20;
         $data = $this->find('all', [
             'conditions' => ['post_id' => $postId],
             'order' => 'Comments.created DESC',

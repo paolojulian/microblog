@@ -78,6 +78,7 @@ const PostView = (props) => {
                     avatarUrl={profile.avatar_url}
                     created={post.created}
                     imgPath={post.img_path}
+                    isShared={isShared}
                     likes={post.likes}
                     comments={post.comments}
                     loggedin_id={user.id}

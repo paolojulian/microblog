@@ -20,7 +20,6 @@ export const ModalProvider = (props) => {
       component,
       props
     })
-    console.log(state);
   }
   const hideModal = () => {
     setState({

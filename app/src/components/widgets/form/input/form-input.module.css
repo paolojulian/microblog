@@ -36,6 +36,15 @@
     margin: 0.2rem 0;
 }
 
+.formInfo {
+    margin-left: 0.3rem;
+    text-align: left;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--black-light);
+}
+
 .invalid-feedback {
     text-align: left;
     font-size: 0.9rem;

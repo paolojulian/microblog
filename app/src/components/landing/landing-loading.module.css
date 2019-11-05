@@ -1,12 +1,11 @@
 .landing {
     position: relative;
     width: 100%;
+    height: auto;
 }
 
 .container {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    margin: 0 auto;
     width: 30rem;
     max-width: 100%;
     border-radius: 5px;
@@ -57,9 +56,10 @@
 @media screen and (min-width: 1000px) {
     .profile {
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: flex-start;
-        position: absolute;
+        position: fixed;
+        top: 3rem;
         left: calc(50% - 25.5rem);
         transform: translateX(-50%);
         background-color: var(--grey);
@@ -83,6 +83,7 @@
     .right {
         display: block;
         position: absolute;
+        top: 0;
         left: calc(50% + 25.5rem);
         transform: translateX(-50%);
         background-color: var(--grey);

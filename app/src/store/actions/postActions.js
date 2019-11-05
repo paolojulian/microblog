@@ -19,7 +19,6 @@ export const getPostById = (postId) => async dispatch => {
 export const getPosts = (page = 1) => async dispatch => {
     try {
         dispatch({ type: TOGGLE_LOADING_POST, payload: true })
-        console.log(page);
         const res = await axios.get(`/posts.json?page=${page}`)
         // Will override all posts
         if (page === 1) {
@@ -197,5 +196,17 @@ export const deleteComment = (commentId) => async dispatch => {
         return Promise.resolve()
     } catch (e) {
         return Promise.reject()
+    }
+}
+
+/**
+ * Gets the likes of a post
+ */
+export const fetchLikesByPost = (postId) => async dispatch => {
+    try {
+        const res = await axios.get(`/posts/likes/${postId}.json`)
+        return Promise.resolve(res.data.data);
+    } catch (e) {
+        return Promise.reject(e);
     }
 }

@@ -169,6 +169,28 @@ class PostsController extends AppController
      * [GET]
      * [PRIVATE] - only for logged in user
      * 
+     * Fetches likes by post
+     * 
+     * @param int $id - PK posts table
+     * @return json
+     */
+    public function likes($id)
+    {
+        $this->request->allowMethod('get');
+        $page = $this->request->query('page');
+        return $this->responseData(
+            $this->Post->Likes->paginateLikes(
+                $this->request->user->id,
+                $id,
+                $page
+            )
+        );
+    }
+
+    /**
+     * [GET]
+     * [PRIVATE] - only for logged in user
+     * 
      * Fetches comments by post
      * 
      * @param int $id - PK posts table
