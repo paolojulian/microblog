@@ -24,8 +24,8 @@ class UserHandlerComponent extends Component {
         $message = "Dear <span color='red'>$name</span>";
         $message .= "<br />Your account has been created successfully.<br />";
         $message .= "<b>In order to get started, please click the link below to activate your account</b>";
-        $message .= "<br/><b><a href='$activationUrl'>$activationUrl</a></b>";
-        $message .= "<br />Thank you very much! Pipz";
+        $message .= "<br/><b><a href='$activationUrl.json'>$activationUrl</a></b>";
+        $message .= "<br />Thank you very much!<br />-Pipz";
 
         $this->MailHandler->sendHTMLMail($to, $subject, $message);
     }

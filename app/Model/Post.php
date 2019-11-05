@@ -182,6 +182,32 @@ class Post extends AppModel
         return true;
     }
 
+    /**
+     * TODO
+     * For a better searching of user, display users with mutual
+     * followers first
+     * 
+     * @param int $userId - user logged in shouldnt be included in the search
+     * @param string $searchText - text to be searched
+     */
+    public function searchPost($searchText, $page = 1)
+    {
+        $perPage = 5;
+        $searchText = trim($searchText);
+        return $this->find('all', [
+            'contain' => ['User'],
+            'conditions' => [
+                'OR' => [
+                    'title LIKE' => "%$searchText%",
+                    'body LIKE' => "%$searchText%",
+                ],
+            ],
+            'order' => 'Post.created DESC',
+            'limit' => $perPage,
+            'page' => $page
+        ]);
+    }
+
     public function isOwnedBy($postId, $userId)
     {
         $params = [

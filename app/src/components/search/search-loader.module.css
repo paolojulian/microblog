@@ -1,0 +1,33 @@
+.container {
+    margin: 0 auto;
+    width: 95%;
+    max-width: 95%;
+}
+
+.postHeader {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+@media screen and (min-width: 600px) {
+    .wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .users,
+    .posts {
+        flex: 1;
+    }
+
+    .users {
+        margin-right: 0.5rem;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .container {
+        width: 60rem;
+    }
+}

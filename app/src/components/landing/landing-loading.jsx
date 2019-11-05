@@ -1,24 +1,6 @@
 import React from 'react';
 import styles from './landing-loading.module.css';
-
-const TextMock = () => (
-    <div style={{
-        backgroundColor: 'var(--grey-dark)',
-        height: '1rem',
-        marginBottom: '0.5rem',
-        borderRadius: '10px',
-        width: Math.floor(Math.random() * 50 + 50) + '%'
-    }}></div>
-)
-
-const RoundedMock = ({ size }) => (
-    <div style={{
-        backgroundColor: 'var(--black-disabled)',
-        width: size,
-        height: size,
-        borderRadius: '50%',
-    }}></div>
-)
+import { TextMock, RoundedMock } from '../widgets/wireframes';
 
 const Profile = () => (
     <div className={styles.profile}>
