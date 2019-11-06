@@ -20,6 +20,7 @@ import LikesModal from '../likes'
 
 /** Consumer */
 import { ModalConsumer } from '../../widgets/p-modal/p-modal-context'
+import PostImage from '../../widgets/post-image'
 
 const fromNow = date => {
     return moment(date).fromNow()
@@ -102,10 +103,8 @@ const PostItem = ({
 
     const renderBody = () => (
         <div className={styles.body}>
-            {body}
-            {!!imgPath && <div className={styles.postImg}>
-                <img src={imgPath + 'x512.png'} alt={title}/>
-            </div>}
+            <div className={styles.bodyText}>{body}</div>
+            {!!imgPath && <PostImage imgPath={imgPath} title={title}/>}
         </div>
     )
 

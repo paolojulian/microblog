@@ -26,36 +26,56 @@ const PSearch = (props) => {
     const [searchText, setSearchText] = useState(queryString.parse(props.location.search).searchText);
     const [users, setUsers] = useState([]);
     const [posts, setPosts] = useState([]);
+    const [isMounted, setMounted] = useState(false);
 
     useEffect(() => {
-        setStatus({ ...initialStatus, loading: true });
-        let test = setTimeout(() => {
-            setStatus({ ...initialStatus, post: true });
-        }, 500);
+        setMounted(true);
+        const init = async () => {
+            setStatus({ ...initialStatus, loading: true });
+            try {
+                await searchUsersAndPosts(searchText)
+                setStatus({ ...initialStatus, post: true });
+            } catch (e) {
+                setStatus({ ...initialStatus, error: true });
+            }
+        }
+        init();
         return () => {
-            clearTimeout(test);
+            setMounted(false);
         };
     }, [])
 
     const handleSearch = e => {
-        const str = e.target.value.trim();
-        setSearchText(str);
-        if ( ! str) {
-            return setUsers([])
+        setSearchText(e.target.value);
+        searchUsersAndPosts(e.target.value);
+    }
+
+    const searchUsersAndPosts = async str => {
+        console.log(str);
+        const trimmedStr = str.trim();
+        if ( ! trimmedStr) {
+            setPosts([])
+            setUsers([])
+            return;
         }
 
-        dispatch(apiSearch(str))
-            .then(data => {
-                // Sometimes canceling token will return undefined
-                if ( ! data) return;
+        try {
+            const data = await dispatch(apiSearch(trimmedStr))
+            if (data) {
                 setUsers(data.users)
                 setPosts(data.posts)
-            })
-            .catch(() => {
-                setStatus({ ...initialStatus, post: true });
-                setUsers([]);
-                setPosts([]);
-            });
+            }
+            return Promise.resolve();
+        } catch (e) {
+            setStatus({ ...initialStatus, error: true });
+            setUsers([]);
+            setPosts([]);
+            return Promise.reject(e);
+        }
+    }
+
+    const searchUsers = async (page = 1) => {
+
     }
 
     const renderBody = () => (
@@ -65,8 +85,14 @@ const PSearch = (props) => {
                 searchText={searchText}
             />
             <div className={styles.wrapper}>
-                <SearchUsers className={styles.users}/>
-                <SearchPosts className={styles.posts}/>
+                <SearchUsers
+                    className={styles.users}
+                    users={users}
+                />
+                <SearchPosts
+                    className={styles.posts}
+                    posts={posts}
+                />
             </div>
         </div>
     )

@@ -4,12 +4,13 @@ import { useDispatch } from 'react-redux'
 import classNames from 'classnames'
 
 /** Redux */
-import { searchUser } from '../../../store/actions/profileActions'
+import { apiSearch } from '../../../store/actions/searchActions';
 
 /** Components */
 import ProfileImage from '../../widgets/profile-image'
 
 import styles from './navbar.module.css'
+import { PostItemMinimal } from '../../widgets/post-item';
 
 const SearchBar = () => {
 
@@ -31,6 +32,7 @@ const SearchBar = () => {
         setIsSearching(false);
         setNoData(false);
         setUsers([]);
+        setPosts([]);
     }
 
     const handleSearch = e => {
@@ -42,19 +44,16 @@ const SearchBar = () => {
         e.target.value.trim();
         setIsSearching(!!e.target.value);
         setNoData(false);
-        if (!e.target.value) {
-            return setUsers([])
-        }
-        dispatch(searchUser(searchText.current.value))
+        dispatch(apiSearch(searchText.current.value))
             .then(data => {
                 // Sometimes canceling token will return undefined
                 if ( ! data) return;
 
-                if (data.length === 0) {
-                    setUsers([]);
+                if (data.users.length === 0 && data.posts.length === 0) {
                     return setNoData(true);
                 }
-                setUsers(data)
+                setUsers(data.users);
+                setPosts(data.posts);
             });
     }
 
@@ -106,8 +105,11 @@ const SearchBar = () => {
         </Link>
     )); 
     
-    const renderPosts = () => posts.map(post => (
-        <div>post</div>
+    const renderPosts = () => posts.map((post, i) => (
+        <PostItemMinimal
+            post={post}
+            key={post.Post.id + i}
+        />
     ));
 
     return (
@@ -126,15 +128,19 @@ const SearchBar = () => {
             <div className={classNames(styles.searchList, {
                 [styles.active]: isSearching
             })}>
-                <div className={styles.searchContent}>
-                    {users.length > 0 ? renderUsers(): renderSearching()}
+                <div className={styles.searchContent}
+                    style={{ overflowY: 'auto', maxHeight: '80vh' }}>
+                    {users.length === 0 && posts.length === 0 && renderSearching()}
+                    {users.length > 0 && renderUsers()}
                     {posts.length > 0 && renderPosts()}
-                    {users.length > 0 && <Link to={`/search?searchText=${getSearchText()}`}>
-                        <div className={styles.viewMore}>
-                            View More
-                        </div>
-                    </Link>}
                 </div>
+                {users.length > 0 || posts.length > 0
+                    ? <Link to={`/search?searchText=${getSearchText()}`}>
+                    <div className={styles.viewMore}>
+                        View More
+                    </div>
+                </Link>
+                : ''}
             </div>
         </div>
     );

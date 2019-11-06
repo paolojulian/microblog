@@ -7,6 +7,7 @@
 	<?php echo $this->Html->css('App') ?>
 	<?php echo $this->Html->css('Card') ?>
 	<?php echo $this->Html->css('Form') ?>
+	<?php echo $this->Html->css('scrollbar') ?>
 	<link rel="stylesheet"
 		crossorigin
 		type="text/css"

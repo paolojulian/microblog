@@ -1,4 +1,6 @@
 const path = require('path');
+const webpack = require('webpack')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const BUILD_DIR = path.resolve(__dirname, 'app/webroot/');
 const APP_DIR = path.resolve(__dirname, 'app/src/');
@@ -7,8 +9,31 @@ const config = {
   entry: ['@babel/polyfill', `${APP_DIR}/index.js`],
   output: {
     path: `${BUILD_DIR}/js/`,
+    chunkFilename: '[name].bundle.js',
     filename: 'bundle.js',
   },
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        chunkFilter: (chunk) => {
+          // Exclude uglification for the `vendor` chunk
+          if (chunk.name === 'vendor') {
+            return false;
+          }
+
+          return true;
+        },
+      }),
+    ],
+  },
+  plugins: [
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    })
+  ],
   resolve: {
     extensions: ['*', '.js', '.jsx']
   },

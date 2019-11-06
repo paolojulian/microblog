@@ -4,6 +4,9 @@
     padding: 0;
     border: 0;
 }
+body {
+    overflow-x: hidden;
+}
 .App {
     --primary: #f2994a;
     --primary-dark: #bb6a1b;

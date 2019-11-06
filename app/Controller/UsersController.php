@@ -39,8 +39,8 @@ class UsersController extends AppController {
     {
         $this->request->allowMethod('get');
         $users = $this->User->searchUser(
+            $searchText,
             $this->request->user->id,
-            $searchText
         );
         return $this->responseData($users);
     }

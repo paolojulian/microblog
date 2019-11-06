@@ -169,7 +169,7 @@ class User extends AppModel
      * @param int $userId - user logged in shouldnt be included in the search
      * @param string $searchText - text to be searched
      */
-    public function searchUser($userId, $searchText, $page = 1)
+    public function searchUser($searchText, $userId = null, $page = 1)
     {
         $perPage = 5;
         $searchText = trim($searchText);

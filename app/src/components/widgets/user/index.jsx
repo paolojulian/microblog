@@ -10,9 +10,9 @@ import { followUser } from '../../../store/actions/profileActions';
 /** Components */
 import ProfileImage from '../profile-image/profile-image';
 
-const UserItem = ({ user, onRequestClose }) => {
+const UserItem = ({ user, showFollow, onRequestClose }) => {
     const dispatch = useDispatch();
-    const [isFollowing, setFollowing] = useState(user.is_following);
+    const [isFollowing, setFollowing] = useState(!!user.is_following);
 
     const handleFollow = (id) => {
         dispatch(followUser(id))
@@ -41,7 +41,7 @@ const UserItem = ({ user, onRequestClose }) => {
                     </Link>
                 </div>
             </div>
-            { ! isFollowing && <div className={styles.follow}
+            {showFollow && ! isFollowing && <div className={styles.follow}
                 onClick={() => handleFollow(user.id)}
             >
                 <i className="fa fa-heart"></i>
@@ -52,6 +52,10 @@ const UserItem = ({ user, onRequestClose }) => {
 
 UserItem.propTypes = {
     user: PropTypes.object.isRequired
+}
+
+UserItem.defaultProps = {
+    showFollow: true
 }
 
 export default UserItem;

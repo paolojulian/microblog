@@ -1,15 +1,38 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import PCard from '../widgets/p-card/p-card';
+import UserItem from '../widgets/user';
 
-const SearchUsers = (props) => {
+const User = ({ user }) => (
+    <UserItem
+        user={user}
+        showFollow={false}
+    />
+)
+
+const SearchUsers = ({ users, ...props }) => {
     return (
         <div {...props}>
-            <PCard size="fit">
+            <PCard
+                size="fit"
+                style={{marginBottom: '0.5rem'}}
+            >
                 Users
             </PCard>
+            
+            {users.length > 0 && <PCard size="fit">
+                {users.map((user, i) => 
+                    <User
+                        key={user.User.id + i}
+                        user={user.User}/>)}
+            </PCard>}
         </div>
     )
+}
+
+SearchUsers.propTypes = {
+    users: PropTypes.array.isRequired
 }
 
 export default SearchUsers

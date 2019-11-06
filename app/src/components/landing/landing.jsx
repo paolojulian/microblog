@@ -21,6 +21,7 @@ const Landing = () => {
     const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
+        window.scrollTo({ top: 0, left: 0 });
         const init = async () => {
             await dispatch(getProfile())
             await fetchHandler();
