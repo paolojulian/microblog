@@ -50,11 +50,14 @@ const SearchBar = () => {
                 // Sometimes canceling token will return undefined
                 if ( ! data) return;
 
-                if (data.users.length === 0 && data.posts.length === 0) {
+                if (
+                    data.users.list.length === 0 &&
+                    data.posts.list.length === 0
+                ) {
                     return setNoData(true);
                 }
-                setUsers(data.users);
-                setPosts(data.posts);
+                setUsers(data.users.list);
+                setPosts(data.posts.list);
             });
     }
 

@@ -173,22 +173,30 @@ class User extends AppModel
     {
         $perPage = 5;
         $searchText = trim($searchText);
-        return $this->find('all', [
+        $conditions = [
+            'OR' => [
+                'username LIKE' => "%$searchText%",
+                "concat_ws(' ', first_name, last_name) LIKE" => "%$searchText%",
+            ],
+            'id !=' => $userId,
+            'deleted' => null,
+            'is_activated' => 1
+        ];
+        $totalUsers = $this->find('count', ['conditions' => $conditions]);
+        $users = $this->find('all', [
             'recursive' => -1,
             'fields' => ['id', 'username', 'first_name', 'last_name', 'avatar_url'],
-            'conditions' => [
-                'OR' => [
-                    'username LIKE' => "%$searchText%",
-                    "concat_ws(' ', first_name, last_name) LIKE" => "%$searchText%",
-                ],
-                'id !=' => $userId,
-                'deleted' => null,
-                'is_activated' => 1
-            ],
+            'conditions' => $conditions,
             'order' => 'created DESC',
             'limit' => $perPage,
             'page' => $page
         ]);
+        $totalLeft = $totalUsers - ($perPage * $page);
+        return [
+            'list' => $users,
+            'totalUsers' => $totalUsers,
+            'totalLeft' => $totalLeft > 0 ? $totalLeft : 0
+        ];
     }
 
     public function addUser($data)

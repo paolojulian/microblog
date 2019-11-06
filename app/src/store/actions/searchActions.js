@@ -17,3 +17,12 @@ export const apiSearchUsers = (searchText, page = 1) => async dispatch => {
         return Promise.reject(e);
     }
 }
+
+export const apiSearchPosts = (searchText, page = 1) => async dispatch => {
+    try {
+        const res = await search(`/search/posts/${searchText}.json?page=${page}`);
+        return Promise.resolve(res);
+    } catch (e) {
+        return Promise.reject(e);
+    }
+}

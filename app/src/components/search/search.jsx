@@ -4,7 +4,7 @@ import styles from './search.module.css'
 import { useDispatch } from 'react-redux'
 
 /** Redux */
-import { apiSearch } from '../../store/actions/searchActions'
+import { apiSearch, apiSearchUsers, apiSearchPosts } from '../../store/actions/searchActions'
 
 /** Components */
 import { withRouter } from 'react-router-dom'
@@ -20,12 +20,20 @@ const initialStatus = {
     post: false
 }
 
+const initialPager = {
+    loading: false,
+    page: 1,
+    totalLeft: 0
+}
+
 const PSearch = (props) => {
     const dispatch = useDispatch();
     const [status, setStatus] = useState({ ...initialStatus })
     const [searchText, setSearchText] = useState(queryString.parse(props.location.search).searchText);
     const [users, setUsers] = useState([]);
+    const [userPager, setUserPager] = useState(initialPager);
     const [posts, setPosts] = useState([]);
+    const [postPager, setPostPager] = useState(initialPager);
     const [isMounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -51,7 +59,6 @@ const PSearch = (props) => {
     }
 
     const searchUsersAndPosts = async str => {
-        console.log(str);
         const trimmedStr = str.trim();
         if ( ! trimmedStr) {
             setPosts([])
@@ -62,8 +69,16 @@ const PSearch = (props) => {
         try {
             const data = await dispatch(apiSearch(trimmedStr))
             if (data) {
-                setUsers(data.users)
-                setPosts(data.posts)
+                setUsers(data.users.list)
+                setUserPager({
+                    ...userPager,
+                    totalLeft: data.users.totalLeft
+                })
+                setPosts(data.posts.list)
+                setPostPager({
+                    ...postPager,
+                    totalLeft: data.posts.totalLeft
+                })
             }
             return Promise.resolve();
         } catch (e) {
@@ -74,8 +89,36 @@ const PSearch = (props) => {
         }
     }
 
-    const searchUsers = async (page = 1) => {
+    const searchUsers = async () => {
+        try {
+            const res = await dispatch(apiSearchUsers(searchText, userPager.page + 1))
+            if (res.list.length > 0) {
+                setUsers([ ...users, ...res.list ]);
+                setUserPager({
+                    page: userPager.page + 1,
+                    totalLeft: res.totalLeft
+                })
+            }
+        } catch (e) {
+            setStatus({ ...initialStatus, error: true });
+            setUsers([]);
+        }
+    }
 
+    const searchPosts = async () => {
+        try {
+            const res = await dispatch(apiSearchPosts(searchText, postPager.page + 1))
+            if (res.list.length > 0) {
+                setPosts([ ...posts, ...res.list ]);
+                setPostPager({
+                    page: postPager.page + 1,
+                    totalLeft: res.totalLeft
+                })
+            }
+        } catch (e) {
+            setStatus({ ...initialStatus, error: true });
+            setPosts([]);
+        }
     }
 
     const renderBody = () => (
@@ -87,10 +130,14 @@ const PSearch = (props) => {
             <div className={styles.wrapper}>
                 <SearchUsers
                     className={styles.users}
+                    onRequestLoad={searchUsers}
+                    totalLeft={userPager.totalLeft}
                     users={users}
                 />
                 <SearchPosts
                     className={styles.posts}
+                    onRequestLoad={searchPosts}
+                    totalLeft={postPager.totalLeft}
                     posts={posts}
                 />
             </div>

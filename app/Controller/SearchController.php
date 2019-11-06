@@ -61,11 +61,12 @@ class SearchController extends AppController {
             $userId = $this->request->user->id;
         }
         $this->loadModel('User');
-        return $this->User->searchUser(
+        $data = $this->User->searchUser(
             $searchText,
             $userId,
             $page
         );
+        return $this->responseData($data);
     }
 
     /**
@@ -79,6 +80,13 @@ class SearchController extends AppController {
      * @return array - array of posts
      */
     public function posts($searchText) {
-
+        $this->request->allowMethod('get');
+        $page = $this->request->query('page');
+        $this->loadModel('Post');
+        $data = $this->Post->searchPost(
+            $searchText,
+            $page
+        );
+        return $this->responseData($data);
     }
 }

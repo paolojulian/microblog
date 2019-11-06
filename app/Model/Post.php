@@ -193,19 +193,27 @@ class Post extends AppModel
     public function searchPost($searchText, $page = 1)
     {
         $perPage = 5;
-        $searchText = trim($searchText);
-        return $this->find('all', [
-            'contain' => ['User'],
-            'conditions' => [
-                'OR' => [
-                    'title LIKE' => "%$searchText%",
-                    'body LIKE' => "%$searchText%",
-                ],
+        $conditions = [
+            'OR' => [
+                'title LIKE' => "%$searchText%",
+                'body LIKE' => "%$searchText%",
             ],
+        ];
+        $searchText = trim($searchText);
+        $totalPosts = $this->find('count', ['conditions' => $conditions]);
+        $posts = $this->find('all', [
+            'contain' => ['User'],
+            'conditions' => $conditions,
             'order' => 'Post.created DESC',
             'limit' => $perPage,
             'page' => $page
         ]);
+        $totalLeft = $totalPosts - ($perPage * $page);
+        return [
+            'list' => $posts,
+            'totalPosts' => $totalPosts,
+            'totalLeft' => $totalLeft > 0 ? $totalLeft : 0
+        ];
     }
 
     public function isOwnedBy($postId, $userId)

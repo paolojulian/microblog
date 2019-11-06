@@ -68,7 +68,7 @@ nav ul li {
     cursor: pointer;
     user-select: none;
     padding: 0.5rem 0;
-    background-color: var(--black-disabled);
+    background-color: var(--secondary-dark);
     color: var(--grey);
     font-size: 0.9rem;
     text-transform: uppercase;
