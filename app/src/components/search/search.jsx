@@ -34,10 +34,8 @@ const PSearch = (props) => {
     const [userPager, setUserPager] = useState(initialPager);
     const [posts, setPosts] = useState([]);
     const [postPager, setPostPager] = useState(initialPager);
-    const [isMounted, setMounted] = useState(false);
 
     useEffect(() => {
-        setMounted(true);
         const init = async () => {
             setStatus({ ...initialStatus, loading: true });
             try {
@@ -48,9 +46,7 @@ const PSearch = (props) => {
             }
         }
         init();
-        return () => {
-            setMounted(false);
-        };
+        // TODO Add if mounted cancel all setters
     }, [])
 
     const handleSearch = e => {
@@ -63,7 +59,7 @@ const PSearch = (props) => {
         if ( ! trimmedStr) {
             setPosts([])
             setUsers([])
-            return;
+            return Promise.resolve();
         }
 
         try {

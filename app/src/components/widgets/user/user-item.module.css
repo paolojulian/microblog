@@ -6,6 +6,10 @@
     padding: 0.5rem 0;
 }
 
+.user:hover {
+    background-color: var(--grey-secondary);
+}
+
 .avatar {
     margin: 0.5rem 1rem;
 }

@@ -20,33 +20,33 @@ const UserItem = ({ user, showFollow, onRequestClose }) => {
     }
 
     return (
-        <div key={user.id}
-            className={styles.user}
+        <Link to={`/profiles/${user.username}`}
+            onClick={onRequestClose}
         >
-            <div className={styles.avatar}>
-                <ProfileImage
-                    src={user.avatar_url}
-                    size={32}
-                />
-            </div>
-            <div className={styles.info}>
-                <div className={styles.name}>
-                    {user.first_name + ' ' + user.last_name}
-                </div>
-                <div className="username">
-                    <Link to={`/profiles/${user.username}`}
-                        onClick={onRequestClose}
-                    >
-                        @{user.username}
-                    </Link>
-                </div>
-            </div>
-            {showFollow && ! isFollowing && <div className={styles.follow}
-                onClick={() => handleFollow(user.id)}
+            <div key={user.id}
+                className={"User " + styles.user}
             >
-                <i className="fa fa-heart"></i>
-            </div>}
-        </div>
+                <div className={styles.avatar}>
+                    <ProfileImage
+                        src={user.avatar_url}
+                        size={32}
+                    />
+                </div>
+                <div className={styles.info}>
+                    <div className={styles.name}>
+                        {user.first_name + ' ' + user.last_name}
+                    </div>
+                    <div className="username">
+                            @{user.username}
+                    </div>
+                </div>
+                {showFollow && ! isFollowing && <div className={styles.follow}
+                    onClick={() => handleFollow(user.id)}
+                >
+                    <i className="fa fa-heart"></i>
+                </div>}
+            </div>
+        </Link>
     )
 };
 

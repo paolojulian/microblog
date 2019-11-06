@@ -6,9 +6,6 @@ import classNames from 'classnames'
 /** Redux */
 import { apiSearch } from '../../../store/actions/searchActions';
 
-/** Components */
-import ProfileImage from '../../widgets/profile-image'
-
 import styles from './navbar.module.css'
 import { PostItemMinimal } from '../../widgets/post-item';
 import UserItem from '../../widgets/user';
@@ -21,11 +18,12 @@ const SearchBar = () => {
     const [posts, setPosts] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
     const [noData, setNoData] = useState(false);
+    const [hasMoreData, setHasMoreData] = useState(false);
 
     useEffect(() => {
-        document.body.addEventListener('click', resetState)
+        document.body.addEventListener('click', resetState, false)
         return () => {
-            document.body.removeEventListener('click', resetState)
+            document.body.removeEventListener('click', resetState, false)
         };
     }, [])
 
@@ -55,6 +53,14 @@ const SearchBar = () => {
                     data.posts.list.length === 0
                 ) {
                     return setNoData(true);
+                }
+                if (
+                    data.users.totalLeft > 0 ||
+                    data.posts.totalLeft > 0
+                ) {
+                    setHasMoreData(true);
+                } else {
+                    setHasMoreData(false);
                 }
                 setUsers(data.users.list);
                 setPosts(data.posts.list);
@@ -124,13 +130,11 @@ const SearchBar = () => {
                     {users.length > 0 && renderUsers()}
                     {posts.length > 0 && renderPosts()}
                 </div>
-                {users.length > 0 || posts.length > 0
-                    ? <Link to={`/search?searchText=${getSearchText()}`}>
+                {hasMoreData && <Link to={`/search?searchText=${getSearchText()}`}>
                     <div className={styles.viewMore}>
                         View More
                     </div>
-                </Link>
-                : ''}
+                </Link>}
             </div>
         </div>
     );

@@ -21,6 +21,7 @@ const PostView = (props) => {
 
     const [isLoading, setIsLoading] = useState(true);
     const [post, setPost] = useState({});
+    const [page, setPage] = useState(1);
     const [profile, setProfile] = useState('');
     const [comments, setComments] = useState([]);
     const [isShared, setShared] = useState(false);
@@ -39,6 +40,7 @@ const PostView = (props) => {
                 setComments(Comments);
                 setProfile(User);
                 setShared(isShared);
+                setPage(1);
                 if (isShared) {
                     console.log(response.Original)
                     setOriginalPost(response.Original);
@@ -56,6 +58,7 @@ const PostView = (props) => {
             } else {
                 setComments([...comments, ...res])
             }
+            setPage(pageNo);
             return Promise.resolve(res);
         } catch (e) {
             return Promise.reject(e);
@@ -93,6 +96,7 @@ const PostView = (props) => {
                     />
                 </div>
                 <OnScrollPaginate
+                    page={page}
                     className={styles.comments}
                     fetchHandler={getComments}
                 >

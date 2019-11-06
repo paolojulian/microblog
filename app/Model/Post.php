@@ -36,7 +36,7 @@ class Post extends AppModel
         'Comments' => [
             'className' => 'Comment',
             'order' => 'Comments.created DESC',
-            'limit' => 10,
+            'limit' => 20,
             'conditions' =>['Comments.deleted' => null],
         ],
     ];

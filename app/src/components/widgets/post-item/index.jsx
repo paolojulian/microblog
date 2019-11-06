@@ -6,6 +6,10 @@ import ProfileImage from '../profile-image';
 import PostImage from '../post-image';
 
 const postStyle = {
+    post: {
+        width: '100%',
+        padding: '1rem 0',
+    },
     header: {
         display: 'flex',
         justifyContent: 'center',
@@ -30,30 +34,31 @@ const postStyle = {
 }
 
 export const PostItemMinimal = ({ post: { User, Post }}) => (
-    <PCard size="fit">
-        <div style={postStyle.header}>
-            <div style={postStyle.img}>
-                <ProfileImage
-                    src={User.avatar_url}
-                    size={24}
-                />
-            </div>
-            <div style={postStyle.info}>
-                <div style={postStyle.title}>
-                    <Link to={`/posts/${Post.id}`}>
-                        TITLE: {Post.title}
-                    </Link>
+    <Link to={`/posts/${Post.id}`}>
+        <div style={postStyle.post} className="hover-grey">
+            <div 
+                style={postStyle.header}>
+                <div style={postStyle.img}>
+                    <ProfileImage
+                        src={User.avatar_url}
+                        size={24}
+                    />
                 </div>
-                <div>
-                    <Link to={`/profiles/${User.username}`}>
-                        <span className="username">
-                            @{User.username}
-                        </span>
-                    </Link>
+                <div style={postStyle.info}>
+                    <div style={postStyle.title}>
+                        TITLE: {Post.title}
+                    </div>
+                    <div>
+                        <Link to={`/profiles/${User.username}`}>
+                            <span className="username">
+                                @{User.username}
+                            </span>
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>
-    </PCard>
+    </Link>
 )
 
 export const PostItem = ({ post: { User, Post } }) => (

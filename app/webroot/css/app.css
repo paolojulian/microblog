@@ -178,6 +178,9 @@ p.small {
     -moz-user-drag: none;
     -o-user-drag: none;
 }
+.username:hover {
+    color: var(--blue-dark);
+}
 
 .with-navbar {
     padding-top: calc(var(--navbar-height) + 1rem);
@@ -189,4 +192,8 @@ p.small {
     color: var(--black-disabled);
     font-size: 0.9rem;
     font-style: italic;
+}
+
+.hover-grey:hover {
+    background-color: var(--grey-secondary);
 }
