@@ -33,16 +33,19 @@ const Navbar = ({
 
     return (
         <nav>
+            <SearchBar/>
+            <div className={styles.logo}>Logo</div>
             <ul className={styles.container}>
-                <li>Logo</li>
-                <li className={styles.search}>
-                    <SearchBar/>
+                <li
+                    className={styles.home}
+                    onClick={reloadOrNavigate}>
+                    Home
                 </li>
-                <span onClick={reloadOrNavigate}><li>Home</li></span>
-                <li>
+                <li className={styles.notification}>
                     <i className="fa fa-bell"/>
                 </li>
-                <li onClick={handleLogout}>
+                <li className={styles.logout}
+                    onClick={handleLogout}>
                     Logout
                 </li>
             </ul>

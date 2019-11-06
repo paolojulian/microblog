@@ -11,6 +11,7 @@ import ProfileImage from '../../widgets/profile-image'
 
 import styles from './navbar.module.css'
 import { PostItemMinimal } from '../../widgets/post-item';
+import UserItem from '../../widgets/user';
 
 const SearchBar = () => {
 
@@ -82,27 +83,11 @@ const SearchBar = () => {
         )
     };
 
-    const renderUsers = () => users.map(({User: user}, i) => (
-        <Link to={`/profiles/${user.username}`}
-            key={i}
-        >
-            <div className={styles.userItem}>
-                <div className={styles.userImage}>
-                    <ProfileImage
-                        size={32}
-                        src={user.avatar_url}
-                        />
-                </div>
-                <div className={styles.userInfo}>
-                    <div className={styles.userItemName}>
-                        {user.first_name + ' ' + user.last_name}
-                    </div>
-                    <span className="username">
-                        @{user.username}
-                    </span>
-                </div>
-            </div>
-        </Link>
+    const renderUsers = () => users.map(({ User: user }, i) => (
+        <UserItem
+            key={user.id + i}
+            user={user}
+            showFollow={false} />
     )); 
     
     const renderPosts = () => posts.map((post, i) => (
@@ -114,7 +99,9 @@ const SearchBar = () => {
 
     return (
         <div className={styles.search}>
-            <form onSubmit={handleSearch}>
+            <form onSubmit={handleSearch}
+                className={styles.searchForm}
+            >
                 <input type="text"
                     placeholder="Search"
                     name="search_bar"
