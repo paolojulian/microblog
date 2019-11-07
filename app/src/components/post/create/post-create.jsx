@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useContext } from 'react'
 import styles from './post-create.module.css'
 import { useDispatch, useSelector, connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
@@ -14,6 +14,9 @@ import FormInput from '../../widgets/form/input'
 import FormTextarea from '../../widgets/form/textarea'
 import FormImage from '../../widgets/form/image'
 
+/** Context */
+import { ModalContext } from '../../widgets/p-modal/p-modal-context'
+
 const initialError = {
     title: '',
     body: ''
@@ -24,6 +27,7 @@ const PostCreate = ({
     ...props
 }) => {
     const dispatch = useDispatch()
+    const context = useContext(ModalContext);
     const stateErrors = useSelector(state => state.errors)
     /**
      * Toggler if component will show create post or display
@@ -58,7 +62,12 @@ const PostCreate = ({
             img: img.current.files[0]
         }
         addPost(form, props.history)
-            .then(() => { closeCreate() })
+            .then(handleSuccess)
+    }
+
+    const handleSuccess = () => {
+        context.notify.success('Your post was successfully created!');
+        closeCreate()
     }
 
     const closeCreate = () => {

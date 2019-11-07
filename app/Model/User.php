@@ -164,14 +164,35 @@ class User extends AppModel
     }
 
     /**
-     * Gets not yet followed users
+     * Gets not yet followed users who is a friend of a friend
      * Prioritizes users who has mutual connections
      */
-    public function getNotFollowedUsers($userId, $pageNo, $perPage = 3)
+    public function getFriendsOfFriends($userId, $pageNo, $perPage = 3)
     {
+        $FollowerModel = ClassRegistry::init('Follower');
+        $totalFollowing = $FollowerModel->countFollowing($userId);
+        if ($totalFollowing == 0) {
+            return $this->getNotFollowedUsers($userId, $pageNo, $perPage);
+        }
         $offset = ($pageNo - 1) * $perPage;
         $procedure = "CALL getNotFollowedUsers($userId, $perPage, $offset)";
-        return $this->query($procedure);
+        $data = $this->query($procedure);
+        if (count($data) === 0) {
+            return $this->getNotFollowedUsers($userId, $pageNo, $perPage);
+        }
+        return $data;
+    }
+
+    public function getNotFollowedUsers($userId, $pageNo, $perPage)
+    {
+        return $this->find('all' , [
+            'recursive' => -1,
+            'conditions' => ['is_activated' => 1, 'id !=' => $userId],
+            'order' => 'created DESC',
+            'fields' => ['id', 'username', 'first_name', 'last_name', 'avatar_url'],
+            'limit' => $perPage,
+            'page' => $pageNo
+        ]);
     }
 
     /**

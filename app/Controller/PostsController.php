@@ -89,7 +89,6 @@ class PostsController extends AppController
     {
         $this->request->allowMethod('post');
         $this->request->data['user_id'] = $this->request->user->id;
-        $this->request->data['img_path'] = '';
         if (isset($_FILES['img']) && !!$_FILES['img']) {
             $this->request->data['img_path'] = $this->PostHandler->uploadImage(
                 $_FILES['img'],
@@ -116,7 +115,6 @@ class PostsController extends AppController
     {
         $this->request->allowMethod('post');
         $this->request->data['user_id'] = $this->request->user->id;
-        $this->request->data['img_path'] = '';
         if (isset($_FILES['img']) && !!$_FILES['img']) {
             $this->request->data['img_path'] = $this->PostHandler->uploadImage(
                 $_FILES['img'],

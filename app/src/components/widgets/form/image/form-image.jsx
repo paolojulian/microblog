@@ -7,8 +7,10 @@ const FormImage = ({
     name,
     refs,
     initSrc,
+    onChangeImg,
     ...props
 }) => {
+    const hasDefault = !!initSrc;
     const [imgSrc, setImgSrc] = useState(initSrc);
     const [imgName, setImgName] = useState('Choose an image');
 
@@ -17,7 +19,7 @@ const FormImage = ({
         const img = refs.current.files[0];
         reader.onload = () => {
             setImgSrc(reader.result);
-            // setImgName(rea)
+            onChangeImg();
         };
         if (img) {
             reader.readAsDataURL(img);
@@ -29,6 +31,9 @@ const FormImage = ({
     const removeImg = () => {
         refs.current.value = '';
         setImgSrc('');
+        if (hasDefault) {
+            onChangeImg();
+        }
     }
 
     return (
@@ -63,11 +68,13 @@ const FormImage = ({
 
 FormImage.propTypes = {
     name: PropTypes.string.isRequired,
+    onChangeImg: PropTypes.func.isRequired,
     initSrc: PropTypes.string
 }
 
 FormImage.defaultProps = {
-    initSrc: ''
+    initSrc: '',
+    onChangeImg: () => {}
 }
 
 export default FormImage;

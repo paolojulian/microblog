@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { connect, useSelector, useDispatch } from 'react-redux'
 import { withRouter } from 'react-router-dom';
@@ -12,12 +12,17 @@ import PCard from '../../widgets/p-card'
 import PButton from '../../widgets/p-button'
 import FormInput from '../../widgets/form/input'
 
+/** Context */
+import { ModalContext } from '../../widgets/p-modal/p-modal-context'
+
 const Register = ({
     registerUser,
     history
 }) => {
-    const stateErrors = useSelector(state => state.errors);
     const dispatch = useDispatch();
+    const context = useContext(ModalContext);
+    const stateErrors = useSelector(state => state.errors);
+    const [isLoading, setLoading] = useState(false);
     const first_name = useRef('');
     const last_name = useRef('');
     const email = useRef('');
@@ -51,6 +56,12 @@ const Register = ({
 
     const handleSubmit = async e => {
         e.preventDefault();
+
+        if (isLoading) {
+            return;
+        }
+
+        setLoading(true);
         const User = {
             first_name: first_name.current.value,
             last_name: last_name.current.value,
@@ -63,8 +74,27 @@ const Register = ({
         }
         try {
             await registerUser(User, history)
+            context.notify.success(
+                `Account created successfully,
+                \n
+                please check your email for an activation link`
+            );
+            history.push('/login');
+
         } catch (e) {
-            console.log(e);
+            if (
+                !!e.response &&
+                !!e.response.status &&
+                e.response.status !== 422
+            ) {
+                context.notify.danger(`
+                    There was a problem in creating your account,
+                    \n
+                    Please try again later
+                `);
+            }
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -145,6 +175,7 @@ const Register = ({
                     <PButton
                         type="submit"
                         theme="primary"
+                        isLoading={isLoading}
                     >
                         SUBMIT
                     </PButton>

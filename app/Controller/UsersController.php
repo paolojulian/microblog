@@ -153,6 +153,7 @@ class UsersController extends AppController {
     /**
      * [GET]
      * [PRIVATE] - for logged in users only
+     * 
      */
     public function notfollowed()
     {
@@ -162,7 +163,7 @@ class UsersController extends AppController {
             $page = 1;
         }
         return $this->responseData(
-            $this->User->getNotFollowedUsers(
+            $this->User->getFriendsOfFriends(
                 $this->request->user->id,
                 $page
             )

@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import React from 'react';
 import axios from 'axios'
 import { Provider } from 'react-redux'
 import jwtDecode from 'jwt-decode'
@@ -54,6 +54,9 @@ axios.interceptors.response.use(config => {
         return false;
     }
     switch (err.response.status) {
+        case 404:
+            window.location.href = '/not-found'
+            break;
         case 403:
             // No break
         case 401:
@@ -106,6 +109,7 @@ const App = () => {
                     </ModalProvider>
                     <VNofication/>
                     <Route exact path="/not-found" component={NoMatch} />
+                    {/* <Route component={NoMatch}/> */}
                 </div>
             </Router>
         </Provider>

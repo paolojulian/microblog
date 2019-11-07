@@ -86,10 +86,13 @@ class Post extends AppModel
             throw new NotFoundException(__('Invalid post'));
         }
         $post['isShared'] = $post['Post']['retweet_post_id'] != null;
+
         $post['Post']['comments'] = $this->Comments->countPerPost($post['Post']['id']);
+
         $post['Post']['likes'] = array_map(function ($like) {
             return $like['user_id'];
         }, $post['Likes']);
+
         foreach ($post['Comments'] as $key => $comment) {
             $commentUser = $this->User->find('first', [
                 'recursive' => -1,

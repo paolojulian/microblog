@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useContext } from 'react'
 import styles from './post-edit.module.css'
 import { useDispatch, useSelector, connect } from 'react-redux'
 
@@ -12,6 +12,9 @@ import FormInput from '../../widgets/form/input'
 import FormTextarea from '../../widgets/form/textarea'
 import FormImage from '../../widgets/form/image'
 
+/** Context */
+import { ModalContext } from '../../widgets/p-modal/p-modal-context'
+
 const PostEdit = ({
     editPost,
     id,
@@ -20,8 +23,10 @@ const PostEdit = ({
 }) => {
 
     const dispatch = useDispatch()
+    const context = useContext(ModalContext)
     const { errors } = useSelector(state => state)
     const imgRef = useRef()
+    const [didChangeImg, setDidChangeImg] = useState(false);
     const [title, setTitle] = useState(props.title);
     const [body, setBody] = useState(props.body);
 
@@ -35,16 +40,19 @@ const PostEdit = ({
         if (e) {
             e.preventDefault();
         }
-        const form = {
+        let form = {
             title,
             body,
-            img: imgRef.current.files[0]
+        }
+        if (didChangeImg) {
+            form.img = imgRef.current.files[0]
         }
         editPost(id, form)
             .then(() => { close() })
     }
 
     const close = () => {
+        context.notify.success("Updated Successfully!");
         dispatch({ type: CLEAR_ERRORS });
         onSuccess();
     }
@@ -73,6 +81,7 @@ const PostEdit = ({
                 name="profile_image"
                 refs={imgRef}
                 initSrc={props.imgPath ? props.imgPath + 'x256.png' : ''}
+                onChangeImg={() => setDidChangeImg(true)}
             />
 
             <div className={styles.actions}>

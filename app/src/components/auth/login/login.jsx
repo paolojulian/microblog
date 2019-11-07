@@ -15,7 +15,8 @@ const Login = ({
     loginUser,
     history
 }) => {
-    const { isAuthenticated } = useSelector(state => state.auth)
+    const { isAuthenticated } = useSelector(state => state.auth);
+    const [isLoading, setLoading] = useState(false);
     const username = useRef('');
     const password = useRef('');
     const [errors, setErrors] = useState({
@@ -32,6 +33,10 @@ const Login = ({
 
     const handleSubmit = async e => {
         e.preventDefault();
+        if (isLoading) {
+            return;
+        }
+        setLoading(true);
         setErrors({
             form: '',
             username: false,
@@ -51,6 +56,8 @@ const Login = ({
                     password: true
                 })
             }
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -85,6 +92,7 @@ const Login = ({
                     <PButton
                         type="submit"
                         theme="primary"
+                        isLoading={isLoading}
                     >
                         SUBMIT
                     </PButton>
