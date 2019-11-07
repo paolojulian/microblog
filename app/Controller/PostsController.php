@@ -7,7 +7,8 @@ class PostsController extends AppController
         'PostHandler'
     ];
 
-    public function beforeFilter() {
+    public function beforeFilter()
+    {
         parent::beforeFilter();
         if (in_array($this->action, ['edit', 'delete'])) {
             parent::isOwnedBy($this->Post, $this->request->user->id);
@@ -43,7 +44,7 @@ class PostsController extends AppController
      * Fetches a post along with its comments
      * 
      * @param int $id - PK tbl posts
-     * @return json
+     * @return json - Post with array of comments
     */
     public function view($id)
     {
@@ -60,7 +61,7 @@ class PostsController extends AppController
      * Checks the posts created or shared by the user
      * 
      * @param int $username - users.username (UNIQUE)
-     * @return json
+     * @return json - array of posts
      */
     public function user($username)
     {
@@ -83,13 +84,15 @@ class PostsController extends AppController
      * 
      * Creates a post
      * 
-     * @return json
+     * @return json - status 200
      */
     public function add()
     {
         $this->request->allowMethod('post');
         $this->request->data['user_id'] = $this->request->user->id;
         if (isset($_FILES['img']) && !!$_FILES['img']) {
+            // If an image is passed save it to imgs folder for post
+            // and update img_path
             $this->request->data['img_path'] = $this->PostHandler->uploadImage(
                 $_FILES['img'],
                 $this->request->user->id,
@@ -100,7 +103,7 @@ class PostsController extends AppController
             return $this->responseUnprocessableEntity('', $this->Post->validationErrors);
         }
 
-        return $this->responseCreated($this->Post);
+        return $this->responseCreated();
     }
 
     /**
@@ -109,13 +112,15 @@ class PostsController extends AppController
      * 
      * Edits the title and body of a post
      * 
-     * @return json
+     * @return json - status 200
      */
     public function edit($id)
     {
         $this->request->allowMethod('post');
         $this->request->data['user_id'] = $this->request->user->id;
         if (isset($_FILES['img']) && !!$_FILES['img']) {
+            // If an image is passed save it to imgs folder for post
+            // and update img_path
             $this->request->data['img_path'] = $this->PostHandler->uploadImage(
                 $_FILES['img'],
                 $this->request->user->id,
@@ -135,7 +140,7 @@ class PostsController extends AppController
      * Likes a post via the logged_in user
      * 
      * @param int $id - PK posts_tbl
-     * @return json
+     * @return json - status 201
      */
     public function like($id)
     {
@@ -154,7 +159,7 @@ class PostsController extends AppController
      * Shares a post
      * 
      * @param int $id - PK posts table
-     * @return json
+     * @return json - status 201
      */
     public function share($id)
     {
@@ -170,7 +175,7 @@ class PostsController extends AppController
      * Fetches likes by post
      * 
      * @param int $id - PK posts table
-     * @return json
+     * @return json - array of users
      */
     public function likes($id)
     {
@@ -192,7 +197,7 @@ class PostsController extends AppController
      * Fetches comments by post
      * 
      * @param int $id - PK posts table
-     * @return json
+     * @return json - array of comments
      */
     public function comments($id)
     {
@@ -209,7 +214,7 @@ class PostsController extends AppController
      * 
      * Deletes a post or a shared post
      * 
-     * @return json
+     * @return json - status 204
      */
     public function delete($id)
     {

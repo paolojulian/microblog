@@ -2,12 +2,15 @@
 
 App::uses('AppController', 'Controller');
 
-class SearchController extends AppController {
+class SearchController extends AppController4
+{
     public $components = ['RequestHandler'];
 
+    /** Public routes */
     public $public = ['index', 'users', 'posts'];
 
-    public function beforeFilter() {
+    public function beforeFilter()
+    {
         parent::beforeFilter();
     }
     
@@ -16,11 +19,13 @@ class SearchController extends AppController {
      * [PUBLIC]
      * 
      * Searches for posts and users according
+     * to the text given
      * 
-     * @param string
+     * @param string - string to match
      * @return object - object with array of users and posts
      */
-    public function index($searchText) {
+    public function index($searchText)
+    {
         $this->request->allowMethod('get');
         $this->loadModel('User');
         $this->loadModel('Post');
@@ -51,7 +56,8 @@ class SearchController extends AppController {
      * @param string $searchText
      * @return array - array of users
      */
-    public function users($searchText) {
+    public function users($searchText)
+    {
         $this->request->allowMethod('get');
         $page = $this->request->query('page');
         $userId = null;
@@ -79,7 +85,8 @@ class SearchController extends AppController {
      * @param string $searchText
      * @return array - array of posts
      */
-    public function posts($searchText) {
+    public function posts($searchText)
+    {
         $this->request->allowMethod('get');
         $page = $this->request->query('page');
         $this->loadModel('Post');

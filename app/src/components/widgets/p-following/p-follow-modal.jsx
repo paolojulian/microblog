@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styles from './p-follow.module.css';
 
 /** Redux */
@@ -20,6 +20,7 @@ const PFollowModal = ({
 }) => {
     const dispatch = useDispatch();
     const usersRef = useRef('');
+    const { id: loggedInUser } = useSelector(state => state.auth.user);
     const [isLoading, setLoading] = useState(true);
     const [isError, setError] = useState(false);
     const [users, setUsers] = useState([]);
@@ -68,9 +69,12 @@ const PFollowModal = ({
             >
                 {users.map((item, i) => {
                     let user = type === 'follower' ? item.User : item.Following;
+                    console.log(user.id);
+                    console.log(loggedInUser);
                     return <UserItem
                         key={user.id + i}
                         user={user}
+                        showFollow={Number(user.id) !== Number(loggedInUser)}
                         onRequestClose={onRequestClose}
                     />
                 })}

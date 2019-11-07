@@ -30,7 +30,7 @@ const ProfileCard = (props) => {
                     <div className={styles.first_name}>
                         {user.first_name}
                     </div>
-                    <div className={styles.username}>
+                    <div className="username">
                         <Link to={`/profiles/${user.username}`}>
                             @{user.username}
                         </Link>

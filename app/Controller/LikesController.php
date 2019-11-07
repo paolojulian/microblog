@@ -1,5 +1,6 @@
 <?php
 
+// TODO not used
 class LikesController extends AppController
 {
     public $components = ['RequestHandler'];

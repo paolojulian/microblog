@@ -1,6 +1,8 @@
 <?php
 
 App::uses('Component', 'Controller');
+App::uses('ImageResizerHelper', 'PImage');
+App::uses('FileUploadHelper', 'PFile');
 
 class UserHandlerComponent extends Component {
 
@@ -28,5 +30,30 @@ class UserHandlerComponent extends Component {
         $message .= "<br />Thank you very much!<br />-Pipz";
 
         $this->MailHandler->sendHTMLMail($to, $subject, $message);
+        return true;
+    }
+
+    public function uploadimage($user, $file)
+    {
+        try {
+            $id = $user['id'];
+            $username = $user['username'];
+            $imageName = $username . time();
+            $imgpath = "/img/profiles/$id/";
+            $fullpath = WWW_ROOT . $imgpath;
+            $image = FileUploadHelper::uploadImg(
+                $fullpath,
+                $file,
+                $imageName.'.png'
+            );
+            $imageResizer = new ImageResizerHelper("profiles/$id/$imageName.png");
+            $imageResizer->multipleResizeMaxHeight(
+                "profiles/$id/$imageName",
+                [256, 128, 64, 32, 24]
+            );
+            return "/app/webroot/$imageName";
+        } catch (Exception $e) {
+            throw new InternalErrorException($e->getMessage());
+        }
     }
 }

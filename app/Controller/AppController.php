@@ -35,20 +35,26 @@ App::uses('JWT', 'Lib');
  */
 class AppController extends Controller {
     public $public = [];
-    // public $components = ['DebugKit.Toolbar'];
     
-    public function beforeFilter() {
+    /**
+     * Checks if user is logged in
+     * if route is not on the variable $public
+     * 
+     * @return bool
+     */
+    public function beforeFilter()
+    {
         if (in_array($this->action, $this->public)) {
-            return;
+            return false;
         }
         try {
+            // will automatically throw if token passed
+            // is invalid or expired
             $decoded = self::getDecodedHeader();
-            // Check if post to be edited belongs to self
             return true;
         } catch (Exception $e) {
             throw new ForbiddenException('Unauthorized');
         }
-        throw new ForbiddenException('Unauthorized');
     }
 
     public function getDecodedHeader()
@@ -125,9 +131,13 @@ class AppController extends Controller {
         $this->jsonResponse(403);
     }
 
+    /**
+     * Encodes a payload into a JWTToken
+     * 
+     * @return string - jwt token
+     */
     public function jwtEncode($payload) {
         $time = time();
-        $key = "example_key";
         $payload['iss'] = "Pipz";
         $payload['aud'] = "Microblog";
         $payload['iat'] = $time;
@@ -137,6 +147,11 @@ class AppController extends Controller {
         return JWT::encode($payload, $secretKey, 'HS256');
     }
 
+    /**
+     * Decodes the jwt token via the secret key
+     * 
+     * @return bool
+     */
     public function jwtDecode($jwt)
     {
         if ( ! isset($jwt) && empty($jwt)) {
@@ -154,6 +169,17 @@ class AppController extends Controller {
         }
     }
 
+    /**
+     * Check if model is owned by user passed
+     * !!IMPORTANT
+     * table should have user_id as column name
+     * for its owner
+     * 
+     * TODO
+     * make it dynamic for any field_name
+     * 
+     * @return bool
+     */
     public function isOwnedBy($model, $userId)
     {
         $reqId = (int) $this->request->params['pass'][0];

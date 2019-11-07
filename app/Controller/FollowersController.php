@@ -9,7 +9,12 @@ class FollowersController extends AppController
     }
 
     /**
+     * [GET]
+     * [PRIVATE] - For logged in users only
      * Fetches all followers
+     * 
+     * 
+     * @return json - array of users
      */
     public function index()
     {

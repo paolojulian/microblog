@@ -1,21 +1,30 @@
 <?php
 
 App::uses('AppController', 'Controller');
-App::uses('ImageResizerHelper', 'PImage');
-App::uses('FileUploadHelper', 'PFile');
 
 class ProfilesController extends AppController
 {
-    public $components = ['RequestHandler'];
+    public $components = [
+        'RequestHandler',
+        'UserHandler'
+    ];
 
-    public function beforeFilter() {
+    public function beforeFilter()
+    {
         parent::beforeFilter();
     }
 
     /**
      * [GET]
      * [PRIVATE] - for logged in users only
+     * 
      * Gets the profile of user by username
+     * along with followers and following
+     * and if username given is currently being
+     * followed by the logged in user
+     * 
+     * @param string $username - username to search
+     * @return json - User object
      */
     public function view($username)
     {
@@ -43,8 +52,11 @@ class ProfilesController extends AppController
     /**
      * [GET]
      * [PRIVATE] - for logged in users only
+     * 
      * Gets the current profile of user
      * along with its followers and following
+     * 
+     * @return json
      */
     public function current()
     {
@@ -66,36 +78,25 @@ class ProfilesController extends AppController
         ]);
     }
 
+    /**
+     * [POST]
+     * [PRIVATE] - for loggedin users only
+     * 
+     * adds or edits the image of the currently logged in
+     * user
+     * 
+     * @return json - 200 status
+     */
     public function uploadimage()
     {
         $this->request->allowMethod('post');
-        try {
-            $this->loadModel('User');
-            $id = $this->request->user->id;
-            $user = $this->User->findById($id);
-            $username = $user['User']['username'];
-            $imageName = $username . time();
-            $imgpath = "/img/profiles/$id/";
-            $basepath = "/app/webroot$imgpath";
-            $fullpath = WWW_ROOT . $imgpath;
-            $image = FileUploadHelper::uploadImg(
-                $fullpath,
-                $file = $_FILES['profile_img'],
-                $imageName.'.png'
-            );
-            $imageResizer = new ImageResizerHelper("profiles/$id/$imageName.png");
-            $imageResizer->multipleResizeMaxHeight(
-                "profiles/$id/$imageName",
-                [256, 128, 64, 32, 24]
-            );
-
-            $this->User->updateAvatar(
-                $id,
-                $basepath.$imageName
-            );
-            return $this->responseOk();
-        } catch (Exception $e) {
-            throw new InternalErrorException($e->getMessage());
-        }
+        $this->loadModel('User');
+        $user = $this->User->findById($this->request->user->id);
+        $fullPath = $this->UserHandler->uploadImage($user['User'], $_FILES['profile_img']);
+        $this->User->updateAvatar(
+            $this->request->user->id,
+            $fullPath
+        );
+        return $this->responseOk();
     }
 }

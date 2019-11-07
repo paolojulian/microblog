@@ -1,18 +1,22 @@
 <?php
 
 App::uses('AppController', 'Controller');
-App::uses('Security', 'Utility');
 App::uses('Folder', 'Utility');
 App::uses('File', 'Utility');
 
-class UsersController extends AppController {
+class UsersController extends AppController
+{
     public $components = [
         'RequestHandler',
         'UserHandler',
+        'HasherHandler'
     ];
+
+    /** Public routes */
     public $public = ['register', 'activate', 'login', 'accessDenied'];
 
-    public function beforeFilter() {
+    public function beforeFilter()
+    {
         parent::beforeFilter();
     }
     
@@ -20,7 +24,8 @@ class UsersController extends AppController {
      * TODO
      * Don't know if this is used
      */
-    public function view($id = null) {
+    public function view($id = null)
+    {
         $this->request->allowMethod('get');
         $this->User->id = $id;
         if ( ! $this->User->exists()) {
@@ -54,16 +59,17 @@ class UsersController extends AppController {
      * 
      * @return json
      */
-    public function register() {
+    public function register()
+    {
         $this->request->allowMethod('post');
+        $this->request->data['activation_key'] = $this->HasherHandler->generateRand();
+        if ( ! $this->User->addUser($this->request->data)) {
+            return $this->responseUnprocessableEntity('', $this->User->validationErrors);
+        }
 
         try {
-            $timeStr = str_replace("0.", "", microtime());
-            $timeStr = str_replace(" ", "", $timeStr);
-            $this->request->data['activation_key'] = Security::hash('lkkasdjfalj').'_'.$timeStr;
-            if ( ! $this->User->addUser($this->request->data)) {
-                return $this->responseUnprocessableEntity('', $this->User->validationErrors);
-            }
+            // TODO add a page if mail failed,
+            // should display resend link
             $this->UserHandler->sendActivationMail($this->request->data);
         } catch (Exception $e) {
             throw new InternalErrorException(__($e->getMessage()));
@@ -75,13 +81,14 @@ class UsersController extends AppController {
     /**
      * [PUT]
      * [PRIVATE] - logged in users only
+     * 
      * Edits current user
      * 
      * @return json
      */
-    public function edit() {
+    public function edit()
+    {
         $this->request->allowMethod('put');
-
         try {
             if ( ! $this->User->editUser($this->request->user->id, $this->request->data)) {
                 return $this->responseUnprocessableEntity('', $this->User->validationErrors);
@@ -96,8 +103,11 @@ class UsersController extends AppController {
     /**
      * [DELETE]
      * [PRIVATE] - Logged in user only
+     * 
+     * @return json
      */
-    public function delete($id = null) {
+    public function delete($id = null)
+    {
         $this->request->allowMethod('delete');
         $this->User->id = $id;
         if ( ! $this->User->exists()) {
@@ -108,11 +118,6 @@ class UsersController extends AppController {
         }
 
         $this->responseDeleted();
-    }
-
-    public function addProfileImage()
-    {
-        $dir = new Folder(WWW_ROOT . 'img');
     }
 
     /**
@@ -137,23 +142,22 @@ class UsersController extends AppController {
             throw new BadRequestException(__('Please activate your account first.'));
         }
 
-        $payload = [
-            "id" => $user["User"]["id"],
-            "first_name" => $user["User"]["first_name"],
-            "last_name" => $user["User"]["last_name"],
-            "username" => $user["User"]["username"],
-            "email" => $user["User"]["email"],
-            "birthdate" => $user["User"]["birthdate"],
-            "sex" => $user["User"]["sex"],
-            "role" => $user["User"]["role"],
-        ];
-        return $this->responseData($this->jwtEncode($payload));
+        return $this->responseData($this->jwtEncode($user["User"]));
     }
 
     /**
      * [GET]
      * [PRIVATE] - for logged in users only
      * 
+     * Fetches not yet followed users
+     * Prioritizes friends of friends with mutual connections
+     * and then previously created users
+     * 
+     * TODO
+     * for improvement should add location of user
+     * and prioritize same locations
+     * 
+     * @return json - array of Users
      */
     public function notfollowed()
     {
@@ -173,7 +177,14 @@ class UsersController extends AppController {
     /**
      * [POST]
      * [PRIVATE] - for logged in users only
-     * Logout the user currently logged in
+     * 
+     * Logouts the user currently logged in
+     * 
+     * TODO
+     * this is unnecessary because the system is now
+     * using JWT token
+     * 
+     * @return json
      */
     public function logout()
     {
@@ -185,8 +196,12 @@ class UsersController extends AppController {
     /**
      * [GET]
      * [PUBLIC]
-     * A link is given to a user
+     * 
+     * A link is given to a user upon successful registration
+     * 
      * Activates the user by the its activation key
+     * 
+     * @return void
      */
     public function activate($key)
     {
@@ -198,6 +213,6 @@ class UsersController extends AppController {
             $this->User->activateUser($user['User']['id']);
         }
         echo 'User activated';
-        $this->redirect('/');
+        return $this->redirect('/');
     }
 }
