@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import classnames from 'classnames';
 import styles from './form-image.module.css';
 import PropTypes from 'prop-types';
 
@@ -9,12 +10,14 @@ const FormImage = ({
     ...props
 }) => {
     const [imgSrc, setImgSrc] = useState(initSrc);
+    const [imgName, setImgName] = useState('Choose an image');
 
     const handleChange = () => {
         const reader = new FileReader();
         const img = refs.current.files[0];
         reader.onload = () => {
             setImgSrc(reader.result);
+            // setImgName(rea)
         };
         if (img) {
             reader.readAsDataURL(img);
@@ -43,11 +46,16 @@ const FormImage = ({
                     {...props}
                     />
             </div>}
-            <div className={styles.input}>
-                <input type="file"
-                    ref={refs}
-                    onChange={handleChange}
-                />
+            <div className={classnames(styles.input, {
+                [styles.inactive]: !!imgSrc
+            })}>
+                <label>
+                    <input type="file"
+                        ref={refs}
+                        onChange={handleChange}
+                    />
+                    {imgName}
+                </label>
             </div>
         </div>
     )

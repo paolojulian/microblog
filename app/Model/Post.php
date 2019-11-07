@@ -48,6 +48,9 @@ class Post extends AppModel
         ],
     ];
 
+    /**
+     * TODO make subquery to joins and where
+     */
     public function fetchPostsOfUser($userId, $pageNo = 1, $perPage = 5)
     {
         $offset = ($pageNo - 1) * $perPage;
@@ -57,6 +60,9 @@ class Post extends AppModel
         return $data;
     }
 
+    /**
+     * TODO make subquery to joins and where
+     */
     public function fetchPostsToDisplay($userId, $pageNo = 1, $perPage = 5)
     {
         $offset = ($pageNo - 1) * $perPage;

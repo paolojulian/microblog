@@ -2,6 +2,7 @@
     position: relative;
     width: 100%;
     height: auto;
+    text-align: left;
 }
 
 .formImage img {
@@ -19,5 +20,22 @@
 }
 
 .img, .input {
-    margin: 0.5rem 0;
+    margin: 1rem 0;
+}
+
+.input label {
+    background-color: var(--grey);
+    padding: 0.5rem 5rem;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    color: #777777;
+}
+
+.input input[type="file"] {
+    display: none;
+}
+
+.inactive {
+    visibility: hidden;
 }

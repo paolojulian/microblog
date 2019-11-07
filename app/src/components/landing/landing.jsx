@@ -5,15 +5,16 @@ import styles from './landing.module.css';
 import WithNavbar from '../hoc/with-navbar';
 
 /** Redux */
-import { getProfile } from '../../store/actions/profileActions'
-import { getPosts } from '../../store/actions/postActions'
-import { CLEAR_POSTS } from '../../store/types'
+import { getProfile, fetchNotFollowed } from '../../store/actions/profileActions';
+import { getPosts } from '../../store/actions/postActions';
+import { CLEAR_POSTS } from '../../store/types';
 
 /** Components */
-import PCard from '../widgets/p-card'
-import ProfileCard from './profile-card'
-import Posts from '../post'
-import PostCreate from '../post/create'
+import PCard from '../widgets/p-card';
+import ProfileCard from './profile-card';
+import Posts from '../post';
+import PeopleYouMayKnow from './people-you-may-know';
+import PostCreate from '../post/create';
 import LandingLoading from './landing-loading';
 
 const Landing = () => {
@@ -23,7 +24,8 @@ const Landing = () => {
     useEffect(() => {
         window.scrollTo({ top: 0, left: 0 });
         const init = async () => {
-            await dispatch(getProfile())
+            await dispatch(getProfile());
+            await dispatch(fetchNotFollowed());
             await fetchHandler();
             setLoading(false);
         }
@@ -59,7 +61,7 @@ const Landing = () => {
                 </div>
             </div>
             <div className={styles.right}>
-                <PCard size="fit"></PCard>
+                <PeopleYouMayKnow />
             </div>
         </div>
     )

@@ -5,6 +5,27 @@ import PropTypes from 'prop-types';
 import { ModalConsumer } from '../../widgets/p-modal/p-modal-context';
 import FollowModal from './p-follow-modal';
 
+const style = {
+    label: {
+        backgroundColor: 'var(--primary-dark)',
+        color: 'var(--grey)',
+        padding: '0.1rem 0.5rem',
+        fontSize: '0.9rem',
+        borderTopLeftRadius: '5px',
+        borderBottomLeftRadius: '5px',
+        cursor: 'pointer'
+    },
+    number: {
+        backgroundColor: 'var(--primary)',
+        color: 'var(--grey)',
+        padding: '0.1rem 0.5rem',
+        fontSize: '0.9rem',
+        borderTopRightRadius: '5px',
+        borderBottomRightRadius: '5px',
+        cursor: 'pointer'
+    }
+}
+
 const PFollowing = ({
     userId,
     totalFollowers,
@@ -17,29 +38,26 @@ const PFollowing = ({
                 margin: '1rem 0',
                 fontSize: '1.05rem'
             }}>
-                <div>
-                    <label>Followers: </label>
-                    <span style={{
-                        color: 'var(--secondary)',
-                        cursor: 'pointer'
-                    }} onClick={() => showModal(FollowModal, {
-                            userId,
-                            type: 'follower'
-                        })}
-                    >
+                <div style={{margin: '0.5rem 0', cursor: 'pointer'}}
+                    onClick={() => showModal(FollowModal, {
+                        userId,
+                        type: 'follower'
+                    })}
+                >
+                    <label style={style.label}>Followers:&nbsp;</label>
+                    <span style={style.number}>
                         {totalFollowers}
                     </span>
                 </div>
-                <div>
-                    <label>Following: </label>
-                    <span style={{
-                        color: 'var(--secondary)',
-                        cursor: 'pointer'
-                    }} onClick={() => showModal(FollowModal, {
-                            userId,
-                            type: 'following'
-                        })}
-                    >
+                <div onClick={() => showModal(FollowModal, {
+                        userId,
+                        type: 'following'
+                    })}
+                    style={{cursor: 'pointer'}}>
+                    <label style={style.label}>
+                        Following:&nbsp;
+                    </label>
+                    <span style={style.number}>
                         {totalFollowing}
                     </span>
                 </div>

@@ -120,22 +120,22 @@ const SearchBar = () => {
                     autoComplete="off"
                     onPaste={e => e.preventDefault()}
                     />
-            </form>
-            <div className={classNames(styles.searchList, {
-                [styles.active]: isSearching
-            })}>
-                <div className={styles.searchContent}
-                    style={{ overflowY: 'auto', maxHeight: '80vh' }}>
-                    {users.length === 0 && posts.length === 0 && renderSearching()}
-                    {users.length > 0 && renderUsers()}
-                    {posts.length > 0 && renderPosts()}
-                </div>
-                {hasMoreData && <Link to={`/search?searchText=${getSearchText()}`}>
-                    <div className={styles.viewMore}>
-                        View More
+                <div className={classNames(styles.searchList, {
+                    [styles.active]: isSearching
+                })}>
+                    <div className={styles.searchContent}
+                        style={{ overflowY: 'auto', maxHeight: '80vh' }}>
+                        {users.length === 0 && posts.length === 0 && renderSearching()}
+                        {users.length > 0 && renderUsers()}
+                        {posts.length > 0 && renderPosts()}
                     </div>
-                </Link>}
-            </div>
+                    {hasMoreData && <Link to={`/search?searchText=${getSearchText()}`}>
+                        <div className={styles.viewMore}>
+                            View More
+                        </div>
+                    </Link>}
+                </div>
+            </form>
         </div>
     );
 }

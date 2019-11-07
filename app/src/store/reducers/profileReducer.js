@@ -1,7 +1,8 @@
-import { SET_PROFILE, CLEAR_CURRENT_PROFILE, TOGGLE_LOADING_PROFILE } from '../types';
+import { SET_NOT_FOLLOWED, SET_PROFILE, CLEAR_CURRENT_PROFILE, TOGGLE_LOADING_PROFILE } from '../types';
 
 const initialState = {
-    loading: true
+    loading: true,
+    notFollowed: []
 }
 
 export default (state = initialState, action) => {
@@ -17,6 +18,11 @@ export default (state = initialState, action) => {
                 ...state,
                 ...action.payload,
                 loading: false
+            }
+        case SET_NOT_FOLLOWED:
+            return {
+                ...state,
+                notFollowed: action.payload
             }
         case CLEAR_CURRENT_PROFILE:
             return initialState

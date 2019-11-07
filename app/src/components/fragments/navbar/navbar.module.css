@@ -59,6 +59,11 @@ nav ul li {
     visibility: hidden;
 }
 
+.search:focus .searchList {
+    visibility: visible;
+    z-index: 2000;
+}
+
 .searchList.active {
     visibility: visible;
     z-index: 2000;

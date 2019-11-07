@@ -20,9 +20,6 @@ const UserItem = ({ user, showFollow, onRequestClose }) => {
     }
 
     return (
-        <Link to={`/profiles/${user.username}`}
-            onClick={onRequestClose}
-        >
             <div key={user.id}
                 className={"User " + styles.user}
             >
@@ -37,7 +34,11 @@ const UserItem = ({ user, showFollow, onRequestClose }) => {
                         {user.first_name + ' ' + user.last_name}
                     </div>
                     <div className="username">
+                        <Link to={`/profiles/${user.username}`}
+                            onClick={onRequestClose}
+                        >
                             @{user.username}
+                        </Link>
                     </div>
                 </div>
                 {showFollow && ! isFollowing && <div className={styles.follow}
@@ -46,7 +47,6 @@ const UserItem = ({ user, showFollow, onRequestClose }) => {
                     <i className="fa fa-heart"></i>
                 </div>}
             </div>
-        </Link>
     )
 };
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { search } from '../../utils/search';
-import { SET_PROFILE, TOGGLE_LOADING_PROFILE } from '../types';
+import { SET_NOT_FOLLOWED, SET_PROFILE, TOGGLE_LOADING_PROFILE } from '../types';
 
 /**
  * Get profile of current logged in user
@@ -90,6 +90,24 @@ export const fetchFollow = (userId, type, page = 1) => async dispatch => {
     try {
         const res = await axios.get(`/followers.json`, {
             params: {userId, type, page}
+        });
+        return Promise.resolve(res.data.data);
+    } catch (e) {
+        return Promise.reject(e);
+    }
+}
+
+
+/**
+ * Fetch the users who have not yet followed
+ * prioritize the ones who have mutual connections
+ */
+export const fetchNotFollowed = (page = 1) => async dispatch => {
+    try {
+        const res = await axios.get(`/users/notfollowed.json?page=${page}`);
+        dispatch({
+            type: SET_NOT_FOLLOWED,
+            payload: res.data.data
         });
         return Promise.resolve(res.data.data);
     } catch (e) {

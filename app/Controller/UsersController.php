@@ -151,6 +151,25 @@ class UsersController extends AppController {
     }
 
     /**
+     * [GET]
+     * [PRIVATE] - for logged in users only
+     */
+    public function notfollowed()
+    {
+        $this->request->allowMethod('get');
+        $page = $this->request->query('page');
+        if ( ! $page) {
+            $page = 1;
+        }
+        return $this->responseData(
+            $this->User->getNotFollowedUsers(
+                $this->request->user->id,
+                $page
+            )
+        );
+    }
+
+    /**
      * [POST]
      * [PRIVATE] - for logged in users only
      * Logout the user currently logged in

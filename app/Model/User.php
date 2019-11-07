@@ -134,6 +134,8 @@ class User extends AppModel
         ]
     ];
 
+    
+
     public function findById($userId, $fields = '*')
     {
         return $this->find('first', [
@@ -159,6 +161,17 @@ class User extends AppModel
             'fields' => $fields,
             'conditions' => ['activation_key' => $key]
         ]);
+    }
+
+    /**
+     * Gets not yet followed users
+     * Prioritizes users who has mutual connections
+     */
+    public function getNotFollowedUsers($userId, $pageNo, $perPage = 3)
+    {
+        $offset = ($pageNo - 1) * $perPage;
+        $procedure = "CALL getNotFollowedUsers($userId, $perPage, $offset)";
+        return $this->query($procedure);
     }
 
     /**
