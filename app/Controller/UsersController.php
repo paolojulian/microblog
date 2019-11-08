@@ -13,7 +13,7 @@ class UsersController extends AppController
     ];
 
     /** Public routes */
-    public $public = ['register', 'activate', 'login', 'accessDenied'];
+    public $public = ['view', 'register', 'activate', 'login', 'accessDenied'];
 
     public function beforeFilter()
     {
@@ -26,12 +26,7 @@ class UsersController extends AppController
      */
     public function view($id = null)
     {
-        $this->request->allowMethod('get');
-        $this->User->id = $id;
-        if ( ! $this->User->exists()) {
-            throw new NotFoundException(__('Invalid user'));
-        }
-        $this->responseData($this->User->findById($id));
+        die();
     }
 
     /**

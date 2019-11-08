@@ -67,7 +67,7 @@ const PostItem = ({
         fetchHandler();
     }
 
-    onSuccessDelete = () => {
+    const onSuccessDelete = () => {
         window.scrollTo({ top: 0, left: 0 });
         fetchHandler();
     }
