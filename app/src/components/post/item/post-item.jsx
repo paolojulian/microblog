@@ -67,6 +67,11 @@ const PostItem = ({
         fetchHandler();
     }
 
+    onSuccessDelete = () => {
+        window.scrollTo({ top: 0, left: 0 });
+        fetchHandler();
+    }
+
     const renderUsername = () => {
         if (shared_by && shared_by_username) {
             return (
@@ -139,7 +144,7 @@ const PostItem = ({
                             onClick={() => showModal(PostDelete, {
                                 id,
                                 creator,
-                                onSuccess: fetchHandler
+                                onSuccess: onSuccessDelete
                             })}
                         >
                             <i className="fa fa-trash"/>

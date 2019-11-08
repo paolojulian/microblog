@@ -40,7 +40,7 @@ const Post = ({ fetchHandler }) => {
 
     const renderEmpty = () => (
         <PCard size="fit" style={{marginTop: '0.5rem'}}>
-            <div className="disabled">Start following people to view their post</div>
+            <div className="disabled">No Post/s to show</div>
         </PCard>
     )
 

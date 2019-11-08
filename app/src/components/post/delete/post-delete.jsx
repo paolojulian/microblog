@@ -6,6 +6,7 @@ import { deletePost } from '../../../store/actions/postActions'
 
 /** Components */
 import PModal from '../../widgets/p-modal'
+import PLoader from '../../widgets/p-loader'
 
 const PostDelete = ({
     id,
@@ -13,6 +14,8 @@ const PostDelete = ({
     onSuccess,
 }) => {
 
+    const [isError, setError] = useState(false);
+    const [isLoading, setLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const dispatch = useDispatch();
 
@@ -20,11 +23,28 @@ const PostDelete = ({
         if (e) {
             e.preventDefault();
         }
+        setLoading(true);
         dispatch(deletePost(id))
             .then(() => {
                 onSuccess()
                 setIsSuccess(true)
-            });
+            })
+            .catch(() => setError(true))
+            .then(() => setLoading(false));
+    }
+
+    if (isError) {
+        <PModal onRequestClose={onRequestClose}>
+            <div className="disabled">Oops. Something went wrong</div>
+        </PModal>
+    }
+
+    if (isLoading) {
+        return (
+            <PModal onRequestClose={onRequestClose}>
+                <PLoader/>
+            </PModal>
+        )
     }
 
     if (isSuccess) {
