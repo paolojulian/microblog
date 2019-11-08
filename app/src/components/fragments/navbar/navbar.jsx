@@ -1,6 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 
 /** Redux */
@@ -10,6 +9,7 @@ import { logoutUser } from '../../../store/actions/authActions'
 import SearchBar from './search-bar'
 
 import styles from './navbar.module.css'
+import NotificationBell from './notification-bell';
 
 const Navbar = ({
     history,
@@ -18,17 +18,18 @@ const Navbar = ({
 
     const dispatch = useDispatch();
 
+    const { notificationCount } = useSelector(state => state.notification);
+
     const handleLogout = e => {
         if (e) e.preventDefault();
         dispatch(logoutUser(history));
     }
 
     const reloadOrNavigate = () => {
-        if (location.pathname === '/home') {
-            history.push('/');
-        } else {
-            history.push('/home');
+        if (location.pathname === '/') {
+            return window.location.reload();
         }
+        history.push('/')
     };
 
     return (
@@ -42,7 +43,7 @@ const Navbar = ({
                     Home
                 </li>
                 <li className={styles.notification}>
-                    <i className="fa fa-bell"/>
+                    <NotificationBell notificationCount={notificationCount}/>
                 </li>
                 <li className={styles.logout}
                     onClick={handleLogout}>

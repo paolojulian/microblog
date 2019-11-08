@@ -5,7 +5,8 @@ class LikesController extends AppController
 {
     public $components = ['RequestHandler'];
 
-    public function beforeFilter() {
+    public function beforeFilter()
+    {
         parent::beforeFilter();
     }
 

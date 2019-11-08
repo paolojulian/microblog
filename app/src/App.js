@@ -83,33 +83,37 @@ const App = () => {
                 <div className="App">
                     <ModalProvider>
                         <ModalRoot/>
+                        
+
+                    <Switch>
                         <Route exact path="/login" component={Login}/>
                         <Route exact path="/register" component={Register}/>
-                        <Switch>
-                            <PrivateRoute exact path="/" component={Landing}/>
-                        </Switch>
-                        <Switch>
-                            <PrivateRoute exact path="/home" component={Landing}/>
-                        </Switch>
-                        <Switch>
-                            <PrivateRoute exact path="/profiles/:username" component={Profile}/>
-                        </Switch>
-                        <Switch>
-                            <PrivateRoute exact path="/settings/update-profile" component={ProfileUpdate}/>
-                        </Switch>
-                        <Switch>
-                            <PrivateRoute exact path="/posts/edit/:id" component={PostEdit}/>
-                        </Switch>
-                        <Switch>
-                            <PrivateRoute exact path="/posts/:id" component={PostView}/>
-                        </Switch>
-                        <Switch>
-                            <PrivateRoute exact path="/search" component={PSearch}/>
-                        </Switch>
+                    
+                        <PrivateRoute exact path="/" component={Landing}/>
+                    
+                    
+                        <PrivateRoute exact path="/home" component={Landing}/>
+                    
+                    
+                        <PrivateRoute exact path="/profiles/:username" component={Profile}/>
+                    
+                    
+                        <PrivateRoute exact path="/settings/update-profile" component={ProfileUpdate}/>
+                    
+                    
+                        <PrivateRoute exact path="/posts/edit/:id" component={PostEdit}/>
+                    
+                    
+                        <PrivateRoute exact path="/posts/:id" component={PostView}/>
+                    
+                    
+                        <PrivateRoute exact path="/search" component={PSearch}/>
+                    
+                        <Route exact path="/not-found" component={NoMatch} />
+                        <Route path="*" component={NoMatch}/>
+                    </Switch>
                     </ModalProvider>
                     <VNofication/>
-                    <Route exact path="/not-found" component={NoMatch} />
-                    {/* <Route component={NoMatch}/> */}
                 </div>
             </Router>
         </Provider>

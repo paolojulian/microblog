@@ -1,17 +1,24 @@
 import React, { useEffect, createRef } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styles from './v-notification.module.css'
 
+/** Redux */
+import {
+    countUnreadNotifications,
+    readNotification,
+    addNotificationCount
+} from '../../../store/actions/notificationActions';
+
 const VNotification = () => {
+    const dispatch = useDispatch();
     const { isAuthenticated, user } = useSelector(state => state.auth);
     const notificationContainer = createRef();
 
     useEffect(() => {
         if (isAuthenticated) {
+            dispatch(countUnreadNotifications());
             connectWebSocket(user.id);
         }
-        return () => {
-        };
     }, [isAuthenticated])
 
     const connectWebSocket = (userId) => {
@@ -20,7 +27,8 @@ const VNotification = () => {
             console.log('Connected');
         }
         websocket.onmessage = e => {
-            showNotification(e.data)
+            const { notificationId, message } =JSON.parse(e.data);
+            showNotification(notificationId, message);
         }
         websocket.onclose = (e) => {
             console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
@@ -34,10 +42,18 @@ const VNotification = () => {
         };
     }
     
-    const showNotification = (message) => {
+    const showNotification = (notificationId, message) => {
         /** Add webcomponents, located in webroot/js/v-notifier.js */
         let notif = document.createElement('v-notifier')
         notificationContainer.current.appendChild(notif);
+        // Add notif count on message pop
+        dispatch(addNotificationCount())
+        notif.addEventListener('click', () => {
+            // If clicked, it will set notification as read
+            dispatch(readNotification(notificationId))
+            // Reduce notif count
+            dispatch(addNotificationCount(-1))
+        });
         notif.message = message;
     }
 

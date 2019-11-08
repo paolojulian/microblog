@@ -20,6 +20,22 @@ AND a.deleted IS NULL
 
 UNION
 
+SELECT * FROM (
+SELECT
+	a.*,
+	users.username,
+    users.avatar_url,
+    null as shared_by,
+    null as shared_by_username
+FROM posts a
+LEFT JOIN users
+ON users.id = a.user_id
+WHERE a.user_id = userId
+AND retweet_post_id IS NULL
+AND a.deleted IS NULL
+
+UNION
+
 SELECT
 	b.id,
 	orig.title,
@@ -44,6 +60,7 @@ ON shared_user.id = b.user_id
 WHERE b.user_id = userId
 AND b.retweet_post_id IS NOT NULL
 and orig.deleted IS NULL
+AND b.deleted IS NULL
 ) Post
 ORDER BY created DESC
 LIMIT perPage

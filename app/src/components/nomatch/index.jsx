@@ -1,8 +1,5 @@
 import React from 'react'
 
-/** Components */
-import WithNavbar from '../hoc/with-navbar';
-
 const NoMatch = () => {
     return (
         <div style={{
@@ -30,4 +27,4 @@ const NoMatch = () => {
     )
 }
 
-export default WithNavbar(NoMatch);
+export default NoMatch;

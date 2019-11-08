@@ -23,3 +23,12 @@ export const GET_PROFILE_POSTS = "GET_PROFILE_POSTS";
 /** TODO Comment */
 export const GET_POST_COMMENTS = "GET_POST_COMMENTS";
 /** TODO Follow */
+
+/** Notifications */
+export const NOTIFICATION = {
+    set:  "SET_NOTIFICATIONS",
+    clear:  "CLEAR_NOTIFICATIONS",
+    add:  "ADD_NOTIFICATION",
+    setCount: 'SET_COUNT_NOTIFICATION',
+    addCount: 'ADD_COUNT_NOTIFICATION'
+}

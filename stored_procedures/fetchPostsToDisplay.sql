@@ -19,8 +19,7 @@ SELECT * FROM (
         SELECT following_id FROM followers
         WHERE user_id = userId
         AND followers.deleted IS NULL
-    )
-    OR user_id = userId)
+    ) OR user_id = userId)
     AND retweet_post_id IS NULL
     AND a.deleted IS NULL
 
@@ -51,10 +50,11 @@ SELECT * FROM (
         SELECT following_id FROM followers
         WHERE user_id = userId
         AND followers.deleted IS NULL
-    ))
-    OR b.user_id = userId
+    )
+    OR b.user_id = userId)
     AND b.retweet_post_id IS NOT NULL
     and orig.deleted IS NULL
+    AND b.deleted IS NULL
 ) Post
 ORDER BY created DESC
 LIMIT perPage
