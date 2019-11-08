@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './loading-mocks.module.css';
 
 export const TextInputMock = (props) => (
     <input
@@ -10,21 +11,26 @@ export const TextInputMock = (props) => (
             width: '100%',
             border: '1px solid rgba(0, 0, 0, 0.25)'
         }}
+        className={styles.mock}
         type="text"
         disabled
         {...props}
     />
 )
 
-export const TextMock = () => (
-    <div style={{
-        backgroundColor: 'var(--grey-dark)',
-        height: '1rem',
-        marginBottom: '0.5rem',
-        borderRadius: '10px',
-        width: Math.floor(Math.random() * 50 + 50) + '%'
-    }}></div>
-)
+export const TextMock = () => {
+    let width = Math.random() * 50 + 50 + '%';
+    return (
+        <div style={{
+            backgroundColor: 'var(--grey-dark)',
+            height: '1rem',
+            marginBottom: '0.5rem',
+            borderRadius: '10px',
+            width
+        }}
+        className={styles.mock}></div>
+    )
+}
 
 export const RoundedMock = ({ size }) => (
     <div style={{
@@ -33,7 +39,8 @@ export const RoundedMock = ({ size }) => (
         height: size,
         marginRight: '0.5rem',
         borderRadius: '50%',
-    }}></div>
+    }}
+    className={styles.mockRounded}></div>
 )
 
 export const CardMock = ({ height, children, ...props }) => (
@@ -42,8 +49,9 @@ export const CardMock = ({ height, children, ...props }) => (
         borderRadius: '5px',
         height,
         width: '100%',
-    }} {...props}
-    >
+    }}
+        className={styles.mock}
+        {...props}>
         {children}
     </div>
 )

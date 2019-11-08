@@ -3,10 +3,14 @@ import classnames from 'classnames';
 import styles from './form-image.module.css';
 import PropTypes from 'prop-types';
 
+/** Components */
+import PFab from '../../p-fab';
+
 const FormImage = ({
     name,
     refs,
     initSrc,
+    height,
     onChangeImg,
     ...props
 }) => {
@@ -38,12 +42,14 @@ const FormImage = ({
 
     return (
         <div className={styles.formImage}>
-            {!!imgSrc && <div className={styles.img}>
-                <div className={styles.removeImg}
+            {!!imgSrc && <div className={styles.img} style={{height: height}}>
+                <PFab
+                    theme="secondary"
                     onClick={removeImg}
+                    className={styles.removeImg}
                 >
                     &#10006;
-                </div>
+                </PFab>
                 <img
                     src={imgSrc}
                     alt={name}

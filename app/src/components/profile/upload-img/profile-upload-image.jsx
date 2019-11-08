@@ -11,14 +11,11 @@ import PLoader from '../../widgets/p-loader';
 import FormImage from '../../widgets/form/image';
 
 const ProfileUploadImage = ({
-    user,
-    profileImgSrc,
     onRequestClose,
 }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [isSuccess, setSuccess] = useState(false);
-    const { errors } = useSelector(state => state);
     const dispatch = useDispatch();
     const imgRef = useRef();
 
@@ -59,6 +56,7 @@ const ProfileUploadImage = ({
             return <FormImage
                 name="profile_image"
                 refs={imgRef}
+                height="128px"
             />
         }
     }

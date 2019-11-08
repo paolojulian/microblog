@@ -2,7 +2,6 @@
 const http = require('http');
 const url = require('url');
 const WebSocketServer = require('websocket').server;
-const API_KEY = 'TEST';
 let server = http.createServer((request, response) => {
     /**
      * Receives POST parameter for notification

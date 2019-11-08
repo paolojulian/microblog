@@ -37,6 +37,7 @@ export const getPosts = (page = 1) => async dispatch => {
             type: SET_PAGE,
             payload: page
         });
+
         return Promise.resolve(res.data.data)
     } catch (e) {
         return Promise.reject()
@@ -83,7 +84,6 @@ export const getUserPosts = (username, page = 1) => async dispatch => {
         });
         return Promise.resolve(res.data.data)
     } catch (e) {
-        console.error(e);
         dispatch({
             type: SET_PAGE,
             payload: 1

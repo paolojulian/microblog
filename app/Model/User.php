@@ -195,6 +195,14 @@ class User extends AppModel
         ]);
     }
 
+    public function getMutualFriends ($userId, $friendId, $pageNo = 1)
+    {
+        $perPage = 3;
+        $offset = ($pageNo - 1) * $perPage;
+        $procedure = "CALL getMutualFriends($userId, $friendId, $perPage, $offset)";
+        return $this->query($procedure);
+    }
+
     /**
      * TODO
      * For a better searching of user, display users with mutual

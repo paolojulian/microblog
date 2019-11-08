@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 /** Components */
 import PostItem from './item'
 import OnScrollPaginate from '../utils/on-scroll-paginate'
+import PCard from '../widgets/p-card/p-card'
 
 const Post = ({ fetchHandler }) => {
     const { list: posts, page } = useSelector(state => state.post)
@@ -37,6 +38,12 @@ const Post = ({ fetchHandler }) => {
         )
     })
 
+    const renderEmpty = () => (
+        <PCard size="fit" style={{marginTop: '0.5rem'}}>
+            <div className="disabled">Start following people to view their post</div>
+        </PCard>
+    )
+
     return (
         <OnScrollPaginate
             className={styles.posts}
@@ -44,7 +51,7 @@ const Post = ({ fetchHandler }) => {
             fetchHandler={fetchHandler}
             page={page}
         >
-            {renderPosts()}
+            {!posts || posts.length === 0 ? renderEmpty() : renderPosts()}
         </OnScrollPaginate>
     )
 }

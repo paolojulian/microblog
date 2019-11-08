@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './landing-loading.module.css';
 import { TextMock, RoundedMock } from '../widgets/wireframes';
 
@@ -18,7 +18,7 @@ const Profile = () => (
 const Post = () => (
     <div className={styles.post}>
         <div className={styles.header}>
-            <div className={styles.postImg}></div>
+            <RoundedMock size="36px"/>
             <div className={styles.postTitle}>
                 <TextMock/>
                 <TextMock/>
@@ -39,8 +39,25 @@ const Right = () => (
 
 const LandingLoading = () => {
 
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        let cancel = false;
+        let timeout = setTimeout(() => {
+            if ( ! cancel) {
+                setMounted(true);
+            }
+        }, 0);
+        return () => {
+            clearTimeout(timeout);
+            cancel = true;
+        };
+    }, [])
+
     return (
-        <div className={styles.landing}>
+        <div
+            style={{ visibility: mounted ? 'visible': 'hidden' }}
+            className={styles.landing}>
             <Profile/>
             <div className={styles.container}>
                 <Post/>

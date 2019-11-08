@@ -25,8 +25,8 @@ const Landing = () => {
         window.scrollTo({ top: 0, left: 0 });
         const init = async () => {
             await dispatch(getProfile());
-            await dispatch(fetchNotFollowed());
             await fetchHandler();
+            await dispatch(fetchNotFollowed());
             setLoading(false);
         }
         init();

@@ -1,7 +1,22 @@
 .profile_wrapper {
     margin-top: 2.5rem 0;
 }
+.info {
+    display: flex;
+    margin: auto;
+    width: 1000px;
+}
+.mutual,
+.editProfile {
+    margin-top: 0.375rem;
+    flex: 2;
+    margin-right: 0.375rem;
+}
 .posts {
+    flex: 3;
+    width: 100%;
+}
+/* .posts {
     margin-left: calc(50% - 100px);
     width: 600px;
-}
+} */

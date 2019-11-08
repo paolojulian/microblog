@@ -97,7 +97,6 @@ export const fetchFollow = (userId, type, page = 1) => async dispatch => {
     }
 }
 
-
 /**
  * Fetch the users who have not yet followed
  * prioritize the ones who have mutual connections
@@ -109,6 +108,19 @@ export const fetchNotFollowed = (page = 1) => async dispatch => {
             type: SET_NOT_FOLLOWED,
             payload: res.data.data
         });
+        return Promise.resolve(res.data.data);
+    } catch (e) {
+        return Promise.reject(e);
+    }
+}
+
+/**
+ * Fetch the mutual friends with the given user
+ * @param username - user to check mutual friends
+ */
+export const fetchMutualFriends = (username) => async dispatch => {
+    try {
+        const res = await axios.get(`/users/mutual/${username}.json`);
         return Promise.resolve(res.data.data);
     } catch (e) {
         return Promise.reject(e);

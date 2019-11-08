@@ -1,15 +1,14 @@
 .formImage {
     position: relative;
     width: 100%;
-    height: auto;
+    height: 100%;
     text-align: left;
 }
 
 .formImage img {
     width: 100%;
-    height: 128px;
     max-width: 100%;
-    max-height: 50vh;
+    max-height: 100%;
 }
 
 .removeImg {

@@ -69,8 +69,6 @@ const PFollowModal = ({
             >
                 {users.map((item, i) => {
                     let user = type === 'follower' ? item.User : item.Following;
-                    console.log(user.id);
-                    console.log(loggedInUser);
                     return <UserItem
                         key={user.id + i}
                         user={user}

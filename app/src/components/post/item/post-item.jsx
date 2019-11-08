@@ -109,7 +109,7 @@ const PostItem = ({
     )
 
     return (
-        <PCard className={styles.post_item}>
+        <PCard className={styles.post_item} size="fit">
             <div className={styles.from_now}>
                 {fromNow(created)}
             </div>

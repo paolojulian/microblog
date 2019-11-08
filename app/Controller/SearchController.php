@@ -2,7 +2,7 @@
 
 App::uses('AppController', 'Controller');
 
-class SearchController extends AppController4
+class SearchController extends AppController
 {
     public $components = ['RequestHandler'];
 

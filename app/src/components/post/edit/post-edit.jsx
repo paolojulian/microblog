@@ -48,11 +48,13 @@ const PostEdit = ({
             form.img = imgRef.current.files[0]
         }
         editPost(id, form)
-            .then(() => { close() })
+            .then(() => {
+                context.notify.success("Updated Successfully!");
+                close()
+            })
     }
 
     const close = () => {
-        context.notify.success("Updated Successfully!");
         dispatch({ type: CLEAR_ERRORS });
         onSuccess();
     }
