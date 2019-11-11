@@ -57,6 +57,7 @@ class Notification extends AppModel
 
     public function addNotification($data)
     {
+        var_dump();die();
         $this->set($data);
         if ( ! $this->validates()) {
             return false;

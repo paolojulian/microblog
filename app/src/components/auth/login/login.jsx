@@ -47,15 +47,19 @@ const Login = ({
             password: password.current.value,
         }
         try {
-            await loginUser(User, history)
+            console.log(await loginUser(User, history));
         } catch (e) {
             if (e.hasOwnProperty('response') && e.response.status === 400) {
-                setErrors({
+                return setErrors({
                     form: e.response.data.message,
                     username: true,
                     password: true
                 })
             }
+            return setErrors({
+                ...errors,
+                form: 'Oops. Something went wrong'
+            })
         } finally {
             setLoading(false);
         }

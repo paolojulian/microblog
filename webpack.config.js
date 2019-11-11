@@ -9,8 +9,8 @@ const config = {
   entry: ['@babel/polyfill', `${APP_DIR}/index.js`],
   output: {
     path: `${BUILD_DIR}/js/`,
-    chunkFilename: '[name].bundle.js',
-    filename: 'bundle.js',
+    chunkFilename: '[name].bundle.min.js',
+    filename: 'bundle.min.js',
   },
   optimization: {
     minimizer: [

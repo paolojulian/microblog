@@ -7,7 +7,7 @@
 	<title>Document</title>
 
 	<title>Microblog 2</title>
-	<?php echo $this->Html->css('app') ?>
+	<?php echo $this->Html->css('app.min') ?>
 	<?php echo $this->Html->css('card') ?>
 	<?php echo $this->Html->css('Form') ?>
 	<?php echo $this->Html->css('scrollbar') ?>
@@ -23,6 +23,6 @@
 <body>
 	<div id="app"></div>
 	<?= $this->Html->script('v-notifier'); ?>
-	<?= $this->Html->script('bundle'); ?>
+	<?= $this->Html->script('bundle.min'); ?>
 </body>
 </html>
