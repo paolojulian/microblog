@@ -160,34 +160,34 @@ class AuthsController extends AppController
     //     );
     // }
 
-    // /**
-    //  * [GET]
-    //  * [PRIVATE] - for logged in users only
-    //  * 
-    //  * Fetches not yet followed users
-    //  * Prioritizes friends of friends with mutual connections
-    //  * and then previously created users
-    //  * 
-    //  * TODO
-    //  * for improvement should add location of user
-    //  * and prioritize same locations
-    //  * 
-    //  * @return json - array of Users
-    //  */
-    // public function notfollowed()
-    // {
-    //     $this->request->allowMethod('get');
-    //     $page = $this->request->query('page');
-    //     if ( ! $page) {
-    //         $page = 1;
-    //     }
-    //     return $this->responseData(
-    //         $this->User->getFriendsOfFriends(
-    //             $this->request->user->id,
-    //             $page
-    //         )
-    //     );
-    // }
+    /**
+     * [GET]
+     * [PRIVATE] - for logged in users only
+     * 
+     * Fetches not yet followed users
+     * Prioritizes friends of friends with mutual connections
+     * and then previously created users
+     * 
+     * TODO
+     * for improvement should add location of user
+     * and prioritize same locations
+     * 
+     * @return json - array of Users
+     */
+    public function notfollowed()
+    {
+        $this->request->allowMethod('get');
+        $page = $this->request->query('page');
+        if ( ! $page) {
+            $page = 1;
+        }
+        return $this->responseData(
+            $this->User->getFriendsOfFriends(
+                $this->request->user->id,
+                $page
+            )
+        );
+    }
 
     /**
      * [POST]
