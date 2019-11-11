@@ -1,3 +1,5 @@
+<?php header('Cache-Control: public, max-age=31536000, no Etag'); ?>
+<?php header('Cache-Control: max-age=2592000'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,6 +27,5 @@
 	<div id="app"></div>
 	<?= $this->Html->script('v-notifier'); ?>
 	<script type="module" src="/js/bundle.min.js"></script>
-	<?= $this->Js->writeBuffer(); ?>
 </body>
 </html>
