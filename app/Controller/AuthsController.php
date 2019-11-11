@@ -43,33 +43,33 @@ class AuthsController extends AppController
     //     return $this->responseData($users);
     // }
 
-    // /**
-    //  * [POST]
-    //  * [PUBLIC]
-    //  * 
-    //  * Signs up a user,
-    //  * Sends an activation email after a successful registration
-    //  * 
-    //  * @return json
-    //  */
-    // public function register()
-    // {
-    //     $this->request->allowMethod('post');
-    //     $this->request->data['activation_key'] = $this->HasherHandler->generateRand();
-    //     if ( ! $this->User->addUser($this->request->data)) {
-    //         return $this->responseUnprocessableEntity('', $this->User->validationErrors);
-    //     }
+    /**
+     * [POST]
+     * [PUBLIC]
+     * 
+     * Signs up a user,
+     * Sends an activation email after a successful registration
+     * 
+     * @return json
+     */
+    public function register()
+    {
+        $this->request->allowMethod('post');
+        $this->request->data['activation_key'] = $this->HasherHandler->generateRand();
+        if ( ! $this->User->addUser($this->request->data)) {
+            return $this->responseUnprocessableEntity('', $this->User->validationErrors);
+        }
 
-    //     try {
-    //         // TODO add a page if mail failed,
-    //         // should display resend link
-    //         $this->UserHandler->sendActivationMail($this->request->data);
-    //     } catch (Exception $e) {
-    //         throw new InternalErrorException(__($e->getMessage()));
-    //     }
+        try {
+            // TODO add a page if mail failed,
+            // should display resend link
+            $this->UserHandler->sendActivationMail($this->request->data);
+        } catch (Exception $e) {
+            throw new InternalErrorException(__($e->getMessage()));
+        }
 
-    //     return $this->responseOK();
-    // }
+        return $this->responseOK();
+    }
 
     /**
      * [PUT]
