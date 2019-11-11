@@ -1,15 +1,14 @@
-
-const http = require('http');
-const url = require('url');
-const WebSocketServer = require('websocket').server;
-let server = http.createServer((request, response) => {
+var http = require('http');
+var url = require('url');
+var WebSocketServer = require('websocket').server;
+var server = http.createServer((request, response) => {
     /**
      * Receives POST parameter for notification
      */
     const getPostParam = (request, callback) => {
 		const querystring = require('querystring')
         if (request.method === "POST") {
-            let body = '';
+            var body = '';
 
             request.on('data', (data) => {
 	            body += data;
@@ -51,7 +50,7 @@ const websocketRequest = request => {
     // start the connection
     try {
         const { query: { id }} = url.parse(request.resource, true);
-        let connection = request.accept(null, request.origin); 
+        var connection = request.accept(null, request.origin); 
         console.log(`New Connection ${id}`)
         // save the connection for future reference
         clients[Number(id)] = connection;
