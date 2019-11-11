@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 
 /** Redux */
+import { refreshHome } from '../../../store/actions/refreshAction'
 import { logoutUser } from '../../../store/actions/authActions'
 
 /** Components */
@@ -27,7 +28,8 @@ const Navbar = ({
 
     const reloadOrNavigate = () => {
         if (location.pathname === '/') {
-            return window.location.reload();
+            // return window.location.reload();
+            return dispatch(refreshHome())
         }
         history.push('/')
     };

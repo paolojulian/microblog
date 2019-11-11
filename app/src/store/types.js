@@ -32,3 +32,6 @@ export const NOTIFICATION = {
     setCount: 'SET_COUNT_NOTIFICATION',
     addCount: 'ADD_COUNT_NOTIFICATION'
 }
+
+/** Refresh */
+export const REFRESH = "REFRESH";
