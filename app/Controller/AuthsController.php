@@ -138,27 +138,27 @@ class AuthsController extends AppController
     //     return $this->responseData($this->jwtEncode($user["User"]));
     // }
 
-    // /**
-    //  * [GET]
-    //  * [PRIVATE] - for logged in users only
-    //  * 
-    //  * Checks the mutual friends of a certain friend
-    //  * and currently logged in user
-    //  * 
-    //  * @param username - user to be checked
-    //  * @return json - array of Users
-    //  */
-    // public function mutual($username)
-    // {
-    //     $this->request->allowMethod('get');
-    //     $friendUser = $this->User->findByUsername($username, 'id');
-    //     return $this->responseData(
-    //         $this->User->getMutualFriends(
-    //             $this->request->user->id,
-    //             $friendUser['User']['id']
-    //         )
-    //     );
-    // }
+    /**
+     * [GET]
+     * [PRIVATE] - for logged in users only
+     * 
+     * Checks the mutual friends of a certain friend
+     * and currently logged in user
+     * 
+     * @param username - user to be checked
+     * @return json - array of Users
+     */
+    public function mutual($username)
+    {
+        $this->request->allowMethod('get');
+        $friendUser = $this->User->findByUsername($username, 'id');
+        return $this->responseData(
+            $this->User->getMutualFriends(
+                $this->request->user->id,
+                $friendUser['User']['id']
+            )
+        );
+    }
 
     /**
      * [GET]
