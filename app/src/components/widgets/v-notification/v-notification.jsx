@@ -22,7 +22,7 @@ const VNotification = () => {
     }, [isAuthenticated])
 
     const connectWebSocket = (userId) => {
-        let websocket = new WebSocket(`ws://127.0.0.1:8080?id=${userId}`);
+        let websocket = new WebSocket(`ws://127.0.0.1:4567?id=${userId}`);
         websocket.onopen = e => {
             console.log('Connected');
         }
