@@ -93,25 +93,25 @@ class AuthsController extends AppController
     //     return $this->responseOK();
     // }
 
-    // /**
-    //  * [DELETE]
-    //  * [PRIVATE] - Logged in user only
-    //  * 
-    //  * @return json
-    //  */
-    // public function delete($id = null)
-    // {
-    //     $this->request->allowMethod('delete');
-    //     $this->User->id = $id;
-    //     if ( ! $this->User->exists()) {
-    //         throw new NotFoundException(__('Invalid user'));
-    //     }
-    //     if ( ! $this->User->delete()) {
-    //         throw new InternalErrorException(__('Server Error'));
-    //     }
+    /**
+     * [DELETE]
+     * [PRIVATE] - Logged in user only
+     * 
+     * @return json
+     */
+    public function delete($id = null)
+    {
+        $this->request->allowMethod('delete');
+        $this->User->id = $id;
+        if ( ! $this->User->exists()) {
+            throw new NotFoundException(__('Invalid user'));
+        }
+        if ( ! $this->User->delete()) {
+            throw new InternalErrorException(__('Server Error'));
+        }
 
-    //     $this->responseDeleted();
-    // }
+        $this->responseDeleted();
+    }
 
     /**
      * [POST]
