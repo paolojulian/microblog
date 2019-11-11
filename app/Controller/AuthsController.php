@@ -27,21 +27,22 @@ class AuthsController extends AppController
         die();
     }
 
-    // /**
-    //  * [GET] /users/search/:searchText.json
-    //  * [PRIVATE] - only for loggedin user
-    //  * 
-    //  * @return json - array of users
-    //  */
-    // public function search($searchText)
-    // {
-    //     $this->request->allowMethod('get');
-    //     $users = $this->User->searchUser(
-    //         $searchText,
-    //         $this->request->user->id,
-    //     );
-    //     return $this->responseData($users);
-    // }
+    /**
+     * [GET] /users/search/:searchText.json
+     * [PRIVATE] - only for loggedin user
+     * 
+     * @return json - array of users
+     */
+    public function search($searchText)
+    {
+        var_dump($searchText);die();
+        $this->request->allowMethod('get');
+        $users = $this->User->searchUser(
+            $searchText,
+            $this->request->user->id,
+        );
+        return $this->responseData($users);
+    }
 
     /**
      * [POST]
