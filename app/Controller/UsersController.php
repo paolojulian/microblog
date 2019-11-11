@@ -13,7 +13,7 @@ class UsersController extends AppController
     ];
 
     /** Public routes */
-    public $public = ['view', 'register', 'activate', 'login', 'accessDenied'];
+    public $publicRoutes = ['view', 'register', 'activate', 'login', 'accessDenied'];
 
     public function beforeFilter()
     {
@@ -126,8 +126,6 @@ class UsersController extends AppController
      */
     public function login()
     {
-        try {
-
         $this->request->allowMethod('post');
 
         $user = $this->User->authenticate($this->request->data);
@@ -140,9 +138,6 @@ class UsersController extends AppController
         }
 
         return $this->responseData($this->jwtEncode($user["User"]));
-        } catch (Exception $e) {
-            throw new InternalErrorException($e->getMessage());
-        }
     }
 
     /**

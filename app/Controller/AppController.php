@@ -34,7 +34,7 @@ App::uses('JWT', 'Lib');
  * @link		https://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-    public $public = [];
+    public $publicRoutes = [];
     
     /**
      * Checks if user is logged in
@@ -44,7 +44,7 @@ class AppController extends Controller {
      */
     public function beforeFilter()
     {
-        if (in_array($this->action, $this->public)) {
+        if (in_array($this->action, $this->publicRoutes)) {
             return false;
         }
         try {
