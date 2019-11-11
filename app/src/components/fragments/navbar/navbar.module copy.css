@@ -33,7 +33,7 @@ nav ul li:not(.search) {
 
 .search input {
     width: 400px;
-    max-width: 100%;
+    max-width: 95%;
     padding: 0.4rem 0.4rem;
     position: absolute;
     top: 50%;

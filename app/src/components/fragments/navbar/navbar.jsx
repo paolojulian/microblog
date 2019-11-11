@@ -35,7 +35,7 @@ const Navbar = ({
     return (
         <nav>
             <SearchBar/>
-            <div className={styles.logo}>Logo</div>
+            <div className={styles.logo}>LaCosina</div>
             <ul className={styles.container}>
                 <li
                     className={styles.home}
