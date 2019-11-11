@@ -9,7 +9,7 @@
 	<title>Microblog 2</title>
 	<?php echo $this->Html->css('app') ?>
 	<?php echo $this->Html->css('card') ?>
-	<?php echo $this->Html->css('form') ?>
+	<?php echo $this->Html->css('Form') ?>
 	<?php echo $this->Html->css('scrollbar') ?>
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
