@@ -71,7 +71,7 @@ class Notification extends AppModel
     {
         if ( ! $created) return true;
         /** Send to websocket server */
-        $ch = curl_init('http://127.0.0.1:8080');
+        $ch = curl_init('http://127.0.0.1:4567');
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         $jsonData = json_encode([
             'id' => $this->data[$this->alias]['id'],
