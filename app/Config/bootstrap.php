@@ -23,7 +23,11 @@
  */
 
 // Setup a 'default' cache configuration for use in the application.
-Cache::config('default', array('engine' => 'File'));
+Cache::config('default', array(
+	'engine' => 'File',
+	'duration' => '1 week',
+	'path' => CACHE
+));
 
 /**
  * The settings below can be used to set additional paths to models, views and controllers.
@@ -111,6 +115,7 @@ CakeLog::config('debug', array(
 	'types' => array('notice', 'info', 'debug'),
 	'file' => 'debug',
 ));
+
 CakeLog::config('error', array(
 	'engine' => 'File',
 	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),

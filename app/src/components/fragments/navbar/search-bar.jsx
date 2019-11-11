@@ -108,18 +108,18 @@ const SearchBar = () => {
 
     return (
         <div className={styles.search}>
-            <form onSubmit={handleSearch}
-                className={styles.searchForm}
-            >
-                <input type="text"
-                    placeholder="Search"
-                    name="search_bar"
-                    ref={searchText}
-                    onChange={handleChange}
-                    onKeyPress={handleKeyPress}
-                    autoComplete="off"
-                    onPaste={e => e.preventDefault()}
-                    />
+            <div className={styles.searchForm}>
+                <form onSubmit={handleSearch}>
+                    <input type="text"
+                        placeholder="Search"
+                        name="search_bar"
+                        ref={searchText}
+                        onChange={handleChange}
+                        onKeyPress={handleKeyPress}
+                        autoComplete="off"
+                        onPaste={e => e.preventDefault()}
+                        />
+                </form>
                 <div className={classNames(styles.searchList, {
                     [styles.active]: isSearching
                 })}>
@@ -135,7 +135,7 @@ const SearchBar = () => {
                         </div>
                     </Link>}
                 </div>
-            </form>
+            </div>
         </div>
     );
 }
