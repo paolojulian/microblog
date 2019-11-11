@@ -1,12 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const index = () => {
+const Username = ({ username, ...props }) => {
     return (
-        <div>
-            
-        </div>
+        <Link to={`/profiles/${username}`}>
+            <span className="username"
+                {...props}
+            >
+                @{username}
+            </span>
+        </Link>
     )
 }
 
-export default index
+export default Username

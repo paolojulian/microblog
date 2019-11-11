@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import PCard from '../p-card';
 import ProfileImage from '../profile-image';
 import PostImage from '../post-image';
+import Username from '../username';
 
 const postStyle = {
     post: {
@@ -77,11 +78,7 @@ export const PostItem = ({ post: { User, Post } }) => (
                     </Link>
                 </div>
                 <div>
-                    <Link to={`/profiles/${User.username}`}>
-                        <span className="username">
-                            @{User.username}
-                        </span>
-                    </Link>
+                    <Username username={User.username}/>
                 </div>
             </div>
         </div>

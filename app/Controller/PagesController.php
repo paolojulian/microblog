@@ -46,6 +46,7 @@ class PagesController extends AppController {
  *   or MissingViewException in debug mode.
  */
 	public function display() {
+		header('Cache-Control: max-age=86400');
 		$this->render('home');
 	}
 

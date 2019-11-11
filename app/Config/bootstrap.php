@@ -23,10 +23,12 @@
  */
 
 // Setup a 'default' cache configuration for use in the application.
+// Cache::config('default', array('engine' => 'Apc'));
 Cache::config('default', array(
 	'engine' => 'File',
-	'duration' => '1 week',
-	'path' => CACHE
+	'path' => CACHE,
+	'url' => env('CACHE_DEFAULT_URL', null),
+	'duration' => 86400
 ));
 
 /**
