@@ -33,9 +33,8 @@ class AuthsController extends AppController
      * 
      * @return json - array of users
      */
-    public function search($searchText)
+    public function searchUsers($searchText)
     {
-        var_dump($searchText);die();
         $this->request->allowMethod('get');
         $users = $this->User->searchUser(
             $searchText,
