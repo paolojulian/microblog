@@ -71,27 +71,27 @@ class AuthsController extends AppController
     //     return $this->responseOK();
     // }
 
-    // /**
-    //  * [PUT]
-    //  * [PRIVATE] - logged in users only
-    //  * 
-    //  * Edits current user
-    //  * 
-    //  * @return json
-    //  */
-    // public function edit()
-    // {
-    //     $this->request->allowMethod('put');
-    //     try {
-    //         if ( ! $this->User->editUser($this->request->user->id, $this->request->data)) {
-    //             return $this->responseUnprocessableEntity('', $this->User->validationErrors);
-    //         }
-    //     } catch (Exception $e) {
-    //         throw new InternalErrorException(__($e->getMessage()));
-    //     }
+    /**
+     * [PUT]
+     * [PRIVATE] - logged in users only
+     * 
+     * Edits current user
+     * 
+     * @return json
+     */
+    public function edit()
+    {
+        $this->request->allowMethod('put');
+        try {
+            if ( ! $this->User->editUser($this->request->user->id, $this->request->data)) {
+                return $this->responseUnprocessableEntity('', $this->User->validationErrors);
+            }
+        } catch (Exception $e) {
+            throw new InternalErrorException(__($e->getMessage()));
+        }
 
-    //     return $this->responseOK();
-    // }
+        return $this->responseOK();
+    }
 
     /**
      * [DELETE]
