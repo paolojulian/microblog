@@ -113,30 +113,30 @@ class AuthsController extends AppController
     //     $this->responseDeleted();
     // }
 
-    // /**
-    //  * [POST]
-    //  * [PUBLIC]
-    //  * 
-    //  * Logs in the current user and returns a Jwt Token upon success
-    //  * Only allow activated accounts
-    //  * 
-    //  * @return json - containing Jwt Token
-    //  */
-    // public function login()
-    // {
-    //     $this->request->allowMethod('post');
+    /**
+     * [POST]
+     * [PUBLIC]
+     * 
+     * Logs in the current user and returns a Jwt Token upon success
+     * Only allow activated accounts
+     * 
+     * @return json - containing Jwt Token
+     */
+    public function login()
+    {
+        $this->request->allowMethod('post');
 
-    //     $user = $this->User->authenticate($this->request->data);
-    //     if ( ! $user) {
-    //         throw new BadRequestException(__('Invalid Username or Password'));
-    //     }
+        $user = $this->User->authenticate($this->request->data);
+        if ( ! $user) {
+            throw new BadRequestException(__('Invalid Username or Password'));
+        }
 
-    //     if ($user['User']['is_activated'] != 1) {
-    //         throw new BadRequestException(__('Please activate your account first.'));
-    //     }
+        if ($user['User']['is_activated'] != 1) {
+            throw new BadRequestException(__('Please activate your account first.'));
+        }
 
-    //     return $this->responseData($this->jwtEncode($user["User"]));
-    // }
+        return $this->responseData($this->jwtEncode($user["User"]));
+    }
 
     /**
      * [GET]
