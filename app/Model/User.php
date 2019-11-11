@@ -308,12 +308,17 @@ class User extends AppModel
 
     public function authenticate($data)
     {
+        try {
         $user = $this->find('first', [
             'recursive' => true,
             'conditions' => ['username' => $data['username']],
         ]);
         if ( ! $user) {
             return false;
+        }
+        }
+        catch (Exception $e) {
+            throw new InternalErrorException($e->getMessage());
         }
         $passwordHasher = new BlowfishPasswordHasher();
         if ( ! $passwordHasher->check($data['password'], $user['User']['password'])) {
