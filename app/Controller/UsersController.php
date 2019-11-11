@@ -13,7 +13,7 @@ class UsersController extends AppController
     ];
 
     /** Public routes */
-    public $publicRoutes = ['view', 'register', 'activate', 'login', 'accessDenied'];
+    public $public = ['view', 'register', 'activate', 'login', 'accessDenied'];
 
     public function beforeFilter()
     {
