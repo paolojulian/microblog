@@ -22,7 +22,7 @@ const VNotification = () => {
     }, [isAuthenticated])
 
     const connectWebSocket = (userId) => {
-        let websocket = new WebSocket(`ws://localhost:4567?id=${userId}`);
+        let websocket = new WebSocket(`ws://13.250.23.187:4567?id=${userId}`);
         websocket.onopen = e => {
             console.log('Connected');
         }
@@ -31,7 +31,7 @@ const VNotification = () => {
             showNotification(notificationId, message);
         }
         websocket.onclose = (e) => {
-            console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
+            console.log('Socket is closed. Reconnect will be attempted in 10 second.', e.reason);
             setTimeout(() => {
                 connectWebSocket(userId);
             }, 10000);

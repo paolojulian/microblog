@@ -1,5 +1,6 @@
 const http = require('http');
 const url = require('url');
+const WebSocketServerPort = 4567;
 const WebSocketServer = require('websocket').server;
 let server = http.createServer((request, response) => {
     /**
@@ -38,7 +39,12 @@ let server = http.createServer((request, response) => {
         return;
     }
 });
-server.listen(4567, 'localhost');
+server.listen(WebSocketServerPort, () => {
+    console.log('Server is listening')
+})
+.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') console.log('Port is already in use.')
+});
 
 global.clients = {}; // store the connections
 
