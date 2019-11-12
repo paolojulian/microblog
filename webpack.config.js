@@ -13,18 +13,18 @@ const config = {
     filename: 'bundle.min.js',
   },
   optimization: {
-    minimizer: [
-      new UglifyJsPlugin({
-        chunkFilter: (chunk) => {
-          // Exclude uglification for the `vendor` chunk
-          if (chunk.name === 'vendor') {
-            return false;
-          }
+    // minimizer: [
+    //   new UglifyJsPlugin({
+    //     chunkFilter: (chunk) => {
+    //       // Exclude uglification for the `vendor` chunk
+    //       if (chunk.name === 'vendor') {
+    //         return false;
+    //       }
 
-          return true;
-        },
-      }),
-    ],
+    //       return true;
+    //     },
+    //   }),
+    // ],
   },
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
