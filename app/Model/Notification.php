@@ -82,7 +82,10 @@ class Notification extends AppModel
             $query = http_build_query(['data' => $jsonData]);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $response = curl_exec($ch);
+            curl_exec($ch);
+            if (curl_error ($ch)) {
+                echo curl_error ( $ch );
+            }
             curl_close($ch);
             return true;
         } catch (Exception $e) {
