@@ -38,6 +38,11 @@ class User extends AppModel
                 'required' => true,
                 'message' => 'Between 1 to 70 characters only'
             ],
+            'lettersOnly' => [
+                'rule' => '/^[a-zA-Z ]+$/',
+                'required' => true,
+                'message' => 'Letters only'
+            ]
         ],
         'last_name' => [
             'notBlank' => [
@@ -50,11 +55,11 @@ class User extends AppModel
                 'required' => true,
                 'message' => 'Maximum of 35 characters only'
             ],
-            'alphaNumeric' => [
-                'rule' => 'alphaNumeric',
+            'lettersOnly' => [
+                'rule' => '/^[a-zA-Z ]+$/',
                 'required' => true,
-                'message' => 'Letters and Numbers only'
-            ],
+                'message' => 'Letters only'
+            ]
         ],
         'username' => [
             'notBlank' => [
@@ -103,6 +108,11 @@ class User extends AppModel
                 'rule' => ['date'],
                 'required' => true,
                 'message' => 'Please enter a valid date'
+            ],
+            'notGreaterThanToday' => [
+                'rule' => 'notGreaterThanToday',
+                'required' => true,
+                'message' => 'Date should not be greater than today'
             ]
         ],
         'sex' => [

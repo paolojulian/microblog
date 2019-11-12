@@ -25,20 +25,17 @@ const VNotification = () => {
         let websocket = new WebSocket(`ws://13.250.23.187:4567?id=${userId}`);
         // let websocket = new WebSocket(`ws://microblog.localhost:4567?id=${userId}`);
         websocket.onopen = e => {
-            console.log('Connected');
         }
         websocket.onmessage = e => {
             const { notificationId, message } =JSON.parse(e.data);
             showNotification(notificationId, message);
         }
         websocket.onclose = (e) => {
-            console.log('Socket is closed. Reconnect will be attempted in 10 second.', e.reason);
             setTimeout(() => {
                 connectWebSocket(userId);
             }, 10000);
         };
         websocket.onerror = (err) => {
-            console.error('Socket encountered error: ', err.message, 'Closing socket');
             websocket.close();
         };
     }

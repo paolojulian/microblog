@@ -42,4 +42,14 @@ class AppModel extends SoftDeletableModel {
         }
     }
 
+    public function notGreaterThanToday($check)
+    {
+        try {
+            $dateToCheck = strtotime($check['birthdate']);
+            $now = time();
+            return $dateToCheck < $now;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 }
