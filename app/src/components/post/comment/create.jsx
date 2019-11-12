@@ -1,6 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+
+/** Context */
+import { ModalContext } from '../../widgets/p-modal/p-modal-context'
 
 /** Redux */
 import { addComment } from '../../../store/actions/postActions';
@@ -8,6 +11,7 @@ import { addComment } from '../../../store/actions/postActions';
 /** Components */
 import PCard from '../../widgets/p-card';
 import PFab from '../../widgets/p-fab';
+import PLoader from '../../widgets/p-loader';
 import FormTextArea from '../../widgets/form/textarea/form-textarea';
 
 const CommentCreate = ({
@@ -17,8 +21,10 @@ const CommentCreate = ({
 }) => {
 
     const dispatch = useDispatch();
+    const context = useContext(ModalContext);
     const comment = useRef('');
     const [hasComment, setHasComment] = useState(false);
+    const [isLoading, setLoading] = useState(false);
 
     const handleSubmit = e => {
         if (e) e.preventDefault();
@@ -27,10 +33,11 @@ const CommentCreate = ({
             post_id: postId,
             body: comment.current.value
         }
+        setLoading(true);
         dispatch(addComment(form))
             .then(handleSuccess)
-            .catch()
-            .then();
+            .catch(handleError)
+            .then(() => setLoading(false));
     }
 
     const handleSuccess = () => {
@@ -39,8 +46,35 @@ const CommentCreate = ({
         onRequestSuccess();
     }
 
+    const handleError = () => {
+        context.notifyti.serverError();
+    }
+
     const handleChange = e => {
         setHasComment(!!e.target.value);
+    }
+
+    const renderButton = () => {
+        if (isLoading) {
+            return (
+                <div className="action_btns">
+                    <PLoader />
+                </div>
+            )
+        }
+
+        if ( ! hasComment) return '';
+
+        return (
+            <div className="action_btns">
+                <PFab
+                    type="submit"
+                    theme="primary"
+                >
+                    <i className="fa fa-check"/>
+                </PFab>
+            </div>
+        ) 
     }
 
     return (
@@ -56,14 +90,7 @@ const CommentCreate = ({
                     onChange={handleChange}
                     rows={1}
                 />
-                {hasComment && <div className="action_btns">
-                    <PFab
-                        type="submit"
-                        theme="primary"
-                    >
-                        <i className="fa fa-check"/>
-                    </PFab>
-                </div>}
+                {renderButton()}
             </form>
         </PCard>
     );

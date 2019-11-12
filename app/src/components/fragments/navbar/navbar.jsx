@@ -28,7 +28,6 @@ const Navbar = ({
 
     const reloadOrNavigate = () => {
         if (location.pathname === '/') {
-            // return window.location.reload();
             return dispatch(refreshHome())
         }
         history.push('/')

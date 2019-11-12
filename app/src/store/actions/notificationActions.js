@@ -54,3 +54,10 @@ export const addNotificationCount = (n = 1) => dispatch => {
         payload: n
     })
 }
+
+/**
+ * Adds or subtract the number of notifications unread
+ */
+export const refreshesNotification = () => dispatch => {
+    dispatch({ type: NOTIFICATION.refresh })
+}

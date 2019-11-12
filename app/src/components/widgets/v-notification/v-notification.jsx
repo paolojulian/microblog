@@ -23,6 +23,7 @@ const VNotification = () => {
 
     const connectWebSocket = (userId) => {
         let websocket = new WebSocket(`ws://13.250.23.187:4567?id=${userId}`);
+        // let websocket = new WebSocket(`ws://microblog.localhost:4567?id=${userId}`);
         websocket.onopen = e => {
             console.log('Connected');
         }

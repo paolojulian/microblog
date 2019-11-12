@@ -14,6 +14,7 @@ import FormInput from '../../widgets/form/input'
 
 /** Context */
 import { ModalContext } from '../../widgets/p-modal/p-modal-context'
+import FormRadio from '../../widgets/form/radio/form-radio';
 
 const Register = ({
     registerUser,
@@ -61,7 +62,6 @@ const Register = ({
             return;
         }
 
-        setLoading(true);
         const User = {
             first_name: first_name.current.value,
             last_name: last_name.current.value,
@@ -73,6 +73,7 @@ const Register = ({
             confirm_password: confirm_password.current.value,
         }
         try {
+            setLoading(true);
             await registerUser(User, history)
             context.notify.success(
                 `Account created successfully,
@@ -101,7 +102,7 @@ const Register = ({
     return (
         <div className="center-absolute">
             <PCard size="sm"
-                header="Create an Account"
+                header="Create an account"
             >
                 <form
                     className="form"
@@ -134,20 +135,15 @@ const Register = ({
                         error={errors.birthdate}
                     />
 
-                    <input
-                        type="radio"
-                        value="M"
+                    <FormRadio choices={[
+                        {name: 'M', value: 'M'},
+                        {name: 'F', value: 'F'},
+                    ]}
                         name="sex"
-                        onChange={() => setSex('M')}
+                        value={sex}
+                        error={errors.sex}
+                        onChangeValue={value => setSex(value)}
                     />
-                    M
-                    <input
-                        type="radio"
-                        value="F"
-                        name="sex"
-                        onChange={() => setSex('F')}
-                    />
-                    F
 
                     <FormInput
                         placeholder="Username"

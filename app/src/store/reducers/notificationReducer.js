@@ -2,6 +2,7 @@ import { NOTIFICATION } from '../types';
 
 const initialState = {
     // Used for displaying number of notifs
+    refreshCounter: 1,
     notificationCount: 0,
     notifications: []
 }
@@ -37,6 +38,11 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 notificationCount: newCount
+            }
+        case NOTIFICATION.refresh:
+            return {
+                ...state,
+                refreshCounter: state.refreshCounter + 1
             }
         default:
             return state;
