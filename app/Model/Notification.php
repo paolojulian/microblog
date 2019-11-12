@@ -72,7 +72,7 @@ class Notification extends AppModel
         if ( ! $created) return true;
         /** Send to websocket server */
         try {
-            $ch = curl_init('http://dev3.ynsdev.pw:4567');
+            $ch = curl_init('http://127.0.0.1:4567');
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
             $jsonData = json_encode([
                 'id' => $this->data[$this->alias]['id'],
@@ -82,9 +82,9 @@ class Notification extends AppModel
             $query = http_build_query(['data' => $jsonData]);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_exec($ch);
+            $result = curl_exec($ch);
             if (curl_error ($ch)) {
-                echo curl_error ( $ch );
+                echo curl_error ($ch);
             }
             curl_close($ch);
             return true;
