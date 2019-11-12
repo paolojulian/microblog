@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import axios from 'axios'
 import { Provider } from 'react-redux'
 import jwtDecode from 'jwt-decode'

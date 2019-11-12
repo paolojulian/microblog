@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { lazy, useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { connect, useSelector } from 'react-redux'
 import { withRouter } from 'react-router-dom';
