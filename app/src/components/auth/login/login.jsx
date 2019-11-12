@@ -67,7 +67,7 @@ const Login = ({
 
     return (
         <div className="center-absolute">
-            <PCard size="sm">
+            <PCard size="sm" header="LaCosina">
                 <form
                     className="form"
                     onSubmit={handleSubmit}
