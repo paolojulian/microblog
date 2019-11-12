@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 
 const BUILD_DIR = path.resolve(__dirname, 'app/webroot/');
 const APP_DIR = path.resolve(__dirname, 'app/src/');
@@ -12,27 +12,19 @@ const config = {
     chunkFilename: '[name].bundle.min.js',
     filename: 'bundle.min.js',
   },
-  optimization: {
-    // minimizer: [
-    //   new UglifyJsPlugin({
-    //     chunkFilter: (chunk) => {
-    //       // Exclude uglification for the `vendor` chunk
-    //       if (chunk.name === 'vendor') {
-    //         return false;
-    //       }
-
-    //       return true;
-    //     },
-    //   }),
-    // ],
-  },
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production')
       }
-    })
+    }),
+    new TerserPlugin({
+      parallel: true,
+      terserOptions: {
+        ecma: 6,
+      },
+    }),
   ],
   resolve: {
     extensions: ['*', '.js', '.jsx']
