@@ -25,6 +25,12 @@ const SearchBar = ({
     <PCard size="fit">
         <div style={style.container}>
             <input type="text"
+                style={{
+                    padding: '0.375rem',
+                    backgroundColor: 'var(--grey)',
+                    borderRadius: '5px',
+                    border: '1px solid rgba(0, 0, 0, 0.10)'
+                }}
                 placeholder="Search"
                 name="search_bar"
                 autoComplete="off"
