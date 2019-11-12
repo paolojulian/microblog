@@ -6,6 +6,7 @@ let server = http.createServer((request, response) => {
     /**
      * Receives POST parameter for notification
      */
+    console.log(request);
     const getPostParam = (request, callback) => {
 		const querystring = require('querystring')
         if (request.method === "POST") {
