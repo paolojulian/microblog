@@ -28,8 +28,8 @@ let server = http.createServer((request, response) => {
     if (request.method === 'POST') {
         getPostParam(request, (POST) => {
 			try {
-                const {id, receiverId, message} = JSON.parse(POST.data)
                 console.log(POST);
+                const {id, receiverId, message} = JSON.parse(POST.data)
 				notifyUser(id, receiverId, message);
 				response.writeHead(200);
 			} catch (e) {
