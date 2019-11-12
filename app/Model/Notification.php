@@ -71,19 +71,23 @@ class Notification extends AppModel
     {
         if ( ! $created) return true;
         /** Send to websocket server */
-        $ch = curl_init('http://dev3.ynsdev.pw:4567');
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        $jsonData = json_encode([
-            'id' => $this->data[$this->alias]['id'],
-            'receiverId' => $this->data[$this->alias]['receiver_id'],
-            'message' => $this->data[$this->alias]['message']
-        ]);
-        $query = http_build_query(['data' => $jsonData]);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($ch);
-        curl_close($ch);
-        return true;
+        try {
+            $ch = curl_init('http://dev3.ynsdev.pw:4567');
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            $jsonData = json_encode([
+                'id' => $this->data[$this->alias]['id'],
+                'receiverId' => $this->data[$this->alias]['receiver_id'],
+                'message' => $this->data[$this->alias]['message']
+            ]);
+            $query = http_build_query(['data' => $jsonData]);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $response = curl_exec($ch);
+            curl_close($ch);
+            return true;
+        } catch (Exception $e) {
+            var_dump($e->getMessage());
+        }
     }
 
     public function isOwnedBy($notificationId, $userId)
