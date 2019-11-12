@@ -27,6 +27,7 @@ const PostEdit = ({
     const { errors } = useSelector(state => state)
     const imgRef = useRef()
     const [didChangeImg, setDidChangeImg] = useState(false);
+    const [isLoading, setLoading] = useState(false)
     const [title, setTitle] = useState(props.title);
     const [body, setBody] = useState(props.body);
 
@@ -48,10 +49,18 @@ const PostEdit = ({
             form.img = imgRef.current.files[0]
         }
         editPost(id, form)
-            .then(() => {
-                context.notify.success("Updated Successfully!");
-                close()
-            })
+            .then(handleSuccess)
+            .catch(handleError)
+            .then(() => setLoading(false))
+    }
+
+    const handleSuccess = () => {
+        context.notify.success("Updated Successfully!");
+        close()
+    }
+
+    const handleError = () => {
+        context.notify.serverError();
     }
 
     const close = () => {

@@ -10,6 +10,7 @@ import { addPost } from '../../../store/actions/postActions'
 /** Components */
 import PCard from '../../widgets/p-card'
 import PFab from '../../widgets/p-fab'
+import PLoader from '../../widgets/p-loader'
 import FormInput from '../../widgets/form/input'
 import FormTextarea from '../../widgets/form/textarea'
 import FormImage from '../../widgets/form/image'
@@ -35,6 +36,7 @@ const PostCreate = ({
      */
     const [willCreate, setWillCreate] = useState(false)
     const [errors, setErrors] = useState({ ...initialError })
+    const [isLoading, setLoading] = useState(false)
     const title = useRef('')
     const body = useRef('')
     const img = useRef('')
@@ -56,6 +58,7 @@ const PostCreate = ({
             e.preventDefault();
         }
         setErrors(initialError)
+        setLoading(true)
         const form = {
             title: title.current.value,
             body: body.current.value,
@@ -63,11 +66,17 @@ const PostCreate = ({
         }
         addPost(form, props.history)
             .then(handleSuccess)
+            .catch(handleError)
+            .then(() => setLoading(false))
     }
 
     const handleSuccess = () => {
         context.notify.success('Your post was successfully created!');
         closeCreate()
+    }
+
+    const handleError = () => {
+        context.notify.serverError();
     }
 
     const closeCreate = () => {
@@ -119,23 +128,29 @@ const PostCreate = ({
                 />
 
                 <br />
-                <div className={styles.action_btns}>
-                    <PFab
-                        type="submit"
-                        theme="primary"
-                        className={styles.action_btn}
-                    >
-                        <i className="fa fa-check"/>
-                    </PFab>
 
-                    <PFab
-                        theme="secondary"
-                        onClick={() => closeCreate()}
-                        className={styles.action_btn}
-                    >
-                        &#10006;
-                    </PFab>
-                </div>
+                {isLoading
+                    ? <div classNames={styles.action_btns}><PLoader/></div>
+                    : (
+                        <div className={styles.action_btns}>
+                            <PFab
+                                type="submit"
+                                theme="primary"
+                                className={styles.action_btn}
+                            >
+                                <i className="fa fa-check"/>
+                            </PFab>
+
+                            <PFab
+                                theme="secondary"
+                                onClick={() => closeCreate()}
+                                className={styles.action_btn}
+                            >
+                                &#10006;
+                            </PFab>
+                        </div>
+                    )
+                }
 
             </form>
         </PCard>

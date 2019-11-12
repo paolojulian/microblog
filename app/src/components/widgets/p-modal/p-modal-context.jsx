@@ -19,6 +19,9 @@ export const ModalProvider = (props) => {
     component: null,
     props: {},
     notify: {
+      serverError: () => {showModal(AlertNotification, {
+        type: 'danger', body: 'Oops. Something went wrong'
+      })},
       alert: (body = '') => {showModal(AlertNotification, { type: 'alert', body })},
       success: (body = '') => {showModal(AlertNotification, { type: 'success', body })},
       danger: (body = '') => {showModal(AlertNotification, { type: 'danger', body })},
