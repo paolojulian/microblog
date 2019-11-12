@@ -6,7 +6,6 @@ let server = http.createServer((request, response) => {
     /**
      * Receives POST parameter for notification
      */
-    console.log(request);
     const getPostParam = (request, callback) => {
 		const querystring = require('querystring')
         if (request.method === "POST") {
@@ -34,6 +33,7 @@ let server = http.createServer((request, response) => {
 				notifyUser(id, receiverId, message);
 				response.writeHead(200);
 			} catch (e) {
+                console.error(e);
 				response.writeHead(500);
 			}
 			response.end();
