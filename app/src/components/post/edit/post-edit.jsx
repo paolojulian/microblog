@@ -59,8 +59,14 @@ const PostEdit = ({
         close()
     }
 
-    const handleError = () => {
-        context.notify.serverError();
+    const handleError = (e) => {
+        try {
+            if (e.response.status !== 422) {
+                throw new Error();
+            }
+        } catch (e) {
+            context.notify.serverError();
+        }
     }
 
     const close = () => {

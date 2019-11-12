@@ -9,9 +9,16 @@ class Post extends AppModel
             'required' => true
         ],
         'title' => [
-            'rule' => 'notBlank',
-            'message' => 'Please enter a title for your post',
-            'required' => true
+            'notBlank' => [
+                'rule' => ['notBlank'],
+                'required' => true,
+                'message' => 'Please enter a title for your post'
+            ],
+            'maxlength' => [
+                'rule' => ['maxLength', 30],
+                'message' => 'Only 30 characters is allowed.',
+                'required' => true
+            ],
         ],
         'body' => [
             'notBlank' => [
