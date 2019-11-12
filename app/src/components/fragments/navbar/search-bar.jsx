@@ -16,22 +16,20 @@ const SearchBar = () => {
     const searchText = useRef('');
     const [users, setUsers] = useState([]);
     const [posts, setPosts] = useState([]);
+    const [willShow, setShow] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
     const [noData, setNoData] = useState(false);
     const [hasMoreData, setHasMoreData] = useState(false);
 
     useEffect(() => {
-        document.body.addEventListener('click', resetState, false)
+        document.body.addEventListener('click', resetState)
         return () => {
-            document.body.removeEventListener('click', resetState, false)
+            document.body.removeEventListener('click', resetState)
         };
     }, [])
 
     const resetState = () => {
-        setIsSearching(false);
-        setNoData(false);
-        setUsers([]);
-        setPosts([]);
+        setShow(false);
     }
 
     const handleSearch = e => {
@@ -42,6 +40,7 @@ const SearchBar = () => {
     const handleChange = e => {
         e.target.value.trim();
         setIsSearching(!!e.target.value);
+        setShow(!!e.target.value);
         setNoData(false);
         dispatch(apiSearch(searchText.current.value))
             .then(data => {
@@ -106,9 +105,20 @@ const SearchBar = () => {
         />
     ));
 
+    const stopPropagate = e => {
+        if (e) {
+            console.log(e);
+            e.stopPropagation();
+            e.preventDefault();
+        }
+        return false;
+    }
+
     return (
         <div className={styles.search}>
-            <div className={styles.searchForm}>
+            <div className={styles.searchForm}
+                onClick={() => setShow(true)}
+            >
                 <form onSubmit={handleSearch}>
                     <input type="text"
                         placeholder="Search"
@@ -121,8 +131,10 @@ const SearchBar = () => {
                         />
                 </form>
                 <div className={classNames(styles.searchList, {
-                    [styles.active]: isSearching
-                })}>
+                    [styles.active]: willShow && isSearching
+                })}
+                    onClick={stopPropagate}
+                >
                     <div className={styles.searchContent}
                         style={{ overflowY: 'auto', maxHeight: '80vh' }}>
                         {users.length === 0 && posts.length === 0 && renderSearching()}

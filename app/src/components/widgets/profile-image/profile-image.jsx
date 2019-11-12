@@ -7,12 +7,14 @@ import PImage from '../p-image'
 const profilesURL = '/app/webroot/img/profiles/';
 
 const ProfileImage = (props) => {
+    const fallback = `${profilesURL}default_avatarx${props.size}.png`;
+    const src = !!props.src ? `${props.src}x${props.size}.png` : fallback;
 
     return <PImage
         {...props}
         style={{ width: props.size+'px', height: props.size+'px', borderRadius: '50%' }}
-        fallback={`${profilesURL}default_avatarx${props.size}.png`}
-        src={`${props.src}x${props.size}.png`}
+        fallback={fallback}
+        src={src}
     />
 }
 

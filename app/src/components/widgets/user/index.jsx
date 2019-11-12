@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
 import styles from './user-item.module.css';
 
 /** Redux */
@@ -9,6 +8,7 @@ import { followUser } from '../../../store/actions/profileActions';
 
 /** Components */
 import ProfileImage from '../profile-image/profile-image';
+import Username from '../username';
 
 const UserItem = ({ user, showFollow, onRequestClose }) => {
     const dispatch = useDispatch();
@@ -20,9 +20,7 @@ const UserItem = ({ user, showFollow, onRequestClose }) => {
     }
 
     return (
-            <div key={user.id}
-                className={"User " + styles.user}
-            >
+            <div className={"User " + styles.user}>
                 <div className={styles.avatar}>
                     <ProfileImage
                         src={user.avatar_url}
@@ -34,11 +32,10 @@ const UserItem = ({ user, showFollow, onRequestClose }) => {
                         {user.first_name + ' ' + user.last_name}
                     </div>
                     <div className="username">
-                        <Link to={`/profiles/${user.username}`}
+                        <Username
+                            username={user.username} 
                             onClick={onRequestClose}
-                        >
-                            @{user.username}
-                        </Link>
+                           />
                     </div>
                 </div>
                 {showFollow && ! isFollowing && <div className={styles.follow}
@@ -51,11 +48,13 @@ const UserItem = ({ user, showFollow, onRequestClose }) => {
 };
 
 UserItem.propTypes = {
-    user: PropTypes.object.isRequired
+    user: PropTypes.object.isRequired,
+    onRequestClose: PropTypes.func.isRequired
 }
 
 UserItem.defaultProps = {
-    showFollow: true
+    showFollow: true,
+    onRequestClose: () => {}
 }
 
 export default UserItem;

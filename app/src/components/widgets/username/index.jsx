@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom';
 
 const Username = ({ username, ...props }) => {
     return (
-        <Link to={`/profiles/${username}`}>
+        <Link to={`/profiles/${username}`} {...props}>
             <span className="username"
-                {...props}
             >
                 @{username}
             </span>
