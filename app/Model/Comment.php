@@ -42,27 +42,7 @@ class Comment extends AppModel
         if ( ! $this->save()) {
             throw new InternalErrorException();
         }
-        $Notification = ClassRegistry::init('Notification');
-        $Post = ClassRegistry::init('Post');
-        $User = ClassRegistry::init('User');
-        $username = $User->field('username', ['id' => $data['user_id']]);
-        $receiver_id = $Post->field('user_id', ['id' => $data['post_id']]);
-        $postId = $data['post_id'];
-        if ($receiver_id != $data['user_id']) {
-            $Notification->addNotification([
-                'receiver_id' => $receiver_id,
-                'user_id' => $data['user_id'],
-                'message' => "
-                    <span class='username'>
-                        <a href='/profiles/$username'>
-                        @$username
-                        </a>
-                    </span>
-                    has commented on your
-                    <a class='text-link' href='/posts/$postId'>post</a>
-                "
-            ]);
-        }
+
         return true;
     }
 
@@ -107,5 +87,24 @@ class Comment extends AppModel
             'user_id' => $user
         ];
         return $this->field('id', $params) !== false;
+    }
+
+    public function afterSave($created, $options = [])
+    {
+        if ( ! $created) return true;
+        $Notification = ClassRegistry::init('Notification');
+        $Post = ClassRegistry::init('Post');
+        $postId = $this->data[$this->alias]['post_id'];
+        $userId = $this->data[$this->alias]['user_id'];
+        $receiver_id = $Post->field('user_id', ['id' => $postId]);
+        if ($receiver_id != $userId) {
+            $Notification->addNotification([
+                'type' => 'commented',
+                'receiver_id' => $receiver_id,
+                'user_id' => $userId,
+                'post_id' => $postId
+            ]);
+        }
+        return true;
     }
 }

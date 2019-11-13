@@ -77,18 +77,11 @@ class FollowersController extends AppController
             }
 
             $this->loadModel('Notification');
-            $this->loadModel('Post');
-            $this->loadModel('User');
-            $username = $this->User->field('username', ['id' => $this->request->user->id]);
-            if ($receiver_id != $userId) {
+            if ($this->request->user->id != $userId) {
                 $this->Notification->addNotification([
+                    'type' => 'followed',
                     'receiver_id' => $userId,
                     'user_id' => $this->request->user->id,
-                    'message' => "
-                        <span class='username'>
-                            <a href='/profiles/$username'>@$username</a> has followed you
-                        </span>
-                    "
                 ]);
             }
         } else {

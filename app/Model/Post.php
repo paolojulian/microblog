@@ -176,23 +176,14 @@ class Post extends AppModel
             throw new InternalErrorException();
         }
         $Notification = ClassRegistry::init('Notification');
-        $User = ClassRegistry::init('User');
-        $username = $User->field('username', ['id' => $userId]);
         $receiver_id = $this->field('user_id', ['id' => $postId]);
         $postId = $postId;
         if ($receiver_id != $userId) {
             $Notification->addNotification([
+                'type' => 'shared',
                 'receiver_id' => $receiver_id,
                 'user_id' => $userId,
-                'message' => "
-                    <span class='username'>
-                        <a href='/profiles/$username'>
-                        @$username
-                        </a>
-                    </span>
-                    has shared your 
-                    <a class='text-link' href='/posts/$postId'>post</a>
-                "
+                'post_id' => $postId
             ]);
         }
         return true;

@@ -3,6 +3,8 @@
 class Notification extends AppModel
 {
 
+    const TYPES = ['commented', 'liked', 'followed', 'shared'];
+
     public $belongsTo = [
         'User' => [
             'className' => 'User',
@@ -18,6 +20,12 @@ class Notification extends AppModel
         'receiver_id' => [
             'rule' => 'notBlank',
             'required' => true
+        ],
+        'type' => [
+            'Invalid Type' => [
+                'rule' => ['inList', self::TYPES],
+                'required' => true
+            ]
         ],
     ];
 
@@ -55,9 +63,30 @@ class Notification extends AppModel
         return true;
     }
 
+    /**
+     * Sets all notification for a user as 'read'
+     * 
+     * @param int $userId - user logged in
+     * @return void
+     */
+    public function readAll($userId)
+    {
+        $conditions = ['user_id' => $userId];
+        if ( ! $this->updateAll($conditions)) {
+            throw new InternalErrorException(__('Cannot updateAll'));
+        }
+        return true;
+    }
+
     public function addNotification($data)
     {
         $this->set($data);
+        // Wont notify if notification already exists
+        $checkData = $data;
+        $checkData['is_read'] = null;
+        if ($this->hasAny($checkData)) {
+            return false;
+        }
         if ( ! $this->validates()) {
             return false;
         }
@@ -71,19 +100,25 @@ class Notification extends AppModel
     {
         if ( ! $created) return true;
         /** Send to websocket server */
+
         try {
             $ch = curl_init('http://127.0.0.1:4567');
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            $postId = isset($this->data[$this->alias]['post_id'])
+                ? $this->data[$this->alias]['post_id']
+                : null;
             $jsonData = json_encode([
                 'id' => $this->data[$this->alias]['id'],
                 'receiverId' => $this->data[$this->alias]['receiver_id'],
-                'message' => $this->data[$this->alias]['message']
+                'userId' => $this->data[$this->alias]['user_id'],
+                'postId' => $postId,
+                'type' => $this->data[$this->alias]['type'],
             ]);
             $query = http_build_query(['data' => $jsonData]);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_VERBOSE, true);
-            curl_setopt($ch, CURLOPT_STDERR, '/tmp/logs/curl.log');
+            // curl_setopt($ch, CURLOPT_STDERR, '/tmp/logs/curl.log');
             $result = curl_exec($ch);
             if (curl_error ($ch)) {
                 echo curl_error ($ch);

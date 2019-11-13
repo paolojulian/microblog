@@ -30,27 +30,6 @@ class Like extends AppModel
             if ( ! $this->save()) {
                 throw new InternalErrorException();
             }
-            $Notification = ClassRegistry::init('Notification');
-            $Post = ClassRegistry::init('Post');
-            $User = ClassRegistry::init('User');
-            $username = $User->field('username', ['id' => $userId]);
-            $receiver_id = $Post->field('user_id', ['id' => $data['post_id']]);
-            $postId = $data['post_id'];
-            if ($receiver_id != $userId) {
-                $Notification->addNotification([
-                    'receiver_id' => $receiver_id,
-                    'user_id' => $userId,
-                    'message' => "
-                        <span class='username'>
-                            <a href='/profiles/$username'>
-                            @$username
-                            </a>
-                        </span>
-                        has liked your
-                        <a class='text-link' href='/posts/$postId'>post</a>
-                    "
-                ]);
-            }
         }
         return true;
     }
@@ -80,10 +59,19 @@ class Like extends AppModel
     {
         if ( ! $created) return true;
         $notificationModel = ClassRegistry::init('Notification');
-        $notificationModel->set([
-            'message' => 'Someone liked your post',
-            'receiver_id' => $this->data[$this->alias]['user_id']
-        ]);
+        $Post = ClassRegistry::init('Post');
+        $postId = $this->data[$this->alias]['post_id'];
+        $userId = $this->data[$this->alias]['user_id'];
+        $receiverId = $Post->field('user_id', ['id' => $postId]);
+        if ($receiverId != $userId) {
+            $notificationData = [
+                'type' => 'liked',
+                'receiver_id' => $receiverId,
+                'post_id' => $postId,
+                'user_id' => $userId,
+            ];
+            $notificationModel->addNotification($notificationData);
+        }
         return true;
     }
 }

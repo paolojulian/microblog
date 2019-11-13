@@ -57,10 +57,24 @@ class NotificationsController extends AppController
      * [PRIVATE] - for logged in users only
      * 
      * Sets the notification as read
+     * @return json - status(200)
      */
     public function read($id)
     {
         $this->Notification->readNotification($id);
+        return $this->responseOk();
+    }
+
+    /**
+     * [ANY]
+     * [PRIVATE] - for logged in users only
+     * 
+     * sets all notification as read
+     * @return json - status(200)
+     */
+    public function readAll()
+    {
+        $this->Notification->readAll($this->request->user->id);
         return $this->responseOk();
     }
 }
