@@ -33,7 +33,7 @@ export const NOTIFICATION = {
     add:  "ADD_NOTIFICATION",
     setCount: 'SET_COUNT_NOTIFICATION',
     addCount: 'ADD_COUNT_NOTIFICATION',
-    refresh: 'REFRESH_NOTIFICATION'
+    refresh: 'REFRESH_NOTIFICATION',
 }
 
 /** Refresh */

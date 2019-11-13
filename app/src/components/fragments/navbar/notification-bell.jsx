@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './notification-bell.module.css';
@@ -7,6 +7,8 @@ import styles from './notification-bell.module.css';
 import {
     fetchUnreadNotifications,
     readNotification,
+    readAllNotification,
+    clearNotification,
     addNotificationCount
 } from '../../../store/actions/notificationActions';
 
@@ -27,7 +29,7 @@ const NotificationItem = ({ id, message, onRead }) => (
     </div>
 )
 
-const Notifications = ({ status, notifications, onRead }) => {
+const Notifications = ({ status, notifications, onRead, onReadAll }) => {
     if (status.error) {
         return <div className="disabled">Something went wrong</div>
     }
@@ -37,13 +39,23 @@ const Notifications = ({ status, notifications, onRead }) => {
     if (notifications.length === 0) {
         return <div className="disabled">No notifications</div>
     }
-    return notifications.map(({Notification}) => (
-        <NotificationItem
-            id={Notification.id}
-            message={Notification.message}
-            onRead={onRead}
-        />
-    ))
+    return (
+        <div>
+            {notifications.map(({Notification}) => (
+                <NotificationItem
+                    id={Notification.id}
+                    message={Notification.message}
+                    onRead={onRead}
+                />
+            ))}
+            {notifications.length >= 2 && <div
+                className="disabled"
+                onClick={onReadAll}
+            >
+                Read All
+            </div>}
+        </div>
+    )
 }
 
 const NotificationBell = ({ notificationCount }) => {
@@ -52,13 +64,6 @@ const NotificationBell = ({ notificationCount }) => {
     const [status, setStatus] = useState(initialStatus);
     // Set if notification currently displaying on screen
     const [isDisplay, setDisplay] = useState(false);
-
-    // useEffect(() => {
-    //     document.body.addEventListener('click', resetState, false)
-    //     return () => {
-    //         document.body.removeEventListener('click', resetState, false)
-    //     };
-    // }, [])
 
     const showNotifications = async () => {
         if (isDisplay) {
@@ -80,6 +85,11 @@ const NotificationBell = ({ notificationCount }) => {
             .then(() => dispatch(addNotificationCount(-1)))
     }
 
+    const handleOnReadAll = () => {
+        dispatch(readAllNotification())
+            .then(() => dispatch(clearNotification()))
+    }
+
     return (
         <div style={{ position: 'relative' }}
             onClick={showNotifications}
@@ -93,6 +103,7 @@ const NotificationBell = ({ notificationCount }) => {
                     status={status}
                     notifications={notifications}
                     onRead={handleOnRead}
+                    onReadAll={handleOnReadAll}
                     />
             </div>}
         </div>

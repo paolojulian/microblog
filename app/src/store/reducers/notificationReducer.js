@@ -44,6 +44,8 @@ export default function(state = initialState, action) {
                 ...state,
                 refreshCounter: state.refreshCounter + 1
             }
+        case NOTIFICATION.clear:
+            return {...initialState}
         default:
             return state;
     }

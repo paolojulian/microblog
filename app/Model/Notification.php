@@ -71,8 +71,13 @@ class Notification extends AppModel
      */
     public function readAll($userId)
     {
+        $db = $this->getDataSource();
+        $field = $db->value(date('Y-m-d H:i:s'), 'datetime');
         $conditions = ['user_id' => $userId];
-        if ( ! $this->updateAll($conditions)) {
+        $this->unbindModel([
+            'belongsTo' => array_keys($this->belongsTo)
+        ], true);
+        if ( ! $this->updateAll(['is_read' => $field], $conditions)) {
             throw new InternalErrorException(__('Cannot updateAll'));
         }
         return true;

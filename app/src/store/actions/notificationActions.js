@@ -46,6 +46,18 @@ export const readNotification = (id) => async dispatch => {
 }
 
 /**
+ * Sets all notification as read
+ */
+export const readAllNotification = () => async dispatch => {
+    try {
+        const res = await axios.post(`/notifications/readAll.json`);
+        return await Promise.resolve(res.data.data);
+    } catch (e) {
+        return await Promise.reject()
+    }
+}
+
+/**
  * Adds or subtract the number of notifications unread
  */
 export const addNotificationCount = (n = 1) => dispatch => {
@@ -53,6 +65,13 @@ export const addNotificationCount = (n = 1) => dispatch => {
         type: NOTIFICATION.addCount,
         payload: n
     })
+}
+
+/**
+ * Adds or subtract the number of notifications unread
+ */
+export const clearNotification = () => dispatch => {
+    dispatch({ type: NOTIFICATION.clear })
 }
 
 /**
