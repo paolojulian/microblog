@@ -11,25 +11,32 @@ import { CLEAR_POSTS } from '../../store/types';
 
 /** Components */
 import PCard from '../widgets/p-card';
+import ServerError from '../widgets/server-error';
 import ProfileCard from './profile-card';
-import Posts from '../post';
 import PeopleYouMayKnow from './people-you-may-know';
+import Posts from '../post';
 import PostCreate from '../post/create';
 import LandingLoading from './landing-loading';
 
 const Landing = () => {
     const dispatch = useDispatch()
     const [isLoading, setLoading] = useState(true);
+    const [isError, setError] = useState(false);
     const { refreshToken } = useSelector(state => state.refresh);
 
     useEffect(() => {
         window.scrollTo({ top: 0, left: 0 });
         const init = async () => {
-            setLoading(true);
-            await dispatch(getProfile());
-            await fetchHandler();
-            await dispatch(fetchNotFollowed());
-            setLoading(false);
+            try {
+                setLoading(true);
+                await dispatch(getProfile());
+                await fetchHandler();
+                await dispatch(fetchNotFollowed());
+            } catch (e) {
+                setError(true);
+            } finally {
+                setLoading(false);
+            }
         }
         init();
         return () => {
@@ -38,6 +45,10 @@ const Landing = () => {
     }, [refreshToken])
 
     const fetchHandler = (page = 1) => dispatch(getPosts(page));
+
+    if (isError) {
+        return <ServerError/>
+    }
 
     if (isLoading) {
         return <LandingLoading/>

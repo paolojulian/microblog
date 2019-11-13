@@ -68,9 +68,12 @@ class Comment extends AppModel
 
     public function paginateComment($postId, $page = 1)
     {
-        $perPage = 20;
+        $perPage = 10;
+        $conditions = ['post_id' => $postId];
+        $totalCount = $this->find('count', ['conditions' => $conditions]);
+        $totalLeft = $totalCount - ($perPage * $page);
         $data = $this->find('all', [
-            'conditions' => ['post_id' => $postId],
+            'conditions' => $conditions,
             'order' => 'Comments.created DESC',
             'limit' => $perPage,
             'page' => $page,
@@ -79,7 +82,11 @@ class Comment extends AppModel
             $data[$key]['Comments']['username'] = $data[$key]['User']['username'];
             $data[$key] = $data[$key]['Comments'];
         }
-        return $data;
+        return [
+            'list' => $data,
+            'totalCount' => $totalCount,
+            'totalLeft' => $totalLeft > 0 ? $totalLeft : 0
+        ];
     }
     
     /**

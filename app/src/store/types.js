@@ -11,6 +11,8 @@ export const GET_ALL_PROFILES = "GET_ALL_PROFILES";
 export const CLEAR_CURRENT_PROFILE = "CLEAR_CURRENT_PROFILE";
 export const CLEAR_PROFILES = "CLEAR_PROFILES";
 export const SET_NOT_FOLLOWED = "SET_NOT_FOLLOWED";
+export const ADD_FOLLOWER = "ADD_FOLLOWER";
+export const ADD_FOLLOWING = "ADD_FOLLOWING";
 
 /** TODO Posts */
 export const SET_PAGE = "SET_PAGE";

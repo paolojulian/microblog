@@ -171,7 +171,7 @@ export const likePost = (postId) => async dispatch => {
         await axios.post(`/posts/like/${postId}.json`)
         return Promise.resolve()
     } catch (e) {
-        return Promise.reject()
+        return Promise.reject(e)
     }
 }
 
@@ -183,7 +183,7 @@ export const addComment = (comment) => async dispatch => {
         await axios.post(`/comments.json`, comment)
         return Promise.resolve()
     } catch (e) {
-        return Promise.reject()
+        return Promise.reject(e)
     }
 }
 
@@ -208,5 +208,17 @@ export const fetchLikesByPost = (postId) => async dispatch => {
         return Promise.resolve(res.data.data);
     } catch (e) {
         return Promise.reject(e);
+    }
+}
+
+/**
+ * Counts comments of post
+ */
+export const countCommentByPost = (postId) => async dispatch => {
+    try {
+        const res = await axios.get(`/posts/commentsCount/${postId}.json`)
+        return Promise.resolve(res.data.data)
+    } catch (e) {
+        return Promise.reject()
     }
 }

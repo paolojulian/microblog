@@ -1,6 +1,12 @@
 import axios from 'axios';
 import { search } from '../../utils/search';
-import { SET_NOT_FOLLOWED, SET_PROFILE, TOGGLE_LOADING_PROFILE } from '../types';
+import {
+    SET_NOT_FOLLOWED,
+    SET_PROFILE,
+    TOGGLE_LOADING_PROFILE,
+    ADD_FOLLOWING,
+    ADD_FOLLOWER
+} from '../types';
 
 /**
  * Get profile of current logged in user
@@ -125,4 +131,20 @@ export const fetchMutualFriends = (username) => async dispatch => {
     } catch (e) {
         return Promise.reject(e);
     }
+}
+
+/**
+ * Adds a follower to count
+ * @param n - number to add
+ */
+export const addFollower = (n = 1) => dispatch => {
+    dispatch({ type: ADD_FOLLOWER, payload: n })
+}
+
+/**
+ * Adds a follower to count
+ * @param n - number to add
+ */
+export const addFollowing = (n = 1) => dispatch => {
+    dispatch({ type: ADD_FOLLOWING, payload: n })
 }

@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import classnames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './profile-info.module.css';
 
 /** Redux */
-import { followUser } from '../../../store/actions/profileActions';
+import { followUser, addFollower } from '../../../store/actions/profileActions';
+
+/** Context */
+import { ModalContext } from '../../widgets/p-modal/p-modal-context';
 
 /** Components */
 import PCard from '../../widgets/p-card';
@@ -18,15 +21,22 @@ const ProfileInfo = () => {
     const { isFollowing, totalFollowers, totalFollowing } = useSelector(state => state.profile)
     const { id } = useSelector(state => state.auth.user)
     const [stateIsFollowing, setstateIsFollowing] = useState(false);
+    const context = useContext(ModalContext);
 
     useEffect(() => {
         setstateIsFollowing(isFollowing);
     }, [isFollowing])
 
     const handleFollow = () => {
-        setstateIsFollowing(!stateIsFollowing);
         dispatch(followUser(profile.id))
-            .catch(() => setstateIsFollowing(!stateIsFollowing))
+            .then(() => {
+                setstateIsFollowing(!stateIsFollowing);
+                dispatch(addFollower(stateIsFollowing ? -1: 1));
+                if ( ! stateIsFollowing) {
+                    context.notify.success(`You have successfully followed ${profile.username}`)
+                }
+            })
+            .catch(() => context.notify.serverError())
     }
 
     const renderBody = () => (

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import styles from './user-item.module.css';
@@ -20,6 +21,7 @@ const UserItem = ({ user, showFollow, onRequestClose }) => {
     }
 
     return (
+        <Link to={`/profiles/${user.username}`}>
             <div className={"User " + styles.user}>
                 <div className={styles.avatar}>
                     <ProfileImage
@@ -44,6 +46,7 @@ const UserItem = ({ user, showFollow, onRequestClose }) => {
                     <i className="fa fa-heart"></i>
                 </div>}
             </div>
+        </Link>
     )
 };
 

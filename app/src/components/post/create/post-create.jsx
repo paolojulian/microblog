@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, useContext } from 'react'
 import styles from './post-create.module.css'
-import { useDispatch, useSelector, connect } from 'react-redux'
+import { useDispatch, connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 
 /** Redux Actions */
@@ -29,7 +29,6 @@ const PostCreate = ({
 }) => {
     const dispatch = useDispatch()
     const context = useContext(ModalContext);
-    const stateErrors = useSelector(state => state.errors)
     /**
      * Toggler if component will show create post or display
      * a button that will open a create post card
@@ -47,17 +46,11 @@ const PostCreate = ({
         }
     }, [])
 
-    useEffect(() => {
-        if (stateErrors) {
-            setErrors(stateErrors)
-        }
-    }, [stateErrors])
-
     const handleSubmit = e => {
         if (e) {
             e.preventDefault();
         }
-        setErrors(initialError)
+        setErrors({ ...initialError })
         setLoading(true)
         const form = {
             title: title.current.value,
@@ -80,6 +73,7 @@ const PostCreate = ({
             if (e.response.status !== 422) {
                 throw new Error();
             }
+            setErrors(e.response.data.data.errors);
         } catch (e) {
             context.notify.serverError();
         }
@@ -87,6 +81,7 @@ const PostCreate = ({
 
     const closeCreate = () => {
         setWillCreate(false)
+        setErrors({ ...initialError })
         dispatch({ type: CLEAR_ERRORS })
     }
 

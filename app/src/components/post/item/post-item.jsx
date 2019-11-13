@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import moment from 'moment'
 import classnames from 'classnames'
 import { Link } from 'react-router-dom'
@@ -19,8 +19,9 @@ import PostShare from '../share'
 import LikesModal from '../likes'
 
 /** Consumer */
-import { ModalConsumer } from '../../widgets/p-modal/p-modal-context'
+import { ModalConsumer, ModalContext } from '../../widgets/p-modal/p-modal-context'
 import PostImage from '../../widgets/post-image'
+import PostComments from './post-comments'
 
 const fromNow = date => {
     return moment(date).fromNow()
@@ -45,12 +46,15 @@ const PostItem = ({
     title,
     user_id,
 }) => {
-    const dispatch = useDispatch()
-    const [likeCount, setLikeCount] = useState(likes.length)
-    const [isLiked, setIsLiked] = useState(likes.indexOf(loggedin_id) !== -1)
-    const [isEdit, setIsEdit] = useState(false)
-    const isOwned = Number(loggedin_id) === Number(user_id)
-    const isCreator = Number(loggedin_id) === Number(ownerId)
+    const dispatch = useDispatch();
+    const context = useContext(ModalContext);
+    const [likeCount, setLikeCount] = useState(likes.length);
+    const [commentsCount, setCommentsCount] = useState(comments);
+    const [isLiked, setIsLiked] = useState(likes.indexOf(loggedin_id) !== -1);
+    const [isEdit, setIsEdit] = useState(false);
+    const [showComment, setShowComment] = useState(false);
+    const isOwned = Number(loggedin_id) === Number(user_id);
+    const isCreator = Number(loggedin_id) === Number(ownerId);
 
     const handleLike = () => {
         dispatch(likePost(id))
@@ -200,17 +204,24 @@ const PostItem = ({
                         </i>
                     </button>
                 </span>
-                <Link to={`/posts/${id}`}>
-                    <button type="button"
-                        className={styles.comment}
-                    >
-                        Comments&nbsp;
-                        <i className="fa fa-comment">
-                            &nbsp;{comments}
-                        </i>
-                    </button>
-                </Link>
+                <button type="button"
+                    className={styles.comment}
+                    onClick={() => setShowComment(!showComment)}
+                >
+                    Comments&nbsp;
+                    <i className="fa fa-comment">
+                        &nbsp;{commentsCount}
+                    </i>
+                </button>
             </div>
+            {showComment && <PostComments
+                postId={Number(id)}
+                onUpdateCommentCount={value => setCommentsCount(value)}
+                onRequestSuccessCreate={() => {
+                    context.notify.success("Successfully commented on post");
+                }}
+                onRequestClose={() => setShowComment(false)}
+            />}
         </PCard>
     )
 }

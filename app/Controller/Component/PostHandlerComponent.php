@@ -17,7 +17,8 @@ class PostHandlerComponent extends Component {
     public function uploadImage($imgFile, $userId, $data)
     {
         try {
-            $imageName = $userId . $data['title'] . time();
+            $title = preg_replace('/[^A-Za-z0-9]/', '', $data['title']);
+            $imageName = $userId . $title . time();
             $imgpath = "/img/posts/";
             $fullpath = WWW_ROOT . $imgpath;
             $image = FileUploadHelper::uploadImg(

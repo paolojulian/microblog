@@ -199,23 +199,21 @@ class Post extends AppModel
     }
 
     /**
-     * TODO
-     * For a better searching of user, display users with mutual
-     * followers first
+     * Fetches posts by given searchText
      * 
-     * @param int $userId - user logged in shouldnt be included in the search
      * @param string $searchText - text to be searched
+     * @param int $page - page no.
      */
     public function searchPost($searchText, $page = 1)
     {
         $perPage = 5;
+        $searchText = trim($searchText);
         $conditions = [
             'OR' => [
                 'title LIKE' => "%$searchText%",
                 'body LIKE' => "%$searchText%",
             ],
         ];
-        $searchText = trim($searchText);
         $totalPosts = $this->find('count', ['conditions' => $conditions]);
         $posts = $this->find('all', [
             'contain' => ['User'],

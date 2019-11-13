@@ -7,6 +7,7 @@ import { ModalContext } from '../../widgets/p-modal/p-modal-context'
 
 /** Redux */
 import { addComment } from '../../../store/actions/postActions';
+import { CLEAR_ERRORS } from '../../../store/types'
 
 /** Components */
 import PCard from '../../widgets/p-card';
@@ -14,15 +15,20 @@ import PFab from '../../widgets/p-fab';
 import PLoader from '../../widgets/p-loader';
 import FormTextArea from '../../widgets/form/textarea/form-textarea';
 
+const initialError = {
+    body: ''
+}
+
 const CommentCreate = ({
     userId,
     postId,
-    onRequestSuccess
+    onRequestSuccess,
 }) => {
 
     const dispatch = useDispatch();
     const context = useContext(ModalContext);
     const comment = useRef('');
+    const [errors, setErrors] = useState(initialError);
     const [hasComment, setHasComment] = useState(false);
     const [isLoading, setLoading] = useState(false);
 
@@ -44,10 +50,19 @@ const CommentCreate = ({
         comment.current.value = ''
         setHasComment(false);
         onRequestSuccess();
+        setErrors({ ...initialError });
+        dispatch({ type: CLEAR_ERRORS })
     }
 
-    const handleError = () => {
-        context.notifyti.serverError();
+    const handleError = e => {
+        try {
+            if (e.response.status !== 422) {
+                throw new Error();
+            }
+            setErrors(e.response.data.data.errors);
+        } catch (err) {
+            context.notify.serverError();
+        }
     }
 
     const handleChange = e => {
@@ -88,6 +103,7 @@ const CommentCreate = ({
                     placeholder="Write a comment"
                     refs={comment}
                     onChange={handleChange}
+                    error={errors.body}
                     rows={1}
                 />
                 {renderButton()}
