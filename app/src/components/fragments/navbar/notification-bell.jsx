@@ -6,6 +6,7 @@ import styles from './notification-bell.module.css';
 /** Redux */
 import {
     fetchUnreadNotifications,
+    countUnreadNotifications,
     readNotification,
     readAllNotification,
     clearNotification,
@@ -74,7 +75,8 @@ const NotificationBell = ({ notificationCount }) => {
         setStatus({ ...initialStatus, loading: true });
         try {
             await dispatch(fetchUnreadNotifications());
-            setStatus({ ...initialStatus, post: true })
+            await dispatch(countUnreadNotifications());
+            setStatus({ ...initialStatus, post: true });
         } catch (e) {
             setStatus({ ...initialStatus, error: true })
         }
