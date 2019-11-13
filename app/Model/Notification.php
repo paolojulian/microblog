@@ -73,7 +73,7 @@ class Notification extends AppModel
     {
         $db = $this->getDataSource();
         $field = $db->value(date('Y-m-d H:i:s'), 'datetime');
-        $conditions = ['user_id' => $userId];
+        $conditions = ['Notification.receiver_id' => $userId];
         $this->unbindModel([
             'belongsTo' => array_keys($this->belongsTo)
         ], true);
