@@ -65,21 +65,27 @@ const VNotification = () => {
         <div className={styles.wrapper}
             ref={notificationContainer}
         >
-            {notifications.map((notification, i) => (
-                <div className={styles.notification}>
-                    <VNotificationItem
-                        key={i}
-                        index={i}
-                        notificationId={notification.id}
-                        type={notification.type}
-                        postId={notification.postId}
-                        username={notification.user.username}
-                        avatarUrl={notification.user.avatar_url}
-                        onRead={handleOnRead}
-                        onClose={handleOnClose}
-                        />
-                </div>
-            ))}
+            {notifications.map((notification, i) => {
+                try {
+                    return (
+                        <div className={styles.notification}>
+                            <VNotificationItem
+                                key={i}
+                                index={i}
+                                notificationId={notification.id}
+                                type={notification.type}
+                                postId={notification.postId}
+                                username={notification.user.username}
+                                avatarUrl={notification.user.avatar_url}
+                                onRead={handleOnRead}
+                                onClose={handleOnClose}
+                                />
+                        </div>
+                    )
+                } catch (e) {
+                    return '';
+                }
+            })}
         </div>
     )
 }

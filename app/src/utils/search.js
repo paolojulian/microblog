@@ -26,11 +26,12 @@ const makeRequestCreator = () => {
       return result;
     } catch (error) {
       if (axios.isCancel(error)) {
-        // Handle if request was cancelled
-        console.log('Request canceled', error.message);
+        return resources[query];
       } else {
-        // Handle usual errors
-        console.log('Something went wrong: ', error.message);
+        return {
+          users: {list: []},
+          posts: {list: []},
+        };
       }
     }
   };

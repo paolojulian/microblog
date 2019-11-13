@@ -47,7 +47,7 @@ const Login = ({
             password: password.current.value,
         }
         try {
-            console.log(await loginUser(User, history));
+            await loginUser(User, history);
         } catch (e) {
             if (e.hasOwnProperty('response') && e.response.status === 400) {
                 return setErrors({

@@ -35,7 +35,6 @@ const PostView = (props) => {
                 setProfile(User);
                 setShared(isShared);
                 if (isShared) {
-                    console.log(response.Original)
                     setOriginalPost(response.Original);
                 }
             })

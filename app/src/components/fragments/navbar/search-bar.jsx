@@ -45,13 +45,17 @@ const SearchBar = () => {
         dispatch(apiSearch(searchText.current.value))
             .then(data => {
                 // Sometimes canceling token will return undefined
-                if ( ! data) return;
+                try {
+                    if ( ! data) return;
+                } catch (e) {
+                    return;
+                }
 
                 if (
                     data.users.list.length === 0 &&
                     data.posts.list.length === 0
                 ) {
-                    return setNoData(true);
+                    setNoData(true);
                 }
                 if (
                     data.users.totalLeft > 0 ||
@@ -107,7 +111,6 @@ const SearchBar = () => {
 
     const stopPropagate = e => {
         if (e) {
-            console.log(e);
             e.stopPropagation();
             e.preventDefault();
         }

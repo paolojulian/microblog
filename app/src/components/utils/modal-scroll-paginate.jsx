@@ -41,7 +41,6 @@ const ModalScrollPaginate = ({
     const handleScrollDown = async (pageNo = 1) => {
         try {
             const res = await fetchHandler(pageNo);
-            console.log(res);
             if (res.length > 0) {
                 setIsLast(false);
             } else {

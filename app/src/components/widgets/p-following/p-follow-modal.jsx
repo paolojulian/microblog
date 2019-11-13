@@ -27,7 +27,6 @@ const PFollowModal = ({
     const [page, setPage] = useState(1);
 
     if (availableTypes.indexOf(type) === -1) {
-        console.log('Invalid Type Given: ' + type);
         return onRequestClose();
     }
 

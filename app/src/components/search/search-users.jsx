@@ -18,7 +18,6 @@ const SearchUsers = ({
     users,
     ...props
 }) => {
-    console.log('Total Left', totalLeft)
 
     return (
         <div {...props}>
