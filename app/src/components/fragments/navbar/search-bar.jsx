@@ -41,6 +41,12 @@ const SearchBar = () => {
         e.target.value.trim();
         setIsSearching(!!e.target.value);
         setShow(!!e.target.value);
+        if (e.target.value.length === 0) {
+            setNoData(true);
+            setUsers([]);
+            setPosts([]);
+            return;
+        }
         setNoData(false);
         dispatch(apiSearch(searchText.current.value))
             .then(data => {
