@@ -14,20 +14,13 @@ import {
 
 /** Components */
 import PLoader from '../../widgets/p-loader';
+import VNotificationItem from '../../widgets/v-notification/v-notification-item';
 
 const initialStatus = {
     loading: false,
     error: false,
     post: false
 }
-
-const NotificationItem = ({ id, message, onRead }) => (
-    <div className={styles.item}
-        onClick={() => onRead(id)}
-        dangerouslySetInnerHTML={{__html: message}}
-    >
-    </div>
-)
 
 const Notifications = ({ status, notifications, onRead, onReadAll }) => {
     if (status.error) {
@@ -40,16 +33,23 @@ const Notifications = ({ status, notifications, onRead, onReadAll }) => {
         return <div className="disabled">No notifications</div>
     }
     return (
-        <div>
-            {notifications.map(({Notification}) => (
-                <NotificationItem
-                    id={Notification.id}
-                    message={Notification.message}
-                    onRead={onRead}
-                />
+        <div className={styles.notificationWrapper}>
+            {notifications.map(({Notification, User}, i) => (
+                <div className={styles.item}>
+                    <VNotificationItem
+                        key={i}
+                        index={i}
+                        notificationId={Notification.id}
+                        type={Notification.type}
+                        postId={Notification.post_id}
+                        username={User.username}
+                        avatarUrl={User.avatar_url}
+                        onRead={onRead}
+                        />
+                </div>
             ))}
-            {notifications.length >= 2 && <div
-                className="disabled"
+            {notifications.length > 0 && <div
+                className={"disabled " + styles.readAll}
                 onClick={onReadAll}
             >
                 Read All

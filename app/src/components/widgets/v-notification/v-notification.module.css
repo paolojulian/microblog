@@ -5,3 +5,19 @@
     width: 300px;
     max-width: 100%;
 }
+.notification {
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 1rem 0;
+    background-color: #fafafa;
+    color: #333333;
+    padding: 1rem;
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.30);
+    border: 1px solid rgba(10, 10, 10, 0.25);
+    display: flex;
+    justify-content: flex-start;
+}
+.notification:hover {
+    transform: scale(1.05);
+    border: 1px solid rgba(0, 0, 0, 0.50);
+}

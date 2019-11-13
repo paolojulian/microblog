@@ -105,6 +105,11 @@ class Notification extends AppModel
     {
         if ( ! $created) return true;
         /** Send to websocket server */
+        $userModel = ClassRegistry::init('User');
+        $User = $userModel->findById(
+            $this->data[$this->alias]['user_id'],
+            'username, avatar_url'
+        );
 
         try {
             $ch = curl_init('http://127.0.0.1:4567');
@@ -116,6 +121,7 @@ class Notification extends AppModel
                 'id' => $this->data[$this->alias]['id'],
                 'receiverId' => $this->data[$this->alias]['receiver_id'],
                 'userId' => $this->data[$this->alias]['user_id'],
+                'user' => $User['User'],
                 'postId' => $postId,
                 'type' => $this->data[$this->alias]['type'],
             ]);

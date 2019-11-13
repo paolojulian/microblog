@@ -13,7 +13,7 @@ export const fetchUnreadNotifications = () => async dispatch => {
         })
         return Promise.resolve(res.data.data);
     } catch (e) {
-        return Promise.reject(e)
+        return Promise.reject(e);
     }
 }
 

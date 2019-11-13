@@ -1,4 +1,4 @@
-import React, { useEffect, createRef } from 'react'
+import React, { useState, useEffect, createRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styles from './v-notification.module.css'
 
@@ -8,11 +8,14 @@ import {
     readNotification,
     addNotificationCount
 } from '../../../store/actions/notificationActions';
+import VNotificationItem from './v-notification-item';
 
 const VNotification = () => {
     const dispatch = useDispatch();
     const { isAuthenticated, user } = useSelector(state => state.auth);
     const notificationContainer = createRef();
+
+    const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -27,8 +30,7 @@ const VNotification = () => {
         websocket.onopen = e => {
         }
         websocket.onmessage = e => {
-            const { notificationId, message } =JSON.parse(e.data);
-            showNotification(notificationId, message);
+            showNotification(JSON.parse(e.data));
         }
         websocket.onclose = (e) => {
             setTimeout(() => {
@@ -40,25 +42,44 @@ const VNotification = () => {
         };
     }
     
-    const showNotification = (notificationId, message) => {
-        /** Add webcomponents, located in webroot/js/v-notifier.js */
-        let notif = document.createElement('v-notifier')
-        notificationContainer.current.appendChild(notif);
+    const showNotification = (data) => {
+        setNotifications((old) => [...old, data]);
         // Add notif count on message pop
         dispatch(addNotificationCount())
-        notif.addEventListener('click', () => {
-            // If clicked, it will set notification as read
-            dispatch(readNotification(notificationId))
-            // Reduce notif count
-            dispatch(addNotificationCount(-1))
-        });
-        notif.message = message;
+    }
+    const handleOnRead = (notificationId, index) => {
+        handleOnClose(index);
+        dispatch(readNotification(notificationId))
+            .then(() => {
+                dispatch(addNotificationCount(-1))
+            });
+    }
+
+    const handleOnClose = (index) => {
+        let tmpNotifications = [...notifications];
+        tmpNotifications.splice(index, 1);
+        setNotifications([...tmpNotifications]);
     }
 
     return (
         <div className={styles.wrapper}
             ref={notificationContainer}
         >
+            {notifications.map((notification, i) => (
+                <div className={styles.notification}>
+                    <VNotificationItem
+                        key={i}
+                        index={i}
+                        notificationId={notification.id}
+                        type={notification.type}
+                        postId={notification.postId}
+                        username={notification.user.username}
+                        avatarUrl={notification.user.avatar_url}
+                        onRead={handleOnRead}
+                        onClose={handleOnClose}
+                        />
+                </div>
+            ))}
         </div>
     )
 }

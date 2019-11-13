@@ -29,8 +29,7 @@ let server = http.createServer((request, response) => {
         getPostParam(request, (POST) => {
 			try {
                 console.log(POST);
-                const {id, receiverId, message} = JSON.parse(POST.data)
-				notifyUser(id, receiverId, message);
+				notifyUser(JSON.parse(POST.data));
 				response.writeHead(200);
 			} catch (e) {
                 console.error(e);
@@ -70,11 +69,9 @@ const websocketRequest = request => {
 
 websocketServer.on("request", websocketRequest);
 
-const notifyUser = (notificationId, userId, message) => {
-	if (clients[Number(userId)]) {
-		clients[Number(userId)].sendUTF(JSON.stringify({
-            notificationId,
-            message
-        }))
+const notifyUser = (data) => {
+    console.log(data.receiverId);
+	if (clients[Number(data.receiverId)]) {
+		clients[Number(data.receiverId)].sendUTF(JSON.stringify(data))
 	}
 }
