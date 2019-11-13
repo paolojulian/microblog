@@ -13,6 +13,7 @@ import CommentCreate from '../comment/create';
 import PostComment from '../comment';
 import PLoader from '../../widgets/p-loader';
 import LoadMore from '../../widgets/load-more';
+import PButton from '../../widgets/p-button/p-button';
 
 const PostComments = ({
     postId,
@@ -80,6 +81,12 @@ const PostComments = ({
                 totalLeft={totalLeft}
                 onRequestLoad={() => getComments(page + 1)}
                 />
+            <PButton
+                theme="secondary"
+                onClick={onRequestClose}
+            >
+                CLOSE
+            </PButton>
             {renderStatus()}
         </div>
     )

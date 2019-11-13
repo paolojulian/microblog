@@ -3,7 +3,7 @@ import styles from './p-fab.module.css'
 import classnames from 'classnames'
 import PropTypes from 'prop-types';
 
-const PButton = ({
+const PFab = ({
     type,
     theme,
     children,
@@ -26,14 +26,14 @@ const PButton = ({
     )
 }
 
-PButton.propTypes = {
+PFab.propTypes = {
     children: PropTypes.any.isRequired,
     type: PropTypes.string,
     theme: PropTypes.string,
 }
 
-PButton.defaultProps = {
+PFab.defaultProps = {
     type: 'button'
 }
 
-export default PButton
+export default PFab
