@@ -34,6 +34,7 @@ const SearchUsers = ({
                         key={user.User.id + i}
                         user={user.User}/>)}
             </PCard>}
+            {users.length === 0 && <div className="disabled">No user/s found</div>}
             <LoadMore
                 totalLeft={totalLeft}
                 onRequestLoad={onRequestLoad}

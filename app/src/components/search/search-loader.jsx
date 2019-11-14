@@ -3,13 +3,13 @@ import styles from './search-loader.module.css';
 import loadingStyles from '../widgets/wireframes/loading-mocks.module.css';
 import { TextMock, TextInputMock, RoundedMock } from '../widgets/wireframes';
 
-const SearchBar = () => (
-    <div className={loadingStyles.card}>
-        <TextInputMock
-            placeholder="Search"
-        />
-    </div>
-)
+// const SearchBar = () => (
+//     <div className={loadingStyles.card}>
+//         <TextInputMock
+//             placeholder="Search"
+//         />
+//     </div>
+// )
 
 const Users = () => (
     <div className={styles.users}>
@@ -47,7 +47,7 @@ const Post = () => (
 
 const SearchLoader = () => (
     <div className={styles.container}>
-        <SearchBar />
+        {/* <SearchBar /> */}
         <div className={styles.wrapper}>
             <Users/>
             <Posts/>

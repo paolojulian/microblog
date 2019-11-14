@@ -26,7 +26,9 @@ const postStyle = {
     },
     title: {
         fontSize: '1.1rem',
-        color: 'var(--primary-dark)'
+        color: 'var(--primary-dark)',
+        letterSpacing: '1px',
+        fontWeight: 500
     },
     body: {
         padding: '0.5rem 1rem',
@@ -47,7 +49,7 @@ export const PostItemMinimal = ({ post: { User, Post }}) => (
                 </div>
                 <div style={postStyle.info}>
                     <div style={postStyle.title}>
-                        TITLE: {Post.title}
+                        Title: {Post.title}
                     </div>
                     <div>
                         <Link to={`/profiles/${User.username}`}>

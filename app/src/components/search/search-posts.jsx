@@ -25,6 +25,7 @@ const SearchPosts = ({
                     post={post}
                 />
             ))}
+            {posts.length === 0 && <div className="disabled">No Post/s found</div>}
             <LoadMore
                 totalLeft={totalLeft}
                 onRequestLoad={onRequestLoad}

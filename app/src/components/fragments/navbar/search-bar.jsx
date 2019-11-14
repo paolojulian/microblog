@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import classNames from 'classnames'
+import { withRouter } from 'react-router-dom';
 
 /** Redux */
 import { apiSearch } from '../../../store/actions/searchActions';
@@ -10,7 +11,7 @@ import styles from './navbar.module.css'
 import { PostItemMinimal } from '../../widgets/post-item';
 import UserItem from '../../widgets/user';
 
-const SearchBar = () => {
+const SearchBar = ({ history, location }) => {
 
     const dispatch = useDispatch();
     const searchText = useRef('');
@@ -34,14 +35,19 @@ const SearchBar = () => {
 
     const handleSearch = e => {
         if (e) e.preventDefault();
-        if ( ! searchText.current.value) return;
+        if (searchText.current.value) {
+            history.push(`/search?searchText=${getSearchText()}`)
+        }
     }
 
-    const handleChange = e => {
-        e.target.value.trim();
-        setIsSearching(!!e.target.value);
-        setShow(!!e.target.value);
-        if (e.target.value.length === 0) {
+    const handleChange = value => {
+        if (location.pathname === '/search') {
+            // history.push(`/search?searchText=${getSearchText()}`)
+            return;
+        }
+        setIsSearching(!!value);
+        setShow(!!value);
+        if (value.length === 0) {
             setNoData(true);
             setUsers([]);
             setPosts([]);
@@ -133,7 +139,7 @@ const SearchBar = () => {
                         placeholder="Search"
                         name="search_bar"
                         ref={searchText}
-                        onChange={handleChange}
+                        onChange={e => handleChange(e.target.value)}
                         onKeyPress={handleKeyPress}
                         autoComplete="off"
                         onPaste={e => e.preventDefault()}
@@ -161,4 +167,4 @@ const SearchBar = () => {
     );
 }
 
-export default SearchBar;
+export default withRouter(SearchBar);

@@ -27,9 +27,9 @@ const initialPager = {
 }
 
 const PSearch = (props) => {
+    const searchText = queryString.parse(props.location.search).searchText;
     const dispatch = useDispatch();
     const [status, setStatus] = useState({ ...initialStatus })
-    const [searchText, setSearchText] = useState(queryString.parse(props.location.search).searchText);
     const [users, setUsers] = useState([]);
     const [userPager, setUserPager] = useState(initialPager);
     const [posts, setPosts] = useState([]);
@@ -39,6 +39,7 @@ const PSearch = (props) => {
         const init = async () => {
             setStatus({ ...initialStatus, loading: true });
             try {
+                console.log(searchText)
                 await searchUsersAndPosts(searchText)
                 setStatus({ ...initialStatus, post: true });
             } catch (e) {
@@ -47,12 +48,12 @@ const PSearch = (props) => {
         }
         init();
         // TODO Add if mounted cancel all setters
-    }, [])
+    }, [props.location.search])
 
-    const handleSearch = e => {
-        setSearchText(e.target.value);
-        searchUsersAndPosts(e.target.value);
-    }
+    // const handleSearch = e => {
+    //     setSearchText(e.target.value);
+    //     searchUsersAndPosts(e.target.value);
+    // }
 
     const searchUsersAndPosts = async str => {
         const trimmedStr = str.trim();
@@ -119,10 +120,10 @@ const PSearch = (props) => {
 
     const renderBody = () => (
         <div className={styles.container}>
-            <SearchBar
+            {/* <SearchBar
                 handleSearch={handleSearch}
                 searchText={searchText}
-            />
+            /> */}
             <div className={styles.wrapper}>
                 <SearchUsers
                     className={styles.users}
