@@ -35,7 +35,7 @@ const FormImage = ({
     const removeImg = () => {
         refs.current.value = '';
         setImgSrc('');
-        if (hasDefault) {
+        if (!!initSrc) {
             onChangeImg();
         }
     }

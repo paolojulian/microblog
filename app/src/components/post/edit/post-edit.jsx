@@ -46,7 +46,7 @@ const PostEdit = ({
             body,
         }
         if (didChangeImg) {
-            form.img = imgRef.current.files[0]
+            form.img = imgRef.current.files[0] ? imgRef.current.files[0] : -1
         }
         editPost(id, form)
             .then(handleSuccess)
@@ -70,6 +70,7 @@ const PostEdit = ({
     }
 
     const close = () => {
+        window.scrollTo({ top: 0, left: 0 });
         dispatch({ type: CLEAR_ERRORS });
         onSuccess();
     }

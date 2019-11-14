@@ -126,7 +126,12 @@ export const editPost = (postId, post) => async dispatch => {
         const formData = new FormData();
         formData.append('title', post.title);
         formData.append('body', post.body);
-        if (post.img) {
+        if (post.hasOwnProperty('img') && post.img === -1) {
+            // use to check if image is removed or changed
+            formData.append('img_path', '');
+        }
+        else if (!!post.img) {
+            // Only change content type if img has content
             config.headers = {
                 'content-type': 'multipart/form-data'
             }
