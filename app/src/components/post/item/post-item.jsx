@@ -27,6 +27,11 @@ const fromNow = date => {
     return moment(date).fromNow()
 }
 
+const SharedItem = ({
+}) => {
+
+}
+
 const PostItem = ({
     id,
     avatarUrl,
@@ -41,6 +46,7 @@ const PostItem = ({
     loggedin_id,
     ownerId,
     retweet_post_id,
+    shared_body,
     shared_by,
     shared_by_username,
     title,
@@ -112,6 +118,7 @@ const PostItem = ({
 
     const renderBody = () => (
         <div className={styles.body}>
+            {shared_body && <div className={styles.sharedBody}>{shared_body}</div>}
             <div className={styles.bodyText}>{body}</div>
             {!!imgPath && <PostImage imgPath={imgPath} title={title}/>}
         </div>
@@ -119,10 +126,11 @@ const PostItem = ({
 
     return (
         <PCard className={styles.post_item} size="fit">
+            {/** Time */}
             <div className={styles.from_now}>
                 {fromNow(created)}
             </div>
-
+            {/** Profile Header */}
             <div className={styles.profile_header}>
                 <ProfileImage
                     src={avatarUrl}
@@ -132,7 +140,7 @@ const PostItem = ({
                 <div className={styles.title}>
                     <Link to={`/posts/${id}`}>
                         <span className={styles.titleText}>
-                            {title}
+                            {title ? title : 'Untitled'}
                         </span>
                     </Link>
                     {renderUsername()}
@@ -142,7 +150,7 @@ const PostItem = ({
                 >
                     <i className="fa fa-edit"/>
                 </div>}
-                {isOwned && isCreator && <ModalConsumer>
+                {isCreator && <ModalConsumer>
                     {({ showModal }) => (
                         <div className={styles.delete}
                             onClick={() => showModal(PostDelete, {
@@ -172,6 +180,7 @@ const PostItem = ({
                 </ModalConsumer>}
             </div>
 
+            {/** Body */}
             {isEdit
                 ? <PostEdit
                     id={id}
@@ -181,7 +190,8 @@ const PostItem = ({
                     onSuccess={onSuccessEdit}
                     />
                 : renderBody()}
-
+            
+            {/** Actions */}
             <div className={styles.actions}>
                 <span>
                     {likeCount > 0 && <ModalConsumer>
@@ -214,6 +224,8 @@ const PostItem = ({
                     </i>
                 </button>
             </div>
+
+            {/** Comments */}
             {showComment && <PostComments
                 postId={Number(id)}
                 onUpdateCommentCount={value => setCommentsCount(value)}

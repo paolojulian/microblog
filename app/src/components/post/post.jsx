@@ -30,6 +30,7 @@ const Post = ({ fetchHandler }) => {
                 loggedin_id={id}
                 ownerId={Post.shared_by ? Post.shared_by : Post.user_id}
                 retweet_post_id={Post.retweet_post_id}
+                shared_body={Post.shared_body}
                 shared_by={Post.shared_by}
                 shared_by_username={Post.shared_by_username}
                 title={Post.title}

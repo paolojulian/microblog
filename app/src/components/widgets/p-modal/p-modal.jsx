@@ -4,13 +4,33 @@ import PropTypes from 'prop-types'
 
 /** Components */
 import PFab from '../p-fab'
+import PLoader from '../p-loader';
 
 const PModal = ({
     onRequestClose,
     onRequestSubmit,
+    isLoading,
     type,
     ...props
 }) => {
+
+    const actions = () => (
+        <div className={styles.actions}> 
+            {type === 'submit' && <PFab
+                type="submit"
+                theme="default"
+            >
+                <i className="fa fa-check"/>
+            </PFab>}
+            <PFab
+                type="button"
+                theme="danger"
+                onClick={onRequestClose}
+            >
+                &#10006;
+            </PFab>
+        </div>
+    )
 
     const body = () => (
         <div className={styles.modal}>
@@ -22,21 +42,7 @@ const PModal = ({
                 {props.children}
             </div>
 
-            <div className={styles.actions}> 
-                {type === 'submit' && <PFab
-                    type="submit"
-                    theme="default"
-                >
-                    <i className="fa fa-check"/>
-                </PFab>}
-                <PFab
-                    type="button"
-                    theme="danger"
-                    onClick={onRequestClose}
-                >
-                    &#10006;
-                </PFab>
-            </div>
+            {isLoading ? <PLoader /> : actions()}
         </div>
     )
 
@@ -62,11 +68,13 @@ const PModal = ({
 PModal.propTypes = {
     onRequestClose: PropTypes.func.isRequired,
     onRequestSubmit: PropTypes.func,
+    isLoading: PropTypes.bool,
     type: PropTypes.string
 }
 
 PModal.defaultProps = {
-    type: 'alert'
+    type: 'alert',
+    isLoading: false
 }
 
 export default PModal;

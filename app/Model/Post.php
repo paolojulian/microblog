@@ -9,11 +9,6 @@ class Post extends AppModel
             'required' => true
         ],
         'title' => [
-            'notBlank' => [
-                'rule' => ['notBlank'],
-                'required' => true,
-                'message' => 'Please enter a title for your post'
-            ],
             'maxlength' => [
                 'rule' => ['maxLength', 30],
                 'message' => 'Only 30 characters is allowed.',
@@ -160,18 +155,22 @@ class Post extends AppModel
         return true;
     }
 
-    public function sharePost($postId, $userId)
+    public function sharePost($postId, $userId, $data)
     {
         $post = $this->hasAny(['id' => $postId]);
         if ( ! $post) {
             throw new NotFoundException();
         }
         $this->validator()->remove('title');
-        $this->validator()->remove('body');
+        $this->validator()->remove('body', 'notBlank');
         $this->set([
             'retweet_post_id' => $postId,
-            'user_id' => $userId
+            'user_id' => $userId,
+            'body' => $data['body']
         ]);
+        if ( ! $this->validates()) {
+            return false;
+        }
         if ( ! $this->save()) {
             throw new InternalErrorException();
         }

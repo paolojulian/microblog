@@ -135,7 +135,7 @@ export const editPost = (postId, post) => async dispatch => {
         await axios.post(`/posts/edit/${postId}.json`, formData, config)
         return Promise.resolve()
     } catch (e) {
-        return Promise.reject()
+        return Promise.reject(e)
     }
 }
 
@@ -147,19 +147,21 @@ export const deletePost = (postId) => async dispatch => {
         await axios.delete(`/posts/${postId}.json`)
         return Promise.resolve()
     } catch (e) {
-        return Promise.reject()
+        return Promise.reject(e)
     }
 }
 
 /**
  * Shares a post by another user
  */
-export const sharePost = (postId) => async dispatch => {
+export const sharePost = (postId, body) => async dispatch => {
     try {
-        await axios.post(`/posts/share/${postId}.json`)
+        const formData = new FormData();
+        formData.append('body', body);
+        await axios.post(`/posts/share/${postId}.json`, formData);
         return Promise.resolve()
     } catch (e) {
-        return Promise.reject()
+        return Promise.reject(e)
     }
 }
 

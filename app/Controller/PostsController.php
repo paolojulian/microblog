@@ -164,7 +164,9 @@ class PostsController extends AppController
     public function share($id)
     {
         $this->request->allowMethod('post');
-        $this->Post->sharePost($id, $this->request->user->id);
+        if ( ! $this->Post->sharePost($id, $this->request->user->id, $this->request->data)) {
+            return $this->responseUnprocessableEntity('', $this->Post->validationErrors);
+        }
         return $this->responseCreated();
     }
 
