@@ -22,6 +22,7 @@ import LikesModal from '../likes'
 import { ModalConsumer, ModalContext } from '../../widgets/p-modal/p-modal-context'
 import PostImage from '../../widgets/post-image'
 import PostComments from './post-comments'
+import Username from '../../widgets/username'
 
 const fromNow = date => {
     return moment(date).fromNow()
@@ -46,6 +47,8 @@ const PostItem = ({
     loggedin_id,
     ownerId,
     retweet_post_id,
+    postUserId,
+    originalAvatarUrl,
     shared_body,
     shared_by,
     shared_by_username,
@@ -91,16 +94,12 @@ const PostItem = ({
                             @{shared_by_username}&nbsp;
                         </span>
                     </Link>
-                    shared a&nbsp;
+                    shared&nbsp;
+                    {shared_by == postUserId ? 'own' : 'a'}
+                    &nbsp;
                     <Link to={`/posts/${retweet_post_id}`}>
                         <span className="username">
                             post
-                        </span>
-                    </Link>
-                    &nbsp;by&nbsp;
-                    <Link to={`/profiles/${creator}`}>
-                        <span className="username">
-                            @{creator}
                         </span>
                     </Link>
                 </span>
@@ -118,7 +117,17 @@ const PostItem = ({
 
     const renderBody = () => (
         <div className={styles.body}>
-            {shared_body && <div className={styles.sharedBody}>{shared_body}</div>}
+            {shared_body && <div className={styles.sharedBody}>
+                {shared_body}
+            </div>}
+            {shared_by && <div className={styles.originalCreator}>
+                <div className={styles.originalAvatar}>
+                    <ProfileImage src={originalAvatarUrl} size={32}/>
+                </div>
+                <div className={styles.originalUsername}>
+                    <Username username={creator}/>
+                </div>
+            </div>}
             <div className={styles.bodyText}>{body}</div>
             {!!imgPath && <PostImage imgPath={imgPath} title={title}/>}
         </div>
@@ -137,6 +146,7 @@ const PostItem = ({
                     size={32}
                     alt={creator}
                 />
+                {/** Header */}
                 <div className={styles.title}>
                     <Link to={`/posts/${id}`}>
                         <span className={styles.titleText}>
@@ -145,11 +155,13 @@ const PostItem = ({
                     </Link>
                     {renderUsername()}
                 </div>
+                {/** Edit Post */}
                 {isOwned && isCreator && <div className={styles.edit}
                     onClick={() => setIsEdit(!isEdit)}
                 >
                     <i className="fa fa-edit"/>
                 </div>}
+                {/** Delete Post */}
                 {isCreator && <ModalConsumer>
                     {({ showModal }) => (
                         <div className={styles.delete}
@@ -163,11 +175,12 @@ const PostItem = ({
                         </div>
                     )}
                 </ModalConsumer>}
-                {!isOwned && !isCreator && !isShared && <ModalConsumer>
+                {/** Share Post */}
+                {<ModalConsumer>
                     {({ showModal }) => (
                         <div className={styles.share}
                             onClick={() => showModal(PostShare, {
-                                id,
+                                id: isShared ? retweet_post_id : id,
                                 title,
                                 body,
                                 creator,

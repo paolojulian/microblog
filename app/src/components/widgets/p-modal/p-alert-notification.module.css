@@ -5,10 +5,9 @@
     left: 50%;
     transform: translateX(-50%);
     color: #fafafa;
-    border-radius: 5px;
-    box-shadow: 0 1px 7px rgba(0, 0, 0, 0.20);
+    box-shadow: 0 1px 7px rgba(0, 0, 0, 0.30);
     opacity: 0.9;
-    padding: 0.5rem 4rem;
+    padding: 1rem 4rem;
     letter-spacing: 1px;
     max-width: 100%;
     z-index: 1000;

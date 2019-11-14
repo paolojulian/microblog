@@ -110,7 +110,7 @@ class Post extends AppModel
         if ($post['isShared']) {
             $originalPost = $this->find('first', [
                 'recursive' => -1,
-                'contain' => ['User.username'],
+                'contain' => ['User.username', 'User.avatar_url'],
                 'conditions' => ['Post.id' => $post['Post']['retweet_post_id']]
             ]);
             if ( ! $originalPost) {

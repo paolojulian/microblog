@@ -10,6 +10,7 @@ import { getPostById } from '../../../store/actions/postActions';
 import PLoader from '../../widgets/p-loader';
 import PostItem from '../item';
 import WithNavbar from '../../hoc/with-navbar';
+import Post from '../../utils/on-scroll-paginate';
 
 const PostView = (props) => {
     const { id } = props.match.params;
@@ -51,13 +52,16 @@ const PostView = (props) => {
                     id={post.id}
                     title={isShared ? originalPost.Post.title: post.title}
                     body={isShared ? originalPost.Post.body: post.body}
+                    imgPath={isShared ? originalPost.Post.img_path: post.img_path}
                     creator={isShared ? originalPost.User.username : profile.username}
+                    originalAvatarUrl={isShared ? originalPost.User.avatar_url: null}
+                    shared_body={isShared ? post.body: null}
                     shared_by={isShared ? post.user_id: null}
                     shared_by_username={isShared ? profile.username: null}
+                    postUserId={post.user_id}
                     user_id={post.user_id}
                     avatarUrl={profile.avatar_url}
                     created={post.created}
-                    imgPath={post.img_path}
                     isShared={isShared}
                     likes={post.likes}
                     comments={post.comments}

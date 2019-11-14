@@ -97,7 +97,7 @@ const NotificationBell = ({ notificationCount }) => {
             onClick={showNotifications}
         >
             <i className="fa fa-bell"/>
-            {notificationCount > 0 && <span className={styles.bell}>
+            {notificationCount > 0 && ! isDisplay && <span className={styles.bell}>
                 {notificationCount}
             </span>}
             {isDisplay && <div className={styles.content}>

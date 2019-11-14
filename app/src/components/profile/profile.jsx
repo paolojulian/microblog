@@ -22,7 +22,7 @@ const Header = () => (
         fontStyle: 'italic',
         fontWeight: '400',
     }}>
-        Mutual Friends
+        Mutual Followers
     </div>
 )
 
@@ -32,7 +32,7 @@ const MutualFriends = ({ mutualFriends }) => (
             header={<Header />}
         >
             {mutualFriends.length === 0 && <div className="disabled">
-                No mutual friends
+                No mutual follower/s
             </div>}
             {mutualFriends.length > 0 && mutualFriends.map(({ User }) => (
                 <UserItem user={User} showFollow={false}/>

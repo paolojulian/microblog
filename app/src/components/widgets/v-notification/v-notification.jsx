@@ -25,8 +25,8 @@ const VNotification = () => {
     }, [isAuthenticated])
 
     const connectWebSocket = (userId) => {
-        let websocket = new WebSocket(`ws://13.250.23.187:4567?id=${userId}`);
-        // let websocket = new WebSocket(`ws://127.0.0.1:4567?id=${userId}`);
+        // let websocket = new WebSocket(`ws://13.250.23.187:4567?id=${userId}`);
+        let websocket = new WebSocket(`ws://127.0.0.1:4567?id=${userId}`);
         websocket.onopen = e => {
         }
         websocket.onmessage = e => {

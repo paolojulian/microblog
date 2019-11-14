@@ -11,7 +11,12 @@ import { followUser } from '../../../store/actions/profileActions';
 import ProfileImage from '../profile-image/profile-image';
 import Username from '../username';
 
-const UserItem = ({ user, showFollow, onRequestClose }) => {
+const UserItem = ({
+    user,
+    showFollow,
+    onRequestClose,
+    closeOnClick
+}) => {
     const dispatch = useDispatch();
     const [isFollowing, setFollowing] = useState(!!user.is_following);
 
@@ -21,7 +26,13 @@ const UserItem = ({ user, showFollow, onRequestClose }) => {
     }
 
     return (
-        <Link to={`/profiles/${user.username}`}>
+        <Link to={`/profiles/${user.username}`}
+            onClick={() => {
+                if (closeOnClick) {
+                    onRequestClose();
+                }
+            }}
+        >
             <div className={"User " + styles.user}>
                 <div className={styles.avatar}>
                     <ProfileImage
@@ -52,12 +63,14 @@ const UserItem = ({ user, showFollow, onRequestClose }) => {
 
 UserItem.propTypes = {
     user: PropTypes.object.isRequired,
-    onRequestClose: PropTypes.func.isRequired
+    onRequestClose: PropTypes.func.isRequired,
+    closeOnClick: PropTypes.bool.isRequired
 }
 
 UserItem.defaultProps = {
     showFollow: true,
-    onRequestClose: () => {}
+    onRequestClose: () => {},
+    closeOnClick: false
 }
 
 export default UserItem;

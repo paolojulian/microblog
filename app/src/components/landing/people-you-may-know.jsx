@@ -47,7 +47,7 @@ const MutualUser = ({
             <div className="disabled"
                 style={{ fontStyle: 'italic' }}
             >
-                {mutual > 0 ? mutual: 'No '} mutual friends
+                {mutual > 0 ? mutual: 'No '} mutual followers
             </div>
         </div>
     </div>

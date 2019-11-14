@@ -28,7 +28,9 @@ const Post = ({ fetchHandler }) => {
                 isShared={!!Post.shared_by && !!Post.shared_by_username}
                 likes={Post.likes}
                 loggedin_id={id}
+                postUserId={Post.user_id}
                 ownerId={Post.shared_by ? Post.shared_by : Post.user_id}
+                originalAvatarUrl={Post.original_avatar_url}
                 retweet_post_id={Post.retweet_post_id}
                 shared_body={Post.shared_body}
                 shared_by={Post.shared_by}

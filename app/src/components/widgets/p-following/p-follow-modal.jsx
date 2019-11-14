@@ -73,6 +73,7 @@ const PFollowModal = ({
                         user={user}
                         showFollow={Number(user.id) !== Number(loggedInUser)}
                         onRequestClose={onRequestClose}
+                        closeOnClick={true}
                     />
                 })}
             </ModalScrollPaginate>
