@@ -14,30 +14,36 @@ const Post = ({ fetchHandler }) => {
     const { id } = useSelector(state => state.auth.user)
     
     const renderPosts = () => posts.map(({ Post }, i) => {
+        const sharedPost = {
+            userId: Post.shared_user_id,
+            username: Post.shared_username,
+            avatarUrl: Post.shared_avatar_url,
+            body: Post.shared_body,
+            created: Post.shared_created
+        }
         return (
-            <PostItem
-                key={Post.id}
-                id={Post.id}
-                avatarUrl={Post.avatar_url}
-                body={Post.body}
-                comments={Post.comments}
-                created={Post.created}
-                creator={Post.username}
-                fetchHandler={fetchHandler}
-                imgPath={Post.img_path}
-                isShared={!!Post.shared_by && !!Post.shared_by_username}
-                likes={Post.likes}
-                loggedin_id={id}
-                postUserId={Post.user_id}
-                ownerId={Post.shared_by ? Post.shared_by : Post.user_id}
-                originalAvatarUrl={Post.original_avatar_url}
-                retweet_post_id={Post.retweet_post_id}
-                shared_body={Post.shared_body}
-                shared_by={Post.shared_by}
-                shared_by_username={Post.shared_by_username}
-                title={Post.title}
-                user_id={Post.user_id}
-            />
+            <div>
+                <PostItem
+                    isShared={!!Post.is_shared}
+                    sharedPost={sharedPost}
+                    key={Post.id}
+                    id={Post.id}
+                    avatarUrl={Post.avatar_url}
+                    title={Post.title}
+                    body={Post.body}
+                    created={Post.created}
+                    creator={Post.username}
+                    imgPath={Post.img_path}
+                    retweet_post_id={Post.retweet_post_id}
+                    user_id={Post.user_id}
+
+                    likes={Post.likes}
+                    comments={Post.comments}
+                    ownerId={Post.is_shared ? Post.shared_id : Post.user_id}
+                    loggedin_id={id}
+                    fetchHandler={fetchHandler}
+                />
+            </div>
         )
     })
 

@@ -146,6 +146,14 @@ class Post extends AppModel
     {
         $this->id = $postId;
         $this->set($data);
+        $post = $this->find('first', [
+            'fields' => ['retweet_post_id'],
+            'recursive' => -1,
+            'condition' => ['id' => $postId]
+        ]);
+        if ($post["Post"]["retweet_post_id"]) {
+            $this->validator()->remove('body', 'notBlank');
+        }
         if ( ! $this->validates()) {
             return false;
         }

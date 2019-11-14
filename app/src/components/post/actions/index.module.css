@@ -1,0 +1,32 @@
+.wrapper {
+    padding: 0 1rem;
+    text-align: right;
+}
+
+.edit,
+.delete,
+.share {
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 0.375rem;
+    transition: all 100ms ease-in-out;
+}
+
+.edit:hover,
+.delete:hover,
+.share:hover {
+    transform: scale(1.2);
+}
+
+.edit {
+    color: var(--blue);
+}
+
+.delete {
+    color: var(--secondary);
+}
+
+.share {
+    color: var(--black-light);
+}
+

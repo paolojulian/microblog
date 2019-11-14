@@ -1,7 +1,5 @@
 import React, { useState, useContext } from 'react'
-import moment from 'moment'
 import classnames from 'classnames'
-import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 
@@ -10,32 +8,23 @@ import styles from './post-item.module.css'
 /** Redux */
 import { likePost } from '../../../store/actions/postActions'
 
-/** Components */
-import PCard from '../../widgets/p-card'
-import ProfileImage from '../../widgets/profile-image'
-import PostEdit from '../edit'
-import PostDelete from '../delete'
-import PostShare from '../share'
-import LikesModal from '../likes'
-
 /** Consumer */
 import { ModalConsumer, ModalContext } from '../../widgets/p-modal/p-modal-context'
+
+/** Components */
+import PCard from '../../widgets/p-card'
+import PostEdit from '../edit'
+import LikesModal from '../likes'
 import PostImage from '../../widgets/post-image'
 import PostComments from './post-comments'
-import Username from '../../widgets/username'
-import PostTitle from '../title'
-
-const fromNow = date => {
-    return moment(date).fromNow()
-}
-
-const SharedItem = ({
-}) => {
-
-}
+import SharedPost from './shared-post'
+import PostHeader from '../header'
+import PostActions from '../actions'
 
 const PostItem = ({
+    sharedPost,
     id,
+    originalPostId,
     avatarUrl,
     body,
     comments,
@@ -48,11 +37,6 @@ const PostItem = ({
     loggedin_id,
     ownerId,
     retweet_post_id,
-    postUserId,
-    originalAvatarUrl,
-    shared_body,
-    shared_by,
-    shared_by_username,
     title,
     user_id,
 }) => {
@@ -61,10 +45,7 @@ const PostItem = ({
     const [likeCount, setLikeCount] = useState(likes.length);
     const [commentsCount, setCommentsCount] = useState(comments);
     const [isLiked, setIsLiked] = useState(likes.indexOf(loggedin_id) !== -1);
-    const [isEdit, setIsEdit] = useState(false);
     const [showComment, setShowComment] = useState(false);
-    const isOwned = Number(loggedin_id) === Number(user_id);
-    const isCreator = Number(loggedin_id) === Number(ownerId);
 
     const handleLike = () => {
         dispatch(likePost(id))
@@ -76,59 +57,13 @@ const PostItem = ({
         setIsLiked(!isLiked)
     }
 
-    const onSuccessEdit = () => {
-        setIsEdit(false)
+    const successHandler = () => {
+        window.scrollTo({ top: 0, left: 0 })
         fetchHandler();
-    }
-
-    const onSuccessDelete = () => {
-        window.scrollTo({ top: 0, left: 0 });
-        fetchHandler();
-    }
-
-    const renderUsername = () => {
-        if (shared_by && shared_by_username) {
-            return (
-                <span>
-                    <Link to={`/profiles/${shared_by_username}`}>
-                        <span className="username">
-                            @{shared_by_username}&nbsp;
-                        </span>
-                    </Link>
-                    shared&nbsp;
-                    {shared_by == postUserId ? 'own' : 'a'}
-                    &nbsp;
-                    <Link to={`/posts/${retweet_post_id}`}>
-                        <span className="username">
-                            post
-                        </span>
-                    </Link>
-                </span>
-            )
-        }
-
-        return (
-            <Link to={`/profiles/${creator}`}>
-                <span className="text-link">
-                    @{creator}
-                </span>
-            </Link>
-        )
     }
 
     const renderBody = () => (
         <div className={styles.body}>
-            {shared_body && <div className={styles.sharedBody}>
-                {shared_body}
-            </div>}
-            {shared_by && <div className={styles.originalCreator}>
-                <div className={styles.originalAvatar}>
-                    <ProfileImage src={originalAvatarUrl} size={32}/>
-                </div>
-                <div className={styles.originalUsername}>
-                    <Username username={creator}/>
-                </div>
-            </div>}
             <div className={styles.bodyText}>{body}</div>
             {!!imgPath && <PostImage imgPath={imgPath} title={title}/>}
         </div>
@@ -136,70 +71,39 @@ const PostItem = ({
 
     return (
         <PCard className={styles.post_item} size="fit">
-            {/** Time */}
-            <div className={styles.from_now}>
-                {fromNow(created)}
-            </div>
-            {/** Profile Header */}
-            <div className={styles.profile_header}>
-                <ProfileImage
-                    src={avatarUrl}
-                    size={32}
-                    alt={creator}
-                />
-                {/** Header */}
-                <div className={styles.title}>
-                    <PostTitle title={title} postId={id} />
-                    {renderUsername()}
-                </div>
-                {/** Edit Post */}
-                {isOwned && isCreator && <div className={styles.edit}
-                    onClick={() => setIsEdit(!isEdit)}
-                >
-                    <i className="fa fa-edit"/>
-                </div>}
-                {/** Delete Post */}
-                {isCreator && <ModalConsumer>
-                    {({ showModal }) => (
-                        <div className={styles.delete}
-                            onClick={() => showModal(PostDelete, {
-                                id,
-                                creator,
-                                onSuccess: onSuccessDelete
-                            })}
-                        >
-                            <i className="fa fa-trash"/>
-                        </div>
-                    )}
-                </ModalConsumer>}
-                {/** Share Post */}
-                {<ModalConsumer>
-                    {({ showModal }) => (
-                        <div className={styles.share}
-                            onClick={() => showModal(PostShare, {
-                                id: isShared ? retweet_post_id : id,
-                                title,
-                                body,
-                                creator,
-                                onSuccess: fetchHandler
-                            })}
-                        >
-                            <i className="fa fa-share-square"/>
-                        </div>
-                    )}
-                </ModalConsumer>}
-            </div>
+            <PostActions
+                postId={id}
+                userId={isShared ? sharedPost.userId : user_id}
+                isShared={isShared}
+                title={isShared ? '': title}
+                body={isShared ? sharedPost.body: body}
+                imgPath={imgPath}
+                username={creator}
+                sharedPostId={isShared ? retweet_post_id : id}
+                onSuccessEdit={successHandler}
+                onSuccessDelete={successHandler}
+                onSuccessShare={successHandler}
+            />
+            {isShared && <SharedPost
+                postId={id}
+                userId={sharedPost.userId}
+                originalPostId={retweet_post_id}
+                originalUserId={user_id}
+                body={sharedPost.body}
+                avatarUrl={sharedPost.avatarUrl}
+                username={sharedPost.username}
+                created={sharedPost.created}
+            />}
 
-            {/** Body */}
-            {isEdit
-                ? <PostEdit
-                    id={id}
-                    title={title}
-                    body={body}
-                    imgPath={imgPath}
-                    onSuccess={onSuccessEdit}
-                    />
-                : renderBody()}
+            <PostHeader
+                postId={isShared ? retweet_post_id : id}
+                title={title}
+                username={creator}
+                avatarUrl={avatarUrl}
+                created={created}
+            />
+
+            {renderBody()}
             
             {/** Actions */}
             <div className={styles.actions}>

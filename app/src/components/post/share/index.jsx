@@ -14,8 +14,6 @@ import FormTextArea from '../../widgets/form/textarea/form-textarea';
 
 const PostShare = ({
     id,
-    title,
-    body,
     creator,
     onRequestClose,
     onSuccess,
