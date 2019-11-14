@@ -22,6 +22,7 @@ const VNotificationItem = ({
     switch (type) {
         case 'followed':
             link = `/profiles/${username}`;
+            break;
         case 'shared':
             // No break
         case 'liked':
