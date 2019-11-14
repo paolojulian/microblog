@@ -1,0 +1,15 @@
+.title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: var(--green-primary);
+    padding: 0.375rem 0;
+}
+
+.title span {
+    transition: color 100ms ease-in-out;
+}
+
+.title span:hover {
+    color: var(--blue);
+}

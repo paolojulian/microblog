@@ -58,6 +58,7 @@ const PostView = (props) => {
                     shared_body={isShared ? post.body: null}
                     shared_by={isShared ? post.user_id: null}
                     shared_by_username={isShared ? profile.username: null}
+                    ownerId={isShared ? originalPost.Post.user_id: post.user_id}
                     postUserId={post.user_id}
                     user_id={post.user_id}
                     avatarUrl={profile.avatar_url}

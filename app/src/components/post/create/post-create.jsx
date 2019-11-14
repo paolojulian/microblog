@@ -114,12 +114,14 @@ const PostCreate = ({
                     placeholder="Title"
                     name="title"
                     refs={title}
+                    info="The title of your post (Optional)"
                     error={errors.title}
                 />
                 <FormTextarea
                     placeholder="Body"
                     name="body"
                     refs={body}
+                    info="What's on your mind?"
                     error={errors.body}
                 />
 

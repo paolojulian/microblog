@@ -23,6 +23,7 @@ import { ModalConsumer, ModalContext } from '../../widgets/p-modal/p-modal-conte
 import PostImage from '../../widgets/post-image'
 import PostComments from './post-comments'
 import Username from '../../widgets/username'
+import PostTitle from '../title'
 
 const fromNow = date => {
     return moment(date).fromNow()
@@ -148,11 +149,7 @@ const PostItem = ({
                 />
                 {/** Header */}
                 <div className={styles.title}>
-                    <Link to={`/posts/${id}`}>
-                        <span className={styles.titleText}>
-                            {title ? title : 'Untitled'}
-                        </span>
-                    </Link>
+                    <PostTitle title={title} postId={id} />
                     {renderUsername()}
                 </div>
                 {/** Edit Post */}

@@ -33,11 +33,12 @@
 }
 
 .formInfo {
+    margin-left: 0.3rem;
     text-align: left;
-    font-size: 0.9rem;
     font-weight: 400;
-    color: #131313;
-    margin: 0.2rem 0;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--black-light);
 }
 
 .invalid-feedback {
