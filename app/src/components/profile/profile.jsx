@@ -53,6 +53,7 @@ const Profile = (props) => {
         const init = async () => {
             try {
                 const res = await dispatch(getProfile(username))
+                setMutualFriends([]);
                 if ( ! res.user) {
                     throw new Error('Not found');
                 }
