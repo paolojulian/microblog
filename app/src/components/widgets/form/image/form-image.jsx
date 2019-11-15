@@ -44,7 +44,7 @@ const FormImage = ({
         <div className={styles.formImage}>
             {!!imgSrc && <div className={styles.img} style={{
                 height: height,
-                width: height,
+                width: 'auto',
                 margin: 'auto',
             }}>
                 <PFab
@@ -93,6 +93,7 @@ FormImage.propTypes = {
 }
 
 FormImage.defaultProps = {
+    height: '100%',
     initSrc: '',
     onChangeImg: () => {},
     error: ''

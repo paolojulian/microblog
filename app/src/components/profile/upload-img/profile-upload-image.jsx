@@ -80,7 +80,7 @@ const ProfileUploadImage = ({
                 <FormImage
                     name="profile_image"
                     refs={imgRef}
-                    height="128px"
+                    height="256px"
                     error={errors.img}
                 />
             </div>
