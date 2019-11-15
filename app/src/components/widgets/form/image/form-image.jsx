@@ -11,10 +11,10 @@ const FormImage = ({
     refs,
     initSrc,
     height,
+    error,
     onChangeImg,
     ...props
 }) => {
-    const hasDefault = !!initSrc;
     const [imgSrc, setImgSrc] = useState(initSrc);
     const [imgName, setImgName] = useState('Choose an image');
 
@@ -42,7 +42,11 @@ const FormImage = ({
 
     return (
         <div className={styles.formImage}>
-            {!!imgSrc && <div className={styles.img} style={{height: height}}>
+            {!!imgSrc && <div className={styles.img} style={{
+                height: height,
+                width: height,
+                margin: 'auto',
+            }}>
                 <PFab
                     theme="secondary"
                     onClick={removeImg}
@@ -62,12 +66,22 @@ const FormImage = ({
             })}>
                 <label>
                     <input type="file"
+                        accept="image/png, image/jpeg"
                         ref={refs}
                         onChange={handleChange}
                     />
                     {imgName}
                 </label>
             </div>
+            {error && <div className="invalid-feedback">
+                {
+                    typeof error === 'string'
+                        ? `* ${error}`
+                        : typeof error[0] === 'string'
+                            ? `* ${error[0]}`
+                            : ``
+                }
+            </div>}
         </div>
     )
 }
@@ -80,7 +94,8 @@ FormImage.propTypes = {
 
 FormImage.defaultProps = {
     initSrc: '',
-    onChangeImg: () => {}
+    onChangeImg: () => {},
+    error: ''
 }
 
 export default FormImage;

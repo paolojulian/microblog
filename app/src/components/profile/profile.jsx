@@ -15,6 +15,7 @@ import ProfileInfo from './info'
 import PCard from '../widgets/p-card'
 import Post from '../post'
 import UserItem from '../widgets/user'
+import PLoader from '../widgets/p-loader'
 
 const Header = () => (
     <div style={{
@@ -73,7 +74,11 @@ const Profile = (props) => {
 
     const fetchHandler = (page = 1) => dispatch(getUserPosts(username, page))
 
-    return isMounted ? (
+    if ( ! isMounted) {
+        return <PLoader />
+    }
+
+    return (
         <div className={styles.profile_wrapper}>
             <ProfileInfo/>
             <div className={styles.info}>
@@ -92,8 +97,6 @@ const Profile = (props) => {
                 </div>
             </div>
         </div>
-    ) : (
-        <div>Loading</div>
     )
 }
 

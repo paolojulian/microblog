@@ -10,23 +10,25 @@ import {
 } from '../../../store/actions/notificationActions';
 import VNotificationItem from './v-notification-item';
 
+let websocket;
 const VNotification = () => {
     const dispatch = useDispatch();
     const { isAuthenticated, user } = useSelector(state => state.auth);
     const notificationContainer = createRef();
-
     const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
         if (isAuthenticated) {
             dispatch(countUnreadNotifications());
             connectWebSocket(user.id);
+            return;
         }
+        closeWebsocket();
     }, [isAuthenticated])
 
     const connectWebSocket = (userId) => {
         // let websocket = new WebSocket(`ws://13.250.23.187:4567?id=${userId}`);
-        let websocket = new WebSocket(`ws://127.0.0.1:4567?id=${userId}`);
+        websocket = new WebSocket(`ws://127.0.0.1:4567?id=${userId}`);
         websocket.onopen = e => {
         }
         websocket.onmessage = e => {
@@ -40,6 +42,13 @@ const VNotification = () => {
         websocket.onerror = (err) => {
             websocket.close();
         };
+    }
+
+    const closeWebsocket = () => {
+        if (websocket) {
+            websocket.onclose = () => {}
+            websocket.close();
+        }
     }
     
     const showNotification = (data) => {

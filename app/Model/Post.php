@@ -95,15 +95,15 @@ class Post extends AppModel
             return $like['user_id'];
         }, $post['Likes']);
 
-        foreach ($post['Comments'] as $key => $comment) {
-            $commentUser = $this->User->find('first', [
-                'recursive' => -1,
-                'fields' => ['username', 'avatar_url'],
-                'conditions' => ['id' => $comment['user_id']]
-            ]);
-            $post['Comments'][$key]['username'] = $commentUser['User']['username'];
-            $post['Comments'][$key]['avatarUrl'] = $commentUser['User']['avatar_url'];
-        }
+        // foreach ($post['Comments'] as $key => $comment) {
+        //     $commentUser = $this->User->find('first', [
+        //         'recursive' => -1,
+        //         'fields' => ['username', 'avatar_url'],
+        //         'conditions' => ['id' => $comment['user_id']]
+        //     ]);
+        //     $post['Comments'][$key]['username'] = $commentUser['User']['username'];
+        //     $post['Comments'][$key]['avatarUrl'] = $commentUser['User']['avatar_url'];
+        // }
 
         // Check if post is a shared post
         // Gets information about the shared post instead
@@ -116,9 +116,14 @@ class Post extends AppModel
             if ( ! $originalPost) {
                 throw new NotFoundException(__('Invalid post'));
             }
-            $post['Original'] = $originalPost;
+            $post['Shared'] = [];
+            $post['Shared']['Post'] = $post['Post'];
+            $post['Shared']['User'] = $post['User'];
+            $post['Post'] = $originalPost;
             return $post;
         }
+        $post['Post']['Post'] = $post['Post'];
+        $post['Post']['User'] = $post['User'];
         return $post;
     }
 

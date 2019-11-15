@@ -70,10 +70,16 @@ const PostCreate = ({
 
     const handleError = (e) => {
         try {
-            if (e.response.status !== 422) {
-                throw new Error();
+            switch(e.response.status) {
+                case 413:
+                    return setErrors({ img: 'Image size should not exceed 25 mb' })
+                case 415:
+                    return setErrors({ img: 'File is not supported!' })
+                case 422:
+                    return setErrors(e.response.data.data.errors);
+                default:
+                    throw new Error(e);
             }
-            setErrors(e.response.data.data.errors);
         } catch (e) {
             context.notify.serverError();
         }
@@ -129,6 +135,10 @@ const PostCreate = ({
                     name="profile_image"
                     refs={img}
                 />
+
+                {errors.img && <div className="invalid-feedback">
+                    {`* ${errors.img}`}
+                </div>}
 
                 <br />
 

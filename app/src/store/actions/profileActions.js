@@ -57,7 +57,7 @@ export const uploadProfileImg = (img) => async dispatch => {
         const res = await axios.post('/profiles/uploadimage.json', formData, config)
         return Promise.resolve(res.data.data)
     } catch (e) {
-        return Promise.reject()
+        return Promise.reject(e)
     }
 }
 
@@ -70,7 +70,7 @@ export const followUser = (userId) => async dispatch => {
         const res = await axios.post(`/followers/follow/${userId}.json`);
         return Promise.resolve(res.data.data);
     } catch (e) {
-        return Promise.reject();
+        return Promise.reject(e);
     }
 }
 
@@ -83,7 +83,7 @@ export const searchUser = (searchText) => async dispatch => {
         const data = await search(`/users/search/${searchText}.json`);
         return Promise.resolve(data);
     } catch (e) {
-        return Promise.reject();
+        return Promise.reject(e);
     }
 }
 

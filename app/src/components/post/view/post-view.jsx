@@ -10,68 +10,77 @@ import { getPostById } from '../../../store/actions/postActions';
 import PLoader from '../../widgets/p-loader';
 import PostItem from '../item';
 import WithNavbar from '../../hoc/with-navbar';
-import Post from '../../utils/on-scroll-paginate';
+import InitialStatus from '../../utils/initial-status.js';
 
 const PostView = (props) => {
     const { id } = props.match.params;
     const dispatch = useDispatch();
     const { user } = useSelector(state => state.auth);
-
-    const [isLoading, setIsLoading] = useState(true);
+    const [status, setStatus] = useState(InitialStatus);
     const [post, setPost] = useState({});
     const [profile, setProfile] = useState('');
     const [isShared, setShared] = useState(false);
     /** Only if post is a shared Post */
-    const [originalPost, setOriginalPost] = useState({});
+    const [sharedPost, setSharedPost] = useState({});
 
     useEffect(() => {
-        setIsLoading(true);
         reloadPost();
     }, [props.match.params]);
 
-    const reloadPost = () => {
-        dispatch(getPostById(id))
-            .then(({Post, User, isShared, ...response}) => {
-                setPost(Post);
-                setProfile(User);
-                setShared(isShared);
-                if (isShared) {
-                    setOriginalPost(response.Original);
-                }
-            })
-            .catch()
-            .then(() => setIsLoading(false));
+    const reloadPost = async () => {
+        try {
+            setStatus({ ...InitialStatus.LOADING })
+            const { Post, isShared, ...response } = await dispatch(getPostById(id));
+            setPost(Post.Post);
+            setProfile(Post.User);
+            setShared(isShared);
+            if (isShared) {
+                setSharedPost(response.Shared);
+            }
+            setStatus({ ...InitialStatus.POST })
+        } catch (e) {
+            setStatus({ ...InitialStatus.ERROR })
+        }
+    }
+
+    if (status.loading) {
+        return <PLoader />
+    }
+
+    if (status.error) {
+        return <div className="disabled">Oops. Something went wrong</div>
     }
 
     return (
-        isLoading
-        ? <PLoader />
-        : (
-            <div className={styles.wrapper}>
-                <PostItem
-                    id={post.id}
-                    title={isShared ? originalPost.Post.title: post.title}
-                    body={isShared ? originalPost.Post.body: post.body}
-                    imgPath={isShared ? originalPost.Post.img_path: post.img_path}
-                    creator={isShared ? originalPost.User.username : profile.username}
-                    originalAvatarUrl={isShared ? originalPost.User.avatar_url: null}
-                    shared_body={isShared ? post.body: null}
-                    shared_by={isShared ? post.user_id: null}
-                    shared_by_username={isShared ? profile.username: null}
-                    ownerId={isShared ? originalPost.Post.user_id: post.user_id}
-                    postUserId={post.user_id}
-                    user_id={post.user_id}
-                    avatarUrl={profile.avatar_url}
-                    created={post.created}
-                    isShared={isShared}
-                    likes={post.likes}
-                    comments={post.comments}
-                    loggedin_id={user.id}
-                    retweet_post_id={post.retweet_post_id}
-                    fetchHandler={() => {}}
-                />
-            </div>
-        )
+        <div className={styles.wrapper}>
+            <PostItem
+                key={post.id}
+                isShared={isShared}
+                sharedPost={isShared ? {
+                    userId: sharedPost.Post.user_id,
+                    username: sharedPost.User.username,
+                    avatarUrl: sharedPost.User.avatar_url,
+                    body: sharedPost.Post.body,
+                    created: sharedPost.Post.created
+                } : null}
+
+                avatarUrl={profile.avatar_url}
+                creator={profile.username}
+
+                id={isShared ? sharedPost.Post.id : post.id}
+                title={post.title}
+                body={post.body}
+                created={post.created}
+                imgPath={post.img_path}
+                retweet_post_id={isShared ? sharedPost.Post.id : post.id}
+                user_id={post.user_id}
+
+                likes={isShared ? sharedPost.Post.likes: post.likes}
+                comments={isShared ? sharedPost.Post.comments: post.comments}
+                loggedin_id={user.id}
+                fetchHandler={reloadPost}
+            />
+        </div>
     );
 }
 

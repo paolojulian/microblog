@@ -1,9 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
+
+/** Utils */
+import InitialStatus from '../../utils/initial-status';
 
 /** Redux */
 import { uploadProfileImg, getProfile } from '../../../store/actions/profileActions';
-import { CLEAR_ERRORS } from '../../../store/types.js'
+import { CLEAR_ERRORS } from '../../../store/types.js';
 
 /** Components */
 import PModal from '../../widgets/p-modal';
@@ -13,9 +16,8 @@ import FormImage from '../../widgets/form/image';
 const ProfileUploadImage = ({
     onRequestClose,
 }) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [isError, setIsError] = useState(false);
-    const [isSuccess, setSuccess] = useState(false);
+    const [status, setStatus] = useState(InitialStatus);
+    const [errors, setErrors] = useState({ img: '' })
     const dispatch = useDispatch();
     const imgRef = useRef();
 
@@ -25,45 +27,69 @@ const ProfileUploadImage = ({
         };
     }, [])
 
-    const submitHandler = e => {
+    const submitHandler = async (e) => {
         if (e) {
             e.preventDefault();
         }
         let img = imgRef.current.files[0];
-        if ( ! img) return;
-        setIsLoading(true);
-        dispatch(uploadProfileImg(img))
-            .then(() => {
-                dispatch(getProfile());
-                setSuccess(true);
-                setIsLoading(false)
-            })
-            .catch(() => setIsError(true));
+        if ( ! img) {
+            setErrors({ img: 'Please select an image' })
+            return;
+        }
+        try {
+            setStatus({ ...InitialStatus.LOADING });
+            await dispatch(uploadProfileImg(img))
+            await dispatch(getProfile());
+            setStatus({ ...InitialStatus.POST });
+        } catch (e) {
+            handleError(e);
+        }
+    }
+    
+    const handleError = e => {
+        try {
+            setStatus({ ...InitialStatus })
+            switch(e.response.status) {
+                case 413:
+                    return setErrors({ img: 'Image size should not exceed 25 mb' })
+                case 415:
+                    return setErrors({ img: 'File is not supported!' })
+                default:
+                    throw new Error(e);
+            }
+        } catch (e) {
+            setStatus({ ...InitialStatus.ERROR });
+        }
     }
 
     const render = () => {
-        if (isError) {
-            return <div className="italic">Oops Something went wrong.</div>
+        if (status.error) {
+            return <div className="disabled">Oops Something went wrong.</div>
         }
 
-        if (isSuccess) {
+        if (status.post) {
             return <div className="text-success">Image Uploaded Successfully</div>
         }
 
-        if (isLoading) {
+        if (status.loading) {
             return <PLoader/>
-        } else {
-            return <FormImage
-                name="profile_image"
-                refs={imgRef}
-                height="128px"
-            />
         }
+
+        return (
+            <div>
+                <FormImage
+                    name="profile_image"
+                    refs={imgRef}
+                    height="128px"
+                    error={errors.img}
+                />
+            </div>
+        )
     }
 
     return (
         <PModal
-            type={isSuccess || isLoading || isError ? 'button': 'submit'}
+            type={status.post || status.loading || status.error ? 'button': 'submit'}
             header="Change Profile Image"
             onRequestSubmit={submitHandler}
             onRequestClose={onRequestClose}>

@@ -13,7 +13,6 @@ import { ModalConsumer, ModalContext } from '../../widgets/p-modal/p-modal-conte
 
 /** Components */
 import PCard from '../../widgets/p-card'
-import PostEdit from '../edit'
 import LikesModal from '../likes'
 import PostImage from '../../widgets/post-image'
 import PostComments from './post-comments'
@@ -22,6 +21,7 @@ import PostHeader from '../header'
 import PostActions from '../actions'
 
 const PostItem = ({
+    openCommentOnStart,
     sharedPost,
     id,
     avatarUrl,
@@ -151,6 +151,7 @@ const PostItem = ({
 }
 
 PostItem.propTypes = {
+    openCommentOnStart: PropTypes.bool,
     title: PropTypes.string,
     body: PropTypes.string,
     user_id: PropTypes.string,
@@ -166,7 +167,8 @@ PostItem.propTypes = {
 PostItem.defaultProps = {
     likes: [],
     comments: 0,
-    isShared: false
+    isShared: false,
+    openCommentOnStart: false
 }
 
 export default PostItem

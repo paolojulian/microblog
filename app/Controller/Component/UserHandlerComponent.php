@@ -53,7 +53,7 @@ class UserHandlerComponent extends Component {
             );
             return "/app/webroot/$imgpath/$imageName";
         } catch (Exception $e) {
-            throw new InternalErrorException($e->getMessage());
+            throw $e;
         }
     }
 }

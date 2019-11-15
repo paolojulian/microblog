@@ -32,7 +32,7 @@ class PostHandlerComponent extends Component {
                 [512, 256]
             );
         } catch (Exception $e) {
-            throw new InternalErrorException(__($e->getMessage()));
+            throw $e;
         }
 
         return "/app/webroot$imgpath$imageName";

@@ -177,6 +177,50 @@ class MethodNotAllowedException extends HttpException {
 }
 
 /**
+ * Represents an HTTP 413 error.
+ *
+ * @package       Cake.Error
+ */
+class PayloadTooLarge extends HttpException {
+
+/**
+ * Constructor
+ *
+ * @param string $message If no message is given 'Unsupported File Type' will be the message
+ * @param int $code Status code, defaults to 413
+ */
+	public function __construct($message = null, $code = 413) {
+		if (empty($message)) {
+			$message = 'Payload Too Large';
+		}
+		parent::__construct($message, $code);
+	}
+
+}
+
+/**
+ * Represents an HTTP 415 error.
+ *
+ * @package       Cake.Error
+ */
+class UnsupportedFileTypeException extends HttpException {
+
+/**
+ * Constructor
+ *
+ * @param string $message If no message is given 'Unsupported File Type' will be the message
+ * @param int $code Status code, defaults to 415
+ */
+	public function __construct($message = null, $code = 415) {
+		if (empty($message)) {
+			$message = 'Unsupported File Type';
+		}
+		parent::__construct($message, $code);
+	}
+
+}
+
+/**
  * Represents an HTTP 500 error.
  *
  * @package       Cake.Error

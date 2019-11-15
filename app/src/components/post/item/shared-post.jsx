@@ -21,7 +21,7 @@ const SharedPost = ({
         <div>
             shared&nbsp;
             {userId === originalUserId ? 'own': 'a'}&nbsp;
-            <Link to={`/posts/${originalPostId}`}>
+            <Link to={`/posts/${postId}`}>
                 <span className="username">post</span>
             </Link>
         </div>
@@ -29,7 +29,6 @@ const SharedPost = ({
 
     return (
         <div className={styles.sharedPost}>
-            {/* <actions> </actions> */}
             <PostHeader
                 postId={postId}
                 hasTitle={false}
