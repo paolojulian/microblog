@@ -24,7 +24,6 @@ import PostActions from '../actions'
 const PostItem = ({
     sharedPost,
     id,
-    originalPostId,
     avatarUrl,
     body,
     comments,
@@ -35,7 +34,6 @@ const PostItem = ({
     isShared,
     likes,
     loggedin_id,
-    ownerId,
     retweet_post_id,
     title,
     user_id,

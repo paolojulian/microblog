@@ -39,7 +39,6 @@ const Post = ({ fetchHandler }) => {
 
                     likes={Post.likes}
                     comments={Post.comments}
-                    ownerId={Post.is_shared ? Post.shared_id : Post.user_id}
                     loggedin_id={id}
                     fetchHandler={fetchHandler}
                 />

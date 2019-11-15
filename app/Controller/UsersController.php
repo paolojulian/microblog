@@ -144,8 +144,8 @@ class UsersController extends AppController
      * [GET]
      * [PRIVATE] - for logged in users only
      * 
-     * Checks the mutual friends of a certain friend
-     * and currently logged in user
+     * Checks who of your friend/s is following
+     * the given user
      * 
      * @param username - user to be checked
      * @return json - array of Users
