@@ -55,6 +55,7 @@ const PostView = (props) => {
         <div className={styles.wrapper}>
             <PostItem
                 key={post.id}
+                openCommentOnStart={true}
                 isShared={isShared}
                 sharedPost={isShared ? {
                     userId: sharedPost.Post.user_id,

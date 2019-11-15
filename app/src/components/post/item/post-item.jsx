@@ -43,7 +43,7 @@ const PostItem = ({
     const [likeCount, setLikeCount] = useState(likes.length);
     const [commentsCount, setCommentsCount] = useState(comments);
     const [isLiked, setIsLiked] = useState(likes.indexOf(loggedin_id) !== -1);
-    const [showComment, setShowComment] = useState(false);
+    const [showComment, setShowComment] = useState(openCommentOnStart);
 
     const handleLike = () => {
         dispatch(likePost(id))
