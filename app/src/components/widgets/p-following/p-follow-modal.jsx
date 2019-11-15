@@ -19,7 +19,6 @@ const PFollowModal = ({
     onRequestClose,
 }) => {
     const dispatch = useDispatch();
-    const usersRef = useRef('');
     const { id: loggedInUser } = useSelector(state => state.auth.user);
     const [isLoading, setLoading] = useState(true);
     const [isError, setError] = useState(false);
@@ -64,7 +63,6 @@ const PFollowModal = ({
                 page={page}
                 fetchHandler={handleFetchFollow}
                 className={styles.users}
-                bodyRef={usersRef}
             >
                 {users.map((item, i) => {
                     let user = type === 'follower' ? item.User : item.Following;

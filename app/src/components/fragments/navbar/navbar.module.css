@@ -79,7 +79,7 @@ nav ul li {
     text-transform: uppercase;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 50rem) {
     .logo {
         display: block;
         position: absolute;
@@ -87,9 +87,6 @@ nav ul li {
         top: 50%;
         transform: translateY(-50%);
     }
-}
-
-@media screen and (min-width: 1000px) {
     nav ul li {
         cursor: pointer;
         display: block;

@@ -5,8 +5,12 @@ import PropTypes from 'prop-types'
 /** Components */
 import PFab from '../p-fab'
 import PLoader from '../p-loader';
+import ModalScrollPaginate from '../../utils/modal-scroll-paginate';
 
 const PModal = ({
+    enableScrollPaginate,
+    onScrollPaginate,
+    pager,
     onRequestClose,
     onRequestSubmit,
     isLoading,
@@ -38,9 +42,17 @@ const PModal = ({
                 {props.header ? props.header : 'Notification'}
             </div>
 
-            <div className={styles.body}>
-                {props.children}
-            </div>
+            {enableScrollPaginate
+                ? <ModalScrollPaginate
+                    page={pager.page}
+                    fetchHandler={onScrollPaginate}
+                    className={styles.body}
+                >
+                    {props.children}
+                </ModalScrollPaginate>
+                : <div className={styles.body}>
+                    {props.children}
+                </div>}
 
             {isLoading ? <PLoader /> : actions()}
         </div>
@@ -66,6 +78,10 @@ const PModal = ({
 };
 
 PModal.propTypes = {
+    enableScrollPaginate: PropTypes.bool,
+    pager: PropTypes.object,
+    onScrollPaginate: PropTypes.func,
+
     onRequestClose: PropTypes.func.isRequired,
     onRequestSubmit: PropTypes.func,
     isLoading: PropTypes.bool,
@@ -74,7 +90,10 @@ PModal.propTypes = {
 
 PModal.defaultProps = {
     type: 'alert',
-    isLoading: false
+    isLoading: false,
+    enableScrollPaginate: false,
+    onScrollPaginate: () => {},
+    pager: {}
 }
 
 export default PModal;

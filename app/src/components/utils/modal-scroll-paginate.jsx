@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 /** Components */
@@ -6,10 +6,10 @@ import PLoader from '../widgets/p-loader'
 
 const ModalScrollPaginate = ({
     fetchHandler,
-    bodyRef,
     page,
     ...props
 }) => {
+    const bodyRef = useRef('');
     const [isLoading, setIsLoading] = useState(false);
     const [isLast, setIsLast] = useState(false);
 
@@ -41,6 +41,7 @@ const ModalScrollPaginate = ({
     const handleScrollDown = async (pageNo = 1) => {
         try {
             const res = await fetchHandler(pageNo);
+            console.log('Test', res);
             if (res.length > 0) {
                 setIsLast(false);
             } else {

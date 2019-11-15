@@ -29,9 +29,8 @@ class Notification extends AppModel
         ],
     ];
 
-    public function fetchUnreadNotifications($userId, $page = 1)
+    public function fetchUnreadNotifications($userId, $page = 1, $limit = 3)
     {
-        $perPage = 3;
         return $this->find('all', [
             'contain' => ['User'],
             'conditions' => [
@@ -40,7 +39,7 @@ class Notification extends AppModel
             ],
             'order' => 'created DESC',
             'page' => $page,
-            'limit' => $perPage
+            'limit' => $limit
         ]);
     }
 

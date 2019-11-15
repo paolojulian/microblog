@@ -10,7 +10,6 @@ import { apiSearch, apiSearchUsers, apiSearchPosts } from '../../store/actions/s
 import { withRouter } from 'react-router-dom'
 import WithNavbar from '../hoc/with-navbar'
 import SearchLoader from './search-loader'
-import SearchBar from './search-bar'
 import SearchUsers from './search-users'
 import SearchPosts from './search-posts'
 

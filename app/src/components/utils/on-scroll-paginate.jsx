@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 /** Components */
 import PLoader from '../widgets/p-loader'
 
-const Post = ({ fetchHandler, ...props }) => {
+const OnScrollPaginate = ({ fetchHandler, ...props }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isLast, setIsLast] = useState(false);
 
@@ -55,13 +55,13 @@ const Post = ({ fetchHandler, ...props }) => {
     )
 }
 
-Post.propTypes = {
+OnScrollPaginate.propTypes = {
     fetchHandler: PropTypes.func.isRequired,
     page: PropTypes.number
 }
 
-Post.defaultProps = {
+OnScrollPaginate.defaultProps = {
     page: 1
 }
 
-export default Post
+export default OnScrollPaginate

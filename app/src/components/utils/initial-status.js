@@ -16,5 +16,5 @@ export default {
     ERROR: {
         ...initialStatus,
         error: true
-    }
+    },
 }

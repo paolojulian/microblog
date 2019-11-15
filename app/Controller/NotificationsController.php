@@ -24,10 +24,14 @@ class NotificationsController extends AppController
         if ( ! $page = $this->request->query('page')) {
             $page = 1;
         }
+        if ( ! $limit = $this->request->query('limit')) {
+            $limit = 3;
+        }
         return $this->responseData(
             $this->Notification->fetchUnreadNotifications(
                 $this->request->user->id,
-                $page
+                $page,
+                $limit
             )
         );
     }

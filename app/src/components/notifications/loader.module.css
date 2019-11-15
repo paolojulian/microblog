@@ -1,0 +1,20 @@
+
+.notification {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    background-color: var(--grey);
+    padding: 1rem 1rem;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3rem;
+    width: 100%;
+}
+
+.notificationTitle {
+    flex: 1;
+    height: 100%;
+}

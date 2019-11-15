@@ -16,6 +16,10 @@ import {
 /** Components */
 import PLoader from '../../widgets/p-loader';
 import VNotificationItem from '../../widgets/v-notification/v-notification-item';
+import NotificationModal from '../../notifications/index';
+
+/** Consumer */
+import { ModalConsumer } from '../../widgets/p-modal/p-modal-context';
 
 const initialStatus = {
     loading: false,
@@ -23,7 +27,13 @@ const initialStatus = {
     post: false
 }
 
-const Notifications = ({ status, notifications, onRead, onReadAll }) => {
+const Notifications = ({
+    status,
+    notifications,
+    notificationCount,
+    onRead,
+    onReadAll
+}) => {
     if (status.error) {
         return <div className="disabled">Something went wrong</div>
     }
@@ -35,6 +45,12 @@ const Notifications = ({ status, notifications, onRead, onReadAll }) => {
     }
     return (
         <div className={styles.notificationWrapper}>
+            {notifications.length > 0 && <div
+                className={"disabled " + styles.readAll}
+                onClick={onReadAll}
+            >
+                Read All
+            </div>}
             {notifications.map(({Notification, User}, i) => (
                 <div className={styles.item}>
                     <VNotificationItem
@@ -49,12 +65,16 @@ const Notifications = ({ status, notifications, onRead, onReadAll }) => {
                         />
                 </div>
             ))}
-            {notifications.length > 0 && <div
-                className={"disabled " + styles.readAll}
-                onClick={onReadAll}
-            >
-                Read All
-            </div>}
+            {notificationCount > 3 && <ModalConsumer>
+                {({ showModal }) => (
+                    <div
+                        className={`disabled ${styles.viewMore}`}
+                        onClick={() => showModal(NotificationModal)}
+                    >
+                        View more ({notificationCount - 3})
+                    </div>
+                )}
+            </ModalConsumer>}
         </div>
     )
 }
@@ -104,6 +124,7 @@ const NotificationBell = ({ notificationCount }) => {
                 <Notifications
                     status={status}
                     notifications={notifications}
+                    notificationCount={notificationCount}
                     onRead={handleOnRead}
                     onReadAll={handleOnReadAll}
                     />
