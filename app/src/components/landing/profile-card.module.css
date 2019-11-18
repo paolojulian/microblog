@@ -1,12 +1,12 @@
 .profile_card {
-    display: flex;
     padding: 1.5rem 2rem;
 }
 .profile_img {
-    flex: 1 0 auto;
+    display: flex;
     text-align: left;
 }
 .profile_img img{
+    flex: 1;
     background-color: #f5eee5;
     width: 128px;
     height: 128px;
@@ -17,7 +17,9 @@
     text-align: left;
 }
 .credentials {
+    text-align: left;
     margin-top: 1rem;
+    word-break: break-all;
 }
 .last_name {
     font-weight: 700;

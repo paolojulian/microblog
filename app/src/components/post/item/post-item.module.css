@@ -6,6 +6,7 @@
 
 .bodyText {
     padding: 0 1rem;
+    word-break: break-all;
 }
 
 .postImg {
@@ -90,4 +91,17 @@
 .edit, .delete, .share {
     cursor: pointer;
     margin: 0 0.175rem;
+}
+
+.closeComment {
+    padding: 0.5rem 0;
+    text-align: center;
+}
+
+.closeComment span {
+    cursor: pointer;
+}
+
+.closeComment span:hover {
+    color: var(--blue);
 }

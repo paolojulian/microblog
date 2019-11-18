@@ -10,10 +10,14 @@ import { addComment } from '../../../store/actions/postActions';
 import { CLEAR_ERRORS } from '../../../store/types'
 
 /** Components */
-import PCard from '../../widgets/p-card';
 import PFab from '../../widgets/p-fab';
 import PLoader from '../../widgets/p-loader';
 import FormTextArea from '../../widgets/form/textarea/form-textarea';
+
+const styles = {
+    padding: '0.5rem',
+    width: '100%'
+}
 
 const initialError = {
     body: ''
@@ -93,7 +97,7 @@ const CommentCreate = ({
     }
 
     return (
-        <PCard size="fit">
+        <div styles={styles}>
             <form
                 onSubmit={handleSubmit}
                 className="form"
@@ -108,7 +112,7 @@ const CommentCreate = ({
                 />
                 {renderButton()}
             </form>
-        </PCard>
+        </div>
     );
 }
 

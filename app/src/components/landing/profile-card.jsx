@@ -21,28 +21,28 @@ const ProfileCard = (props) => {
                     src={user.avatar_url}
                     alt={user.username}
                 />
-                <div className={styles.credentials}>
-                    <div className={styles.last_name}>
-                        <Link to={`/profiles/${user.username}`}>
-                            {user.last_name}
-                        </Link>
-                    </div>
-                    <div className={styles.first_name}>
-                        {user.first_name}
-                    </div>
-                    <div className="username">
-                        <Link to={`/profiles/${user.username}`}>
-                            @{user.username}
-                        </Link>
-                    </div>
+                <div className={styles.info}>
+                    <PFollowing
+                        userId={Number(user.id)}
+                        totalFollowers={totalFollowers}
+                        totalFollowing={totalFollowing}
+                    />
                 </div>
             </div>
-            <div className={styles.info}>
-                <PFollowing
-                    userId={Number(user.id)}
-                    totalFollowers={totalFollowers}
-                    totalFollowing={totalFollowing}
-                />
+            <div className={styles.credentials}>
+                <div className={styles.last_name}>
+                    <Link to={`/profiles/${user.username}`}>
+                        {user.last_name}
+                    </Link>
+                </div>
+                <div className={styles.first_name}>
+                    {user.first_name}
+                </div>
+                <div className="username">
+                    <Link to={`/profiles/${user.username}`}>
+                        @{user.username}
+                    </Link>
+                </div>
             </div>
         </div>
     )

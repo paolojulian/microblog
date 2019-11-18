@@ -45,9 +45,9 @@ const MutualUser = ({
                 <span className="username">@{user.username}</span>
             </Link>
             <div className="disabled"
-                style={{ fontStyle: 'italic' }}
+                style={{ fontStyle: 'italic', fontSize: '0.85rem' }}
             >
-                {mutual > 0 && `Followed by ${mutual} of your friend${mutual > 1 ? 's' : ''}`}
+                {mutual > 0 && `Followed by ${mutual} of your followed user${mutual > 1 ? 's' : ''}`}
             </div>
         </div>
     </div>

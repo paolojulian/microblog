@@ -13,10 +13,6 @@
     margin-right: 0.5rem;
 }
 
-.bodyText {
-    flex: 1;
-}
-
 .deleteBtn {
     margin: 0 0.5rem;
 }
@@ -27,4 +23,14 @@
 
 .deleteBtn i:hover {
     color: var(--secondary);
+}
+
+.commentBody {
+    flex: 1;
+    word-break: break-all;
+}
+
+.commentItem {
+    padding: 0.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.20);
 }

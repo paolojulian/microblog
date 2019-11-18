@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import styles from './post-comment.module.css';
 
 /** Components */
-import PCard from '../../widgets/p-card';
 import ProfileImage from '../../widgets/profile-image';
 import CommentDelete from './delete';
 
@@ -25,7 +24,7 @@ const CommentItem = ({
     const { user: loggedIn } = useSelector(state => state.auth);
 
     return (
-        <PCard size="fit">
+        <div className={styles.commentItem}>
             <div className={styles.itemBody}>
                 <div className={styles.profileImg}>
                     <ProfileImage
@@ -38,7 +37,7 @@ const CommentItem = ({
                         @{username}&nbsp;
                     </Link>
                 </div>
-                <div className={styles.bodyText}>
+                <div className={styles.commentBody}>
                     {body}
                 </div>
                 {Number(loggedIn.id) === userId && <ModalConsumer>
@@ -55,7 +54,7 @@ const CommentItem = ({
                     )}
                 </ModalConsumer>}
             </div>
-        </PCard>
+        </div>
     );
 }
 
