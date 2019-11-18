@@ -38,7 +38,6 @@ const PSearch = (props) => {
         const init = async () => {
             setStatus({ ...initialStatus, loading: true });
             try {
-                console.log(searchText)
                 await searchUsersAndPosts(searchText)
                 setStatus({ ...initialStatus, post: true });
             } catch (e) {

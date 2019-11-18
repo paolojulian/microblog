@@ -32,7 +32,8 @@ const postStyle = {
     },
     body: {
         padding: '0.5rem 1rem',
-        textAlign: 'left'
+        textAlign: 'left',
+        wordWrap: 'break-word',
     }
 }
 

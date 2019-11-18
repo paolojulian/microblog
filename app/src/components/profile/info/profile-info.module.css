@@ -5,13 +5,19 @@
 
 .wrapper {
     display: flex;
-    padding: 2rem;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.profileCredentials {
+    text-align: center;
 }
 
 .profileDetails {
     flex: 1;
     text-align: left;
-    padding-left: 5rem;
 }
 
 .followerLink {
@@ -27,6 +33,7 @@
 }
 
 .followBtn {
+    text-align: center;
     margin-top: 1rem;
 }
 
@@ -44,10 +51,6 @@
 
 .followBtn.active i:hover {
     color: var(--black-light);
-}
-
-.profileCredentials {
-    text-align: right;
 }
 
 .profileImage {
@@ -75,4 +78,24 @@
 .username {
     font-size: 1.3rem;
     color: var(--secondary);
+}
+
+@media screen and (min-width:600px) {
+    .wrapper {
+        flex-direction: row;
+        padding: 2rem;
+    }
+
+    .profileCredentials {
+        text-align: right;
+    }
+
+    .profileDetails {
+        padding-left: 5rem;
+    }
+
+    .followBtn {
+        text-align: left;
+    }
+
 }

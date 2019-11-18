@@ -4,6 +4,10 @@
     max-width: 95%;
 }
 
+.posts {
+    margin: 0.5rem 0;
+}
+
 @media screen and (min-width: 600px) {
     .wrapper {
         display: flex;
@@ -15,7 +19,7 @@
     .users,
     .posts {
         position: relative;
-        margin: 0.5rem 0;
+        margin: 0;
         flex: 1;
     }
 
