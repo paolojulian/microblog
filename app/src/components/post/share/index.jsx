@@ -67,7 +67,7 @@ const PostShare = ({
         if (isMine) {
             message = `You successfully shared your own post`;
         } else {
-            message = `You successfully shared @{${creator}}'s post`;
+            message = `You successfully shared @${creator}'s post`;
         }
         return (
             <PModal onRequestClose={onRequestClose}>

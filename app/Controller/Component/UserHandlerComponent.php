@@ -51,9 +51,10 @@ class UserHandlerComponent extends Component {
                 "profiles/$id/$imageName",
                 [256, 128, 64, 32, 24]
             );
-            return "/app/webroot/$imgpath/$imageName";
         } catch (Exception $e) {
             throw $e;
         }
+
+        return "/app/webroot$imgpath$imageName";
     }
 }
