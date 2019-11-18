@@ -18,7 +18,7 @@ const PostComment = ({
             body={comment.body}
             userId={Number(comment.user_id)}
             username={comment.username}
-            avatarUrl={comment.avatarUrl}
+            avatarUrl={comment.avatar_url}
             created={comment.created}
             reloadPost={reloadPost}
         />

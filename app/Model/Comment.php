@@ -60,6 +60,7 @@ class Comment extends AppModel
         ]);
         foreach ($data as $key => $item) {
             $data[$key]['Comments']['username'] = $data[$key]['User']['username'];
+            $data[$key]['Comments']['avatar_url'] = $data[$key]['User']['avatar_url'];
             $data[$key] = $data[$key]['Comments'];
         }
         return [
