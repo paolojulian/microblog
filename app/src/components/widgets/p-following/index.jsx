@@ -11,8 +11,8 @@ const style = {
         color: 'var(--grey)',
         padding: '0.1rem 0.5rem',
         fontSize: '0.9rem',
-        borderTopLeftRadius: '5px',
-        borderBottomLeftRadius: '5px',
+        borderTopLeftRadius: '2px',
+        borderBottomLeftRadius: '2px',
         cursor: 'pointer'
     },
     number: {
@@ -20,8 +20,8 @@ const style = {
         color: 'var(--grey)',
         padding: '0.1rem 0.5rem',
         fontSize: '0.9rem',
-        borderTopRightRadius: '5px',
-        borderBottomRightRadius: '5px',
+        borderTopRightRadius: '2px',
+        borderBottomRightRadius: '2px',
         cursor: 'pointer'
     }
 }

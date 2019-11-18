@@ -35,6 +35,7 @@ const VNotification = () => {
         let websocket = new WebSocket(`ws://dev1.ynsdev.pw:4567?id=${userId}`);
         // websocket = new WebSocket(`ws://127.0.0.1:4567?id=${userId}`);
         websocket.onopen = e => {
+            console.log('Connected');
         }
         websocket.onmessage = e => {
             showNotification(JSON.parse(e.data));
@@ -45,6 +46,7 @@ const VNotification = () => {
             }, 10000);
         };
         websocket.onerror = (err) => {
+            console.log('Disconnect');
             websocket.close();
         };
     }
@@ -57,6 +59,7 @@ const VNotification = () => {
     }
     
     const showNotification = (data) => {
+        console.log(data);
         dispatch(addPopupNotifications(data))
         // Add notif count on message pop
         dispatch(addNotificationCount())
