@@ -21,6 +21,7 @@ const PostShare = ({
 }) => {
 
     const [status, setStatus] = useState(InitialStatus);
+    const { user } = useSelector(state => state.auth);
     const errors = useSelector(state => state.errors);
     const bodyRef = useRef(null);
     const dispatch = useDispatch();
@@ -59,9 +60,15 @@ const PostShare = ({
     }
 
     if (status.post) {
+        let message = '';
+        if (creator === user.username) {
+            message = `You successfully shared your own post`;
+        } else {
+            message = `You successfully shared @{${creator}}'s post`;
+        }
         return (
             <PModal onRequestClose={onRequestClose}>
-                You successfully shared @{creator}'s post 
+                {message}
             </PModal>
         )
     }

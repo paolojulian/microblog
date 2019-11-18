@@ -16,7 +16,6 @@ const FormImage = ({
     ...props
 }) => {
     const [imgSrc, setImgSrc] = useState(initSrc);
-    const [imgName, setImgName] = useState('Choose an image');
 
     const handleChange = () => {
         const reader = new FileReader();
@@ -70,7 +69,7 @@ const FormImage = ({
                         ref={refs}
                         onChange={handleChange}
                     />
-                    {imgName}
+                    Choose an Image
                 </label>
             </div>
             {error && <div className="invalid-feedback">
