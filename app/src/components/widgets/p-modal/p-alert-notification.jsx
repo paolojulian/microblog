@@ -17,7 +17,6 @@ const AlertNotification = ({
 
     useEffect(() => {
         let timeout = setTimeout(onRequestClose, 5000);
-        console.log('test')
         return () => {
             clearTimeout(timeout);
         };
