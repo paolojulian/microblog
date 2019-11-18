@@ -8,6 +8,6 @@
     opacity: 0.9;
     padding: 1rem 4rem;
     letter-spacing: 1px;
-    max-width: 100%;
+    max-width: calc(100vw - 2rem);
     z-index: 1000;
 }

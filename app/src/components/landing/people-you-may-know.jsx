@@ -24,7 +24,8 @@ const MutualUser = ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        margin: '0.5rem 0'
+        margin: '0.5rem 0',
+        padding: '0.375rem 0',
     }}>
         <div style={{ margin: '0 1rem'}}>
             <ProfileImage
@@ -38,14 +39,19 @@ const MutualUser = ({
         }}>
             <Link to={`/profiles/${user.username}`}>
                 <div style={{
-                    textTransform: 'capitalize'
+                    textTransform: 'capitalize',
+                    lineHeight: '0.75rem',
                 }}>
                     {`${user.first_name} ${user.last_name}`}
                 </div>
                 <span className="username">@{user.username}</span>
             </Link>
             <div className="disabled"
-                style={{ fontStyle: 'italic', fontSize: '0.85rem' }}
+                style={{
+                    fontStyle: 'italic',
+                    fontSize: '0.85rem',
+                    lineHeight: '0.75rem',
+                }}
             >
                 {mutual > 0 && `Followed by ${mutual} of your followed user${mutual > 1 ? 's' : ''}`}
             </div>

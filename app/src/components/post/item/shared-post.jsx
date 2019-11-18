@@ -18,7 +18,7 @@ const SharedPost = ({
 }) => {
 
     const SharedItem = () => (
-        <div>
+        <div style={{ lineHeight: '0.75rem' }}>
             shared&nbsp;
             {userId === originalUserId ? 'own': 'a'}&nbsp;
             <Link to={`/posts/${postId}`}>

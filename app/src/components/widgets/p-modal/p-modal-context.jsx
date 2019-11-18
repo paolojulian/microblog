@@ -22,14 +22,21 @@ export const ModalProvider = (props) => {
       serverError: () => {showModal(AlertNotification, {
         type: 'danger', body: 'Oops. Something went wrong'
       })},
-      alert: (body = '') => {showModal(AlertNotification, { type: 'alert', body })},
-      success: (body = '') => {showModal(AlertNotification, { type: 'success', body })},
-      danger: (body = '') => {showModal(AlertNotification, { type: 'danger', body })},
+      alert: (body = '') => {
+        showModal(AlertNotification, { type: 'alert', body })
+      },
+      success: (body = '') => {
+        showModal(AlertNotification, { type: 'success', body })
+      },
+      danger: (body = '') => {
+        showModal(AlertNotification, { type: 'danger', body })
+      },
     },
     showModal: (component, props = {}) => {showModal(component, props)},
     hideModal: () => {hideModal()},
   })
   const showModal = (component, props = {}) => {
+    hideModal();
     setState({
       ...state,
       component,
