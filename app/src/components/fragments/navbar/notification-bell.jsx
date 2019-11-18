@@ -35,21 +35,20 @@ const Notifications = ({
     onReadAll
 }) => {
     if (status.error) {
-        return <div className="disabled">Something went wrong</div>
+        return <div className="disabled italic">Something went wrong</div>
     }
     if (status.loading) {
         return <PLoader />
     }
     if (notifications.length === 0) {
-        return <div className="disabled">No notifications</div>
+        return <div className="disabled italic">No new notification/s</div>
     }
     return (
         <div className={styles.notificationWrapper}>
             {notifications.length > 0 && <div
                 className={"disabled " + styles.readAll}
-                onClick={onReadAll}
             >
-                Read All
+                <span onClick={onReadAll}>Read All</span>
             </div>}
             {notifications.map(({Notification, User}, i) => (
                 <div className={styles.item}>

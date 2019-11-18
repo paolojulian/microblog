@@ -87,7 +87,7 @@ nav ul li {
         top: 50%;
         transform: translateY(-50%);
     }
-    nav ul li {
+    nav > ul > li {
         cursor: pointer;
         display: block;
         margin: 0 1rem;

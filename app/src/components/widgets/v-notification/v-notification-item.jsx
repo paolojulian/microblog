@@ -13,6 +13,7 @@ const VNotificationItem = ({
     username,
     type,
     postId,
+    showCloseBtn,
     onRead,
     onClose
 }) => {
@@ -54,7 +55,7 @@ const VNotificationItem = ({
         }
         return (
             <Link to={link} onClick={() => onRead(notificationId, index)}>
-                {text}
+                <span>{text}</span>
             </Link>
         )
     }
@@ -66,23 +67,26 @@ const VNotificationItem = ({
                 size={32}
             />
             <div className={styles.info}>
-                <Link to={link}>
-                    <Username username={username}
-                        onClick={() => onRead(notificationId, index)}
-                    />
-                </Link>
+                <Username username={username}
+                    onClick={() => onRead(notificationId, index)}
+                />
                 <div className={styles.message}>
                     {message()}
                 </div>
             </div>
-            <div className={styles.close}
+            {showCloseBtn && <div className={styles.close}
                 type="button"
                 onClick={() => onClose(index)}
             >
                 &times;
-            </div>
+            </div>}
         </div>
     )
+}
+
+VNotificationItem.defaultProps = {
+    showCloseBtn: false,
+    onClose: () => {}
 }
 
 export default VNotificationItem

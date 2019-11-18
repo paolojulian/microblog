@@ -6,7 +6,12 @@ import styles from './v-notification.module.css'
 import {
     countUnreadNotifications,
     readNotification,
-    addNotificationCount
+    addNotificationCount,
+
+    clearPopupNotifications,
+    addPopupNotifications,
+    removePopupNotifications,
+
 } from '../../../store/actions/notificationActions';
 import VNotificationItem from './v-notification-item';
 
@@ -14,8 +19,8 @@ let websocket;
 const VNotification = () => {
     const dispatch = useDispatch();
     const { isAuthenticated, user } = useSelector(state => state.auth);
+    const { popupNotifications } = useSelector(state => state.notification);
     const notificationContainer = createRef();
-    const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -52,7 +57,7 @@ const VNotification = () => {
     }
     
     const showNotification = (data) => {
-        setNotifications((old) => [...old, data]);
+        dispatch(addPopupNotifications(data))
         // Add notif count on message pop
         dispatch(addNotificationCount())
     }
@@ -65,16 +70,14 @@ const VNotification = () => {
     }
 
     const handleOnClose = (index) => {
-        let tmpNotifications = [...notifications];
-        tmpNotifications.splice(index, 1);
-        setNotifications([...tmpNotifications]);
+       dispatch(removePopupNotifications(index));
     }
 
     return (
         <div className={styles.wrapper}
             ref={notificationContainer}
         >
-            {notifications.map((notification, i) => {
+            {popupNotifications.map((notification, i) => {
                 try {
                     return (
                         <div className={styles.notification}>
@@ -86,6 +89,7 @@ const VNotification = () => {
                                 postId={notification.postId}
                                 username={notification.user.username}
                                 avatarUrl={notification.user.avatar_url}
+                                showCloseBtn={true}
                                 onRead={handleOnRead}
                                 onClose={handleOnClose}
                                 />

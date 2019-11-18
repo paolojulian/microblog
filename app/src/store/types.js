@@ -34,6 +34,12 @@ export const NOTIFICATION = {
     setCount: 'SET_COUNT_NOTIFICATION',
     addCount: 'ADD_COUNT_NOTIFICATION',
     refresh: 'REFRESH_NOTIFICATION',
+
+    popup: {
+        clear: "CLEAR_POPUP_NOTIFICATIONS",
+        add: "ADD_POPUP_NOTIFICATIONS",
+        remove: "REMOVE_POPUP_NOTIFICATIONS",
+    }
 }
 
 /** Refresh */

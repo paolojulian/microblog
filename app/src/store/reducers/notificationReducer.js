@@ -4,7 +4,8 @@ const initialState = {
     // Used for displaying number of notifs
     refreshCounter: 1,
     notificationCount: 0,
-    notifications: []
+    notifications: [],
+    popupNotifications: []
 }
 
 export default function(state = initialState, action) {
@@ -46,6 +47,29 @@ export default function(state = initialState, action) {
             }
         case NOTIFICATION.clear:
             return {...initialState}
+
+        case NOTIFICATION.popup.remove:
+            let popupNotifications = [...state.popupNotifications];
+            popupNotifications.splice(action.payload, 1);
+            return {
+                ...state,
+                popupNotifications
+            }
+        case NOTIFICATION.popup.add:
+            return {
+                ...state,
+                popupNotifications: [
+                    ...state.popupNotifications,
+                    action.payload
+                ]
+            }
+        
+        case NOTIFICATION.popup.clear:
+            return {
+                ...state,
+                popupNotifications: []
+            }
+
         default:
             return state;
     }

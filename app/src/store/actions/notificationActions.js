@@ -87,3 +87,30 @@ export const clearNotification = () => dispatch => {
 export const refreshesNotification = () => dispatch => {
     dispatch({ type: NOTIFICATION.refresh })
 }
+
+/**
+ * Clears all the popup notification on screen
+ */
+export const clearPopupNotifications = () => dispatch => {
+    dispatch({ type: NOTIFICATION.popup.clear })
+}
+
+/**
+ * Add a popup notification
+ */
+export const addPopupNotifications = (notification) => dispatch => {
+    dispatch({
+        type: NOTIFICATION.popup.add,
+        payload: notification
+    })
+}
+
+/**
+ * Remove a certain popup notification
+ */
+export const removePopupNotifications = (index) => dispatch => {
+    dispatch({
+        type: NOTIFICATION.popup.remove,
+        payload: index
+    })
+}

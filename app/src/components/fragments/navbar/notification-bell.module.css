@@ -12,6 +12,7 @@
 }
 
 .content {
+    cursor: default;
     width: 300px;
     max-width: 90vw;
     position: absolute;
@@ -37,13 +38,22 @@
     font-size: 0.9rem;;
 }
 
-.readAll:hover {
+.readAll span {
+    cursor: pointer;
+}
+
+.readAll span:hover {
     color: var(--blue);
 }
 
 .viewMore {
     margin-top: 0.375rem;
     font-size: 0.9rem;
+    color: var(--primary);
+}
+
+.viewMore:hover {
+    color: var(--blue);
 }
 
 .item:not(:last-child) {
