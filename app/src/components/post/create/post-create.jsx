@@ -57,6 +57,11 @@ const PostCreate = ({
             body: body.current.value,
             img: img.current.files[0]
         }
+        // 10mb
+        if (form.img && form.img.size > 1048576) {
+            setLoading(false);
+            return setErrors({ img: 'Can only upload up to 1 mb' });
+        }
         addPost(form, props.history)
             .then(handleSuccess)
             .catch(handleError)
@@ -134,11 +139,8 @@ const PostCreate = ({
                 <FormImage
                     name="profile_image"
                     refs={img}
+                    error={errors.img}
                 />
-
-                {errors.img && <div className="invalid-feedback">
-                    {`* ${errors.img}`}
-                </div>}
 
                 <br />
 

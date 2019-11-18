@@ -6,7 +6,7 @@ class FileUploadHelper
     // List of allowed file types
     const IMG_ALLOWED = ['jpg', 'jpeg', 'gif', 'png'];
     // The limit for img size
-    const MAX_SIZE = 1048576 * 25; // 25mb
+    const MAX_SIZE = 1048576; // 1mb
     // TODO Add Max Size
     // const MAX_SIZE = 0;
 
@@ -30,7 +30,7 @@ class FileUploadHelper
 
         // Check if uploaded filesize is valid
         if (filesize($file['tmp_name']) > self::MAX_SIZE) {
-            throw new PayloadTooLarge('Can only upload up to 25 mb');
+            throw new PayloadTooLarge('Can only upload up to 1 mb');
         }
 
         // Create a directory if specified path is not yet present

@@ -29,6 +29,7 @@ const PostEdit = ({
     const dispatch = useDispatch()
     const context = useContext(ModalContext)
     const { errors } = useSelector(state => state)
+    const [imgError, setImgError] = useState('');
     const imgRef = useRef()
     const [didChangeImg, setDidChangeImg] = useState(false);
     const [status, setStatus] = useState(InitialStatus)
@@ -51,6 +52,10 @@ const PostEdit = ({
         }
         if (didChangeImg) {
             form.img = imgRef.current.files[0] ? imgRef.current.files[0] : -1
+        }
+        // 10mb
+        if (form.img && form.img.size > 1048576) {
+            return setImgError('Can only upload up to 1 mb');
         }
         try {
             setStatus({ ...InitialStatus, loading: true });
@@ -105,6 +110,7 @@ const PostEdit = ({
             { ! isShared && <FormImage
                 name="profile_image"
                 refs={imgRef}
+                error={imgError}
                 initSrc={props.imgPath ? props.imgPath + 'x256.png' : ''}
                 onChangeImg={() => setDidChangeImg(true)}
             />}

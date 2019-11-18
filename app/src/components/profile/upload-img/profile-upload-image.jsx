@@ -36,6 +36,9 @@ const ProfileUploadImage = ({
             setErrors({ img: 'Please select an image' })
             return;
         }
+        if (img && img.size > 1048576) {
+            return setErrors({ img: 'Can only upload up to 1 mb' });
+        }
         try {
             setStatus({ ...InitialStatus.LOADING });
             await dispatch(uploadProfileImg(img))

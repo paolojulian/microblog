@@ -39,5 +39,5 @@
 }
 
 .inactive {
-    visibility: hidden;
+    display: none;
 }
