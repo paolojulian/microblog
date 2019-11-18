@@ -26,6 +26,9 @@ const PostShare = ({
     const bodyRef = useRef(null);
     const dispatch = useDispatch();
 
+    // Check if post is yours
+    const isMine = user.username === creator;
+
     useEffect(() => {
         return () => {
             dispatch({ type: CLEAR_ERRORS })
@@ -61,7 +64,7 @@ const PostShare = ({
 
     if (status.post) {
         let message = '';
-        if (creator === user.username) {
+        if (isMine) {
             message = `You successfully shared your own post`;
         } else {
             message = `You successfully shared @{${creator}}'s post`;
@@ -78,7 +81,7 @@ const PostShare = ({
             onRequestSubmit={handleShare}
             isLoading={status.loading}
             onRequestClose={onRequestClose}
-            header={`Share ${creator}'s post`}
+            header={isMine ? 'Share own post' : `Share ${creator}'s post`}
         >
             <FormTextArea 
                 placeholder="Body"
