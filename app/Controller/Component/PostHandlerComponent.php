@@ -19,7 +19,7 @@ class PostHandlerComponent extends Component {
         try {
             $title = preg_replace('/[^A-Za-z0-9]/', '', $data['title']);
             $imageName = $userId . $title . time();
-            $imgpath = "/img/posts/";
+            $imgpath = "img/posts/";
             $fullpath = WWW_ROOT . $imgpath;
             $image = FileUploadHelper::uploadImg(
                 $fullpath,
@@ -35,6 +35,6 @@ class PostHandlerComponent extends Component {
             throw $e;
         }
 
-        return "/app/webroot$imgpath$imageName";
+        return "/app/webroot/$imgpath$imageName";
     }
 }

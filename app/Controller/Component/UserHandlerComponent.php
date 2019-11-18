@@ -38,8 +38,8 @@ class UserHandlerComponent extends Component {
         try {
             $id = $user['id'];
             $cleanedUsername = preg_replace('/[^A-Za-z0-9]/', '', $user['username']);
-            $imageName = $cleanedUsername . time();
-            $imgpath = "/img/profiles/$id/";
+            $imageName = $id . $cleanedUsername . time();
+            $imgpath = "img/profiles/$id/";
             $fullpath = WWW_ROOT . $imgpath;
             $image = FileUploadHelper::uploadImg(
                 $fullpath,
@@ -55,6 +55,6 @@ class UserHandlerComponent extends Component {
             throw $e;
         }
 
-        return "/app/webroot$imgpath$imageName";
+        return "/app/webroot/$imgpath$imageName";
     }
 }
