@@ -34,7 +34,6 @@ const SearchBar = ({
                 placeholder="Search"
                 name="search_bar"
                 autoComplete="off"
-                onPaste={e => e.preventDefault()}
                 value={searchText}
                 onChange={handleSearch}
                 onKeyPress={handleKeyPress}

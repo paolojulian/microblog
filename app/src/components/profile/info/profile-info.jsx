@@ -34,6 +34,8 @@ const ProfileInfo = () => {
                 dispatch(addFollower(stateIsFollowing ? -1: 1));
                 if ( ! stateIsFollowing) {
                     context.notify.success(`You have successfully followed ${profile.username}`)
+                } else {
+                    context.notify.success(`You have successfully unfollowed ${profile.username}`)
                 }
             })
             .catch(() => context.notify.serverError())
