@@ -10,8 +10,8 @@ module.exports = env => {
     entry: ['@babel/polyfill', `${APP_DIR}/index.js`],
     output: {
       path: `${BUILD_DIR}/js/`,
-      chunkFilename: '[name].bundle.min.js?1',
-      filename: 'bundle.min.js?1',
+      chunkFilename: '[name].bundle.min.js',
+      filename: 'bundle.min.js',
     },
     plugins: [
       new webpack.optimize.OccurrenceOrderPlugin(),
