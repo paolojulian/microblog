@@ -47,8 +47,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "react-scripts start",
-    "build": "webpack -p",
-    "build-dev": "webpack -d --watch"
+    "build": "webpack -p --env.NODE_ENV=production",
+    "build-local": "webpack -p --env.NODE_ENV=local",
+    "build-dev": "webpack -d --watch --env.NODE_ENV=development"
   },
   "repository": {
     "type": "git",

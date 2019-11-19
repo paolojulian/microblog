@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import styles from './user-item.module.css';
@@ -15,7 +15,8 @@ const UserItem = ({
     user,
     showFollow,
     onRequestClose,
-    closeOnClick
+    closeOnClick,
+    history
 }) => {
     const dispatch = useDispatch();
     const [isFollowing, setFollowing] = useState(!!user.is_following);
@@ -26,13 +27,12 @@ const UserItem = ({
     }
 
     return (
-        <Link to={`/profiles/${user.username}`}
-            onClick={() => {
+        <div onClick={() => {
                 if (closeOnClick) {
                     onRequestClose();
                 }
-            }}
-        >
+                history.push(`/profiles/${user.username}`);
+            }}>
             <div className={"User " + styles.user}>
                 <div className={styles.avatar}>
                     <ProfileImage
@@ -57,7 +57,7 @@ const UserItem = ({
                     <i className="fa fa-heart"></i>
                 </div>}
             </div>
-        </Link>
+        </div>
     )
 };
 
@@ -73,4 +73,4 @@ UserItem.defaultProps = {
     closeOnClick: false
 }
 
-export default UserItem;
+export default withRouter(UserItem);

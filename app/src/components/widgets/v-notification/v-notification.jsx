@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createRef } from 'react'
+import React, { useEffect, createRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styles from './v-notification.module.css'
 
@@ -8,7 +8,6 @@ import {
     readNotification,
     addNotificationCount,
 
-    clearPopupNotifications,
     addPopupNotifications,
     removePopupNotifications,
 
@@ -32,10 +31,17 @@ const VNotification = () => {
     }, [isAuthenticated])
 
     const connectWebSocket = (userId) => {
-        let websocket = new WebSocket(`ws://dev1.ynsdev.pw:4567?id=${userId}`);
-        // websocket = new WebSocket(`ws://127.0.0.1:4567?id=${userId}`);
+        let websocket = null;
+        if (process.env.NODE_ENV === 'production') {
+            websocket = new WebSocket(`ws://dev1.ynsdev.pw:4567?id=${userId}`);
+        } else {
+            console.log(process.env);
+            websocket = new WebSocket(`ws://127.0.0.1:4567?id=${userId}`);
+        }
         websocket.onopen = e => {
-            console.log('Connected');
+            if (process.env.NODE_ENV !== 'production') {
+                console.log('Connected');
+            }
         }
         websocket.onmessage = e => {
             showNotification(JSON.parse(e.data));
@@ -46,7 +52,9 @@ const VNotification = () => {
             }, 10000);
         };
         websocket.onerror = (err) => {
-            console.log('Disconnect');
+            if (process.env.NODE_ENV !== 'production') {
+                console.log('Disconnect');
+            }
             websocket.close();
         };
     }
@@ -59,7 +67,6 @@ const VNotification = () => {
     }
     
     const showNotification = (data) => {
-        console.log(data);
         dispatch(addPopupNotifications(data))
         // Add notif count on message pop
         dispatch(addNotificationCount())

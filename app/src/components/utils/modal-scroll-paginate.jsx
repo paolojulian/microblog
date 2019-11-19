@@ -70,8 +70,6 @@ ModalScrollPaginate.propTypes = {
     fetchHandler: PropTypes.func.isRequired,
     /** Current page number */
     page: PropTypes.number,
-    /** The reference on where the scroll should listen */
-    bodyRef: PropTypes.object.isRequired
 }
 
 ModalScrollPaginate.defaultProps = {

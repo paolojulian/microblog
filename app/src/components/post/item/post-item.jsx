@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import classnames from 'classnames'
 import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -43,7 +43,13 @@ const PostItem = ({
     const [likeCount, setLikeCount] = useState(likes.length);
     const [commentsCount, setCommentsCount] = useState(comments);
     const [isLiked, setIsLiked] = useState(likes.indexOf(loggedin_id) !== -1);
-    const [showComment, setShowComment] = useState(openCommentOnStart);
+    const [showComment, setShowComment] = useState(false);
+
+    useEffect(() => {
+        if (openCommentOnStart) {
+            setShowComment(true);
+        }
+    }, [])
 
     const handleLike = () => {
         dispatch(likePost(id))
@@ -154,12 +160,12 @@ PostItem.propTypes = {
     openCommentOnStart: PropTypes.bool,
     title: PropTypes.string,
     body: PropTypes.string,
-    user_id: PropTypes.string,
+    user_id: PropTypes.number,
     creator: PropTypes.string,
     created: PropTypes.string,
     modified: PropTypes.string,
     isShared: PropTypes.bool,
-    loggedin_id: PropTypes.string,
+    loggedin_id: PropTypes.number,
     likes: PropTypes.array,
     comments: PropTypes.number,
 }

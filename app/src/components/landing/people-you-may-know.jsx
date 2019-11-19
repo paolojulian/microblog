@@ -66,12 +66,13 @@ const PeopleYouMayKnow = () => {
         <PCard size="fit"
             header={<Header/>}
         >
-            {notFollowed.map(data => {
+            {notFollowed.map((data, i) => {
                 let mutual = data[0] && data[0].hasOwnProperty('mutual')
                     ? data[0].mutual
                     : 0
                 return (
                     <MutualUser
+                        key={i}
                         mutual={mutual}
                         user={data.User}
                     />

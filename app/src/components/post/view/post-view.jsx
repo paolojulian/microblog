@@ -52,13 +52,12 @@ const PostView = (props) => {
     }
 
     return (
-        <div className={styles.wrapper}>
+        <div className={styles.wrapper} key={post.id}>
             <PostItem
-                key={post.id}
                 openCommentOnStart={true}
                 isShared={isShared}
                 sharedPost={isShared ? {
-                    userId: sharedPost.Post.user_id,
+                    userId: Number(sharedPost.Post.user_id),
                     username: sharedPost.User.username,
                     avatarUrl: sharedPost.User.avatar_url,
                     body: sharedPost.Post.body,
@@ -68,17 +67,17 @@ const PostView = (props) => {
                 avatarUrl={profile.avatar_url}
                 creator={profile.username}
 
-                id={isShared ? sharedPost.Post.id : post.id}
+                id={isShared ? Number(sharedPost.Post.id) : Number(post.id)}
                 title={post.title}
                 body={post.body}
                 created={post.created}
                 imgPath={post.img_path}
                 retweet_post_id={isShared ? sharedPost.Post.id : post.id}
-                user_id={post.user_id}
+                user_id={Number(post.user_id)}
 
                 likes={isShared ? sharedPost.Post.likes: post.likes}
                 comments={isShared ? sharedPost.Post.comments: post.comments}
-                loggedin_id={user.id}
+                loggedin_id={Number(user.id)}
                 fetchHandler={reloadPost}
             />
         </div>

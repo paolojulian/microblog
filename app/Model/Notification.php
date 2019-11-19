@@ -29,6 +29,15 @@ class Notification extends AppModel
         ],
     ];
 
+    /**
+     * Fetches the unread notifications
+     * of the given user
+     * 
+     * @param int $userId - users.id
+     * @param int page
+     * @param int limit
+     * @return array - list of Notification object
+     */
     public function fetchUnreadNotifications($userId, $page = 1, $limit = 3)
     {
         return $this->find('all', [
@@ -43,6 +52,13 @@ class Notification extends AppModel
         ]);
     }
 
+    /**
+     * Counts the unread notifications
+     * of the user given
+     * 
+     * @param int $userId - users.id
+     * @return int - the number of unread notifications
+     */
     public function countUnreadNotifications($userId)
     {
         return $this->find('count', [
@@ -53,6 +69,11 @@ class Notification extends AppModel
         ]);
     }
 
+    /**
+     * Reads a notification by id
+     * @param int $id - notification_id
+     * @return bool
+     */
     public function readNotification($id)
     {
         $this->id = $id;
@@ -82,24 +103,55 @@ class Notification extends AppModel
         return true;
     }
 
+    /**
+     * Adds notifcation data to database
+     * @param object $data - Notification Object
+     * @return bool
+     */
     public function addNotification($data)
     {
         $this->set($data);
-        // Wont notify if notification already exists
-        $checkData = $data;
-        $checkData['is_read'] = null;
-        if ($this->hasAny($checkData)) {
+
+        if ( ! $this->willNotify($data)) {
             return false;
         }
+
         if ( ! $this->validates()) {
+            // TODO: should throw error?
+            // this should be a programmer error
             return false;
         }
+
         if ( ! $this->save()) {
             throw new InternalErrorException();
         }
         return true;
     }
 
+    /** 
+     * Checks if system will notify user
+     * used to negate spamming
+     * 
+     * @param object $data - data to be checked
+     * @return bool - yes if will notify else no
+     */
+    public function willNotify($data)
+    {
+        $checkData = $data;
+        $checkData['is_read'] = null;
+        if ($this->hasAny($checkData)) {
+            // Wont notify if notification already exists
+            // that hasn't exists yet
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Used in notifying user using websockets,
+     * will send a post data to the http socket of node
+     * and sends notification to user through the websocket connection
+     */
     public function afterSave($created, $options = [])
     {
         if ( ! $created) return true;

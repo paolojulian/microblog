@@ -51,9 +51,8 @@ const Notifications = ({
                 <span onClick={onReadAll}>Read All</span>
             </div>}
             {notifications.map(({Notification, User}, i) => (
-                <div className={styles.item}>
+               <div className={styles.item} key={i}>
                     <VNotificationItem
-                        key={i}
                         index={i}
                         notificationId={Notification.id}
                         type={Notification.type}

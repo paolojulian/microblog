@@ -5,7 +5,7 @@ import styles from './profile.module.css'
 
 /** Redux */
 import { CLEAR_POSTS } from '../../store/types'
-import { getProfile, fetchMutualFriends, updateProfile } from '../../store/actions/profileActions'
+import { getProfile, fetchMutualFriends } from '../../store/actions/profileActions'
 import { getUserPosts } from '../../store/actions/postActions'
 
 /** Components */
@@ -35,8 +35,8 @@ const MutualFriends = ({ mutualFriends }) => (
             {mutualFriends.length === 0 && <div className="disabled">
                 None
             </div>}
-            {mutualFriends.length > 0 && mutualFriends.map(({ User }) => (
-                <UserItem user={User} showFollow={false}/>
+            {mutualFriends.length > 0 && mutualFriends.map(({ User }, i) => (
+                <UserItem key={i} user={User} showFollow={false}/>
             ))}
         </PCard>
     </div>

@@ -50,10 +50,10 @@ PostHeader.propTypes = {
     postId: PropTypes.number.isRequired,
     hasTitle: PropTypes.bool,
     title: PropTypes.string,
-    message: PropTypes.string,
-    username: PropTypes.string.isRequired,
-    avatarUrl: PropTypes.string.isRequired,
-    created: PropTypes.string.isRequired
+    message: PropTypes.any,
+    username: PropTypes.any,
+    avatarUrl: PropTypes.any,
+    created: PropTypes.any
 }
 
 PostHeader.defaultProps = {

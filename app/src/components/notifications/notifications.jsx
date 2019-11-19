@@ -72,10 +72,10 @@ const Notifications = ({
             .then(() => dispatch(addNotificationCount(-1)))
     }
 
-    const renderNotifications = () => notifications.map(({ Notification, User }, i) => (
-        <div className={styles.item}>
+    const renderNotifications = notifications.map(({ Notification, User }, i) => (
+        <div className={styles.item} key={`vnotificationitem_${i}`}>
             <VNotificationItem
-                key={i}
+                key={`notificationItem_${i}`}
                 index={i}
                 notificationId={Notification.id}
                 type={Notification.type}
@@ -117,7 +117,7 @@ const Notifications = ({
             onRequestClose={onRequestClose}
             header="Notifications"
         >
-            {notifications.length === 0 ? <EmptyNotifications /> : renderNotifications()}
+            {notifications.length === 0 ? <EmptyNotifications /> : renderNotifications}
         </PModal>
     );
 }

@@ -195,6 +195,10 @@ p.small {
     font-style: italic;
 }
 
+.hover-gray {
+    cursor: pointer;
+}
+
 .hover-grey:hover {
     background-color: var(--grey-secondary);
 }

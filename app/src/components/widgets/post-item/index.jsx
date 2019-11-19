@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 import PCard from '../p-card';
 import ProfileImage from '../profile-image';
@@ -37,8 +37,13 @@ const postStyle = {
     }
 }
 
-export const PostItemMinimal = ({ post: { User, Post }}) => (
-    <Link to={`/posts/${Post.id}`}>
+const Minimal = ({
+    post: { User, Post },
+    history
+}) => (
+    <div onClick={() => {
+        history.push(`/posts/${Post.id}`)
+    }}>
         <div style={postStyle.post} className="hover-grey">
             <div 
                 style={postStyle.header}>
@@ -62,7 +67,7 @@ export const PostItemMinimal = ({ post: { User, Post }}) => (
                 </div>
             </div>
         </div>
-    </Link>
+    </div>
 )
 
 export const PostItem = ({ post: { User, Post } }) => (
@@ -92,4 +97,5 @@ export const PostItem = ({ post: { User, Post } }) => (
     </PCard>
 )
 
-export default PostItem
+export const PostItemMinimal = withRouter(Minimal);
+export default PostItem;

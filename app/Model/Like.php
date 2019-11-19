@@ -13,6 +13,13 @@ class Like extends AppModel
         ]
     ];
 
+    /**
+     * Toggles like of a post
+     * @param int $postId - posts.id - post that was liked/unliked
+     * @param int $userId - users.id - user that liked/unliked the post
+     * 
+     * @return bool
+     */
     public function likePost($postId, $userId)
     {
         $data = [

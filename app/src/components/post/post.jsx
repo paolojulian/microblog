@@ -15,31 +15,30 @@ const Post = ({ fetchHandler }) => {
     
     const renderPosts = () => posts.map(({ Post }, i) => {
         const sharedPost = {
-            userId: Post.shared_user_id,
+            userId: Number(Post.shared_user_id),
             username: Post.shared_username,
             avatarUrl: Post.shared_avatar_url,
             body: Post.shared_body,
             created: Post.shared_created
         }
         return (
-            <div>
+            <div key={Post.id}>
                 <PostItem
                     isShared={!!Post.is_shared}
                     sharedPost={sharedPost}
-                    key={Post.id}
-                    id={Post.id}
+                    id={Number(Post.id)}
                     avatarUrl={Post.avatar_url}
                     title={Post.title}
                     body={Post.body}
                     created={Post.created}
                     creator={Post.username}
                     imgPath={Post.img_path}
-                    retweet_post_id={Post.retweet_post_id}
-                    user_id={Post.user_id}
+                    retweet_post_id={Number(Post.retweet_post_id)}
+                    user_id={Number(Post.user_id)}
 
                     likes={Post.likes}
                     comments={Post.comments}
-                    loggedin_id={id}
+                    loggedin_id={Number(id)}
                     fetchHandler={fetchHandler}
                 />
             </div>
