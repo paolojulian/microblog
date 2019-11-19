@@ -2,23 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 
-const NoMatch = ({ history }) => {
+/** Components */
+import Navbar from '../fragments/navbar';
 
-    const { isAuthenticated } = useSelector(state => state.auth);
+const NotFoundComponent = ({
+    redirectLink,
+    history,
+}) => {
     const [countDown, setCountDown] = useState(5);
-    const redirectLink = isAuthenticated ? '/' : '/login';
     let countDownTimeout = null;
 
     useEffect(() => {
+        if (countDown <= 0) {
+            return history.push(redirectLink);
+        }
         handleCountDown();
-        let timeout = setTimeout(() => {
-            history.push(redirectLink);
-        }, 5000);
         return () => {
-            clearTimeout(timeout);
             clearTimeout(countDownTimeout);
         };
-    }, [])
+    }, [countDown])
 
     const handleCountDown = () => {
         countDownTimeout = setTimeout(() => {
@@ -41,22 +43,46 @@ const NoMatch = ({ history }) => {
                 left: '50%',
                 top: '50%',
                 transform: 'translate(-50%, -50%)',
-                fontWeight: '400',
-                fontSize: '2rem',
-                fontStyle: 'italic',
                 color: 'var(--black-disabled)'
             }}>
 
-                The page you requested was not found
-            </div>
-            <div>Page will be redirecting in {countDown}</div>
-            <div>
-                <Link to="/">
-                    Go back to home
-                </Link>
+                <div style={{
+                    fontWeight: '400',
+                    fontSize: '2rem',
+                    fontStyle: 'italic',
+                }}>
+                    The page you requested was not found
+                </div>
+                <div>Page will be redirecting in {countDown}</div>
+                <div>
+                    <Link to="/">
+                        Go back to home
+                    </Link>
+                </div>
             </div>
         </div>
     )
+}
+
+const NoMatch = ({ history }) => {
+    const { isAuthenticated } = useSelector(state => state.auth);
+    const redirectLink = isAuthenticated ? '/' : '/login';
+
+    if (isAuthenticated) {
+        return (
+            <div>
+                <Navbar/>
+                <NotFoundComponent
+                    history={history}
+                    redirectLink={redirectLink}
+                />
+            </div>
+        )
+    }
+    return <NotFoundComponent
+        history={history}
+        redirectLink={redirectLink}
+    />;
 }
 
 export default withRouter(NoMatch);
