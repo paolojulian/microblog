@@ -24,6 +24,6 @@
 <body>
 	<div id="app"></div>
 	<?= $this->Html->script('v-notifier'); ?>
-	<script type="module" src="/js/bundle.min.js"></script>
+	<script type="module" src="/js/bundle.min.js?1"></script>
 </body>
 </html>
