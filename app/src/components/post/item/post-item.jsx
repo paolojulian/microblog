@@ -42,7 +42,7 @@ const PostItem = ({
     const context = useContext(ModalContext);
     const [likeCount, setLikeCount] = useState(likes.length);
     const [commentsCount, setCommentsCount] = useState(comments);
-    const [isLiked, setIsLiked] = useState(likes.indexOf(loggedin_id) !== -1);
+    const [isLiked, setIsLiked] = useState(likes.indexOf(String(loggedin_id)) !== -1);
     const [showComment, setShowComment] = useState(false);
 
     useEffect(() => {
