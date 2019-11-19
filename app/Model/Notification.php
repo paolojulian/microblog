@@ -148,6 +148,9 @@ class Notification extends AppModel
     }
 
     /**
+     * TODO: add websocket implementation on realtime comments displaying
+     * Change the route to 127.0.0.1:4567 to 127.0.0.1:4567/notification
+     * 
      * Used in notifying user using websockets,
      * will send a post data to the http socket of node
      * and sends notification to user through the websocket connection
