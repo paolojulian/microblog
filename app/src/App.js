@@ -1,4 +1,4 @@
-import React, { lazy } from 'react';
+import React, { lazy , Suspense } from 'react';
 import axios from 'axios'
 import { Provider } from 'react-redux'
 import jwtDecode from 'jwt-decode'
@@ -12,20 +12,21 @@ import { logoutUser, setCurrentUser } from './store/actions/authActions'
 
 /* Components */
 import PrivateRoute from './components/widgets/private-route'
-import Login from './components/auth/login'
-import Register from './components/auth/register'
-import Landing from './components/landing'
-import Profile from './components/profile'
-import ProfileUpdate from './components/profile/update'
-import PostEdit from './components/post/edit'
-import PostView from './components/post/view'
 import VNofication from './components/widgets/v-notification'
 import NoMatch from './components/nomatch/index.jsx'
-import PSearch from './components/search'
-
 /** Context */
 import { ModalProvider } from './components/widgets/p-modal/p-modal-context'
 import ModalRoot from './components/widgets/p-modal/p-modal-root'
+import Loader from './components/loader';
+
+const Login = lazy(() => import('./components/auth/login'));
+const Register = lazy(() => import('./components/auth/register'));
+const Landing = lazy(() => import('./components/landing'));
+const Profile = lazy(() => import('./components/profile'));
+const ProfileUpdate = lazy(() => import('./components/profile/update'));
+const PostEdit = lazy(() => import('./components/post/edit'));
+const PostView = lazy(() => import('./components/post/view'));
+const PSearch = lazy(() => import('./components/search'));
 
 if (localStorage.jwtToken) {
     try {
@@ -83,35 +84,36 @@ const App = () => {
                 <div className="App">
                     <ModalProvider>
                         <ModalRoot/>
-                        
 
-                    <Switch>
-                        <Route exact path="/login" component={Login}/>
-                        <Route exact path="/register" component={Register}/>
-                    
-                        <PrivateRoute exact path="/" component={Landing}/>
-                    
-                    
-                        <PrivateRoute exact path="/home" component={Landing}/>
-                    
-                    
-                        <PrivateRoute exact path="/profiles/:username" component={Profile}/>
-                    
-                    
-                        <PrivateRoute exact path="/settings/update-profile" component={ProfileUpdate}/>
-                    
-                    
-                        <PrivateRoute exact path="/posts/edit/:id" component={PostEdit}/>
-                    
-                    
-                        <PrivateRoute exact path="/posts/:id" component={PostView}/>
-                    
-                    
-                        <PrivateRoute exact path="/search" component={PSearch}/>
-                    
-                        <Route exact path="/not-found" component={NoMatch} />
-                        <Route path="*" component={NoMatch}/>
-                    </Switch>
+                        <Suspense fallback={<Loader/>}>
+                        <Switch>
+                            <Route exact path="/login" component={Login}/>
+                            <Route exact path="/register" component={Register}/>
+                        
+                            <PrivateRoute exact path="/" component={Landing}/>
+                        
+                        
+                            <PrivateRoute exact path="/home" component={Landing}/>
+                        
+                        
+                            <PrivateRoute exact path="/profiles/:username" component={Profile}/>
+                        
+                        
+                            <PrivateRoute exact path="/settings/update-profile" component={ProfileUpdate}/>
+                        
+                        
+                            <PrivateRoute exact path="/posts/edit/:id" component={PostEdit}/>
+                        
+                        
+                            <PrivateRoute exact path="/posts/:id" component={PostView}/>
+                        
+                        
+                            <PrivateRoute exact path="/search" component={PSearch}/>
+                        
+                            <Route exact path="/not-found" component={NoMatch} />
+                            <Route path="*" component={NoMatch}/>
+                        </Switch>
+                        </Suspense>
                     </ModalProvider>
                     <VNofication/>
                 </div>

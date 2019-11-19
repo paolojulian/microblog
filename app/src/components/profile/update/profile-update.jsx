@@ -49,19 +49,17 @@ const ProfileUpdate = () => {
     }, []);
 
     useEffect(() => {
-        if ( ! loading) {
+        let mounted = true;
+        if ( ! loading && mounted) {
             setUsername(user.username);
             setFirstName(user.first_name);
             setLastName(user.last_name);
             setEmail(user.email);
             setBirthdate(user.birthdate);
-            try {
-                const src = `/app/webroot/img/profiles/${user.id}/${user.username}.png`;
-                require(`../../../../webroot/img/profiles/${user.id}/${user.username}.png`);
-                setProfileImgSrc(src);
-            } catch (e) {
-                setProfileImgSrc(null);
-            }
+            setProfileImgSrc(user.avatar_url);
+        }
+        return () => {
+            mounted = false;
         }
     }, [loading])
 

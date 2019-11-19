@@ -10,7 +10,8 @@ module.exports = env => {
     entry: ['@babel/polyfill', `${APP_DIR}/index.js`],
     output: {
       path: `${BUILD_DIR}/js/`,
-      chunkFilename: '[name].bundle.min.js',
+      publicPath: `/js/`,
+      chunkFilename: '[name].[chunkhash].js',
       filename: 'bundle.min.js',
     },
     plugins: [
