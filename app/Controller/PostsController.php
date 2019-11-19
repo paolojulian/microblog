@@ -50,7 +50,7 @@ class PostsController extends AppController
     {
         $this->request->allowMethod('get');
         return $this->responseData(
-            $this->Post->fetchPostsWithComments($id)
+            $this->Post->fetchPost($id)
         );
     }
 

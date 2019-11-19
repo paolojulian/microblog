@@ -33,6 +33,12 @@ class Comment extends AppModel
         ],
     ];
 
+    /**
+     * Adds a comment
+     * 
+     * @param object $data - data to be stored
+     * @return bool
+     */
     public function addComment($data)
     {
         $this->set($data);
@@ -46,6 +52,12 @@ class Comment extends AppModel
         return true;
     }
 
+    /**
+     * Fetches comments by post with pagination
+     * 
+     * @param int $postId - posts.id
+     * @param int $page
+     */
     public function paginateComment($postId, $page = 1)
     {
         $perPage = 10;
@@ -72,6 +84,9 @@ class Comment extends AppModel
     
     /**
      * Counts the number of comments in a post
+     * 
+     * @param int $postId - posts.id
+     * @return int
      */
     public function countPerPost($postId)
     {
@@ -81,15 +96,10 @@ class Comment extends AppModel
         ]);
     }
 
-    public function isOwnedBy($comment, $user)
-    {
-        $params = [
-            'id' => $comment,
-            'user_id' => $user
-        ];
-        return $this->field('id', $params) !== false;
-    }
-
+    /**
+     * Adds a notification upon adding a comment,
+     * will then be processed and sent to the websocket server
+     */
     public function afterSave($created, $options = [])
     {
         if ( ! $created) return true;
@@ -107,5 +117,14 @@ class Comment extends AppModel
             ]);
         }
         return true;
+    }
+
+    public function isOwnedBy($comment, $user)
+    {
+        $params = [
+            'id' => $comment,
+            'user_id' => $user
+        ];
+        return $this->field('id', $params) !== false;
     }
 }

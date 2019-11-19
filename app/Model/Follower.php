@@ -37,6 +37,17 @@ class Follower extends AppModel
         ]);
     }
 
+    /**
+     * TODO: this function serves two purposes, refractor it
+     * Fetches all followers of given user
+     * and checks if current logged in user is following
+     * 
+     * @param int $userId - user to fetch followers
+     * @param int $page
+     * @param int $loggedInUser
+     * 
+     * @return array - array of followers
+     */
     public function fetchFollowersOfUser($userId, $page, $loggedInUser)
     {
         $perPage = 10;
@@ -67,6 +78,17 @@ class Follower extends AppModel
         return $followers;
     }
 
+    /**
+     * TODO: this function serves two purposes, refractor it
+     * Fetches all users followed by the given user
+     * and checks if current logged in user is following
+     * 
+     * @param int $userId - user to fetch followed users
+     * @param int $page
+     * @param int $loggedInUser
+     * 
+     * @return array - array of followers
+     */
     public function fetchFollowedByUser($userId, $page, $loggedInUser)
     {
         $perPage = 10;
@@ -96,6 +118,12 @@ class Follower extends AppModel
         return $followers;
     }
 
+    /**
+     * Counts the followers of the user
+     * 
+     * @param int $userId - users.id
+     * @return int
+     */
     public function countFollowers($userId)
     {
         return $this->find('count', [
@@ -103,6 +131,12 @@ class Follower extends AppModel
         ]);
     }
 
+    /**
+     * Counts the users that the given user is following
+     * 
+     * @param int $userId - users.id
+     * @return int
+     */
     public function countFollowing($userId)
     {
         return $this->find('count', [

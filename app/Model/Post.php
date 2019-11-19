@@ -52,6 +52,14 @@ class Post extends AppModel
 
     /**
      * TODO make subquery to joins and where
+     * [STORED_PROCEDURE] - /stored_procedures/fetchPostsOfUser
+     * Fetches the posts of the user given
+     * 
+     * @param int $userId - users.id
+     * @param int $pageNo
+     * @param int $perPage
+     * 
+     * @return array - array of posts
      */
     public function fetchPostsOfUser($userId, $pageNo = 1, $perPage = 5)
     {
@@ -64,6 +72,14 @@ class Post extends AppModel
 
     /**
      * TODO make subquery to joins and where
+     * [STORED_PROCEDURE] - /stored_procedures/fetchPostsToDisplay
+     * Fetches the posts to display on the given user's landing page
+     * 
+     * @param int $userId - users.id
+     * @param int $pageNo
+     * @param int $perPage
+     * 
+     * @return array - array of posts
      */
     public function fetchPostsToDisplay($userId, $pageNo = 1, $perPage = 5)
     {
@@ -74,6 +90,12 @@ class Post extends AppModel
         return $data;
     }
 
+    /**
+     * Adds the likes and comments of given posts
+     * 
+     * @param array &$data - array of posts
+     * @return void
+     */
     private function getLikesAndComments(&$data)
     {
         foreach ($data as $key => $item) {
@@ -82,7 +104,15 @@ class Post extends AppModel
         }
     }
 
-    public function fetchPostsWithComments($postId)
+    /**
+     * Fetches a whole post by id
+     * if post is a shared post,
+     * also fetches the original post
+     * 
+     * @param int $postId - posts.id
+     * @return object
+     */
+    public function fetchPost($postId)
     {
         if ( ! $post = $this->findById($postId)) {
             throw new NotFoundException(__('Invalid post'));
@@ -94,16 +124,6 @@ class Post extends AppModel
         $post['Post']['likes'] = array_map(function ($like) {
             return $like['user_id'];
         }, $post['Likes']);
-
-        // foreach ($post['Comments'] as $key => $comment) {
-        //     $commentUser = $this->User->find('first', [
-        //         'recursive' => -1,
-        //         'fields' => ['username', 'avatar_url'],
-        //         'conditions' => ['id' => $comment['user_id']]
-        //     ]);
-        //     $post['Comments'][$key]['username'] = $commentUser['User']['username'];
-        //     $post['Comments'][$key]['avatarUrl'] = $commentUser['User']['avatar_url'];
-        // }
 
         // Check if post is a shared post
         // Gets information about the shared post instead
@@ -127,6 +147,12 @@ class Post extends AppModel
         return $post;
     }
 
+    /**
+     * Fetches the users who liked a certain post
+     * 
+     * @param int $postId - posts.id
+     * @return array of users.id
+     */
     public function getLikes($postId)
     {
         return array_values($this->Likes->find('list', [
@@ -135,6 +161,12 @@ class Post extends AppModel
         ]));
     }
 
+    /**
+     * Adds a post
+     * 
+     * @param object $data - Post object
+     * @return bool
+     */
     public function addPost($data)
     {
         $this->set($data);
@@ -147,6 +179,16 @@ class Post extends AppModel
         return true;
     }
 
+    /**
+     * Edits a post
+     * if is a shared post,
+     * removed validation for body
+     * 
+     * @param int $postId
+     * @param object $data
+     * 
+     * @return bool
+     */
     public function editPost($postId, $data)
     {
         $this->id = $postId;
@@ -168,6 +210,16 @@ class Post extends AppModel
         return true;
     }
 
+    /**
+     * Shares a post and notify the
+     * owner of the post after save
+     * 
+     * @param int $postId - posts.id
+     * @param int $userId - users.id
+     * @param object $data
+     * 
+     * @return bool
+     */
     public function sharePost($postId, $userId, $data)
     {
         $post = $this->hasAny(['id' => $postId]);
@@ -206,6 +258,8 @@ class Post extends AppModel
      * 
      * @param string $searchText - text to be searched
      * @param int $page - page no.
+     * 
+     * @return object
      */
     public function searchPost($searchText, $page = 1)
     {

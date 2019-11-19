@@ -41,6 +41,17 @@ class Like extends AppModel
         return true;
     }
 
+    /**
+     * TODO: $userId in this doesn't make sense,
+     * should investigate later on
+     * 
+     * Fetches the likers of a given post
+     * 
+     * @param int $userId
+     * @param int $postId
+     * 
+     * @return array
+     */
     public function paginateLikes($userId, $postId, $page = 1)
     {
         $perPage = 20;
@@ -62,6 +73,10 @@ class Like extends AppModel
         return $data;
     }
 
+    /**
+     * After saving a like
+     * notifies the owner of the post that was liked
+     */
     public function afterSave($created, $options = [])
     {
         if ( ! $created) return true;
