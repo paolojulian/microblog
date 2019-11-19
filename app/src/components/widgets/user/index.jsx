@@ -27,7 +27,9 @@ const UserItem = ({
     }
 
     return (
-        <div onClick={() => {
+        <div
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
                 if (closeOnClick) {
                     onRequestClose();
                 }

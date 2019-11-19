@@ -5,6 +5,8 @@ import PCard from '../p-card';
 import ProfileImage from '../profile-image';
 import PostImage from '../post-image';
 import Username from '../username';
+import SharedPost from '../../post/item/shared-post';
+import PostHeader from '../../post/header';
 
 const postStyle = {
     post: {
@@ -26,7 +28,7 @@ const postStyle = {
     },
     title: {
         fontSize: '1.1rem',
-        color: 'var(--primary-dark)',
+        color: 'var(--green-primary)',
         letterSpacing: '1px',
         fontWeight: 500
     },
@@ -41,9 +43,11 @@ const Minimal = ({
     post: { User, Post },
     history
 }) => (
-    <div onClick={() => {
-        history.push(`/posts/${Post.id}`)
-    }}>
+    <div 
+       style={{ cursor: 'pointer' }}
+        onClick={() => {
+            history.push(`/posts/${Post.id}`)
+        }}>
         <div style={postStyle.post} className="hover-grey">
             <div 
                 style={postStyle.header}>
@@ -54,48 +58,54 @@ const Minimal = ({
                     />
                 </div>
                 <div style={postStyle.info}>
-                    <div style={postStyle.title}>
-                        Title: {Post.title}
-                    </div>
-                    <div>
-                        <Link to={`/profiles/${User.username}`}>
-                            <span className="username">
-                                @{User.username}
-                            </span>
-                        </Link>
-                    </div>
+                    <span style={postStyle.title}>
+                        {Post.title ? Post.title : 'Untitled'}
+                    </span>
+                    &nbsp;
+                    &#8226;
+                    &nbsp;
+                    <Username username={User.username}/>
                 </div>
             </div>
         </div>
     </div>
 )
 
-export const PostItem = ({ post: { User, Post } }) => (
-    <PCard size="fit">
-        <div style={postStyle.header}>
-            <div style={postStyle.img}>
-                <ProfileImage
-                    src={User.avatar_url}
-                    size={24}
-                />
+export const PostItem = ({ post }) => {
+    const { Post, User, isShared } = post;
+    let sharedPost = null;
+    if (isShared) {
+        sharedPost = post.SharedPost;
+    }
+
+    return (
+        <PCard size="fit">
+            {isShared && <SharedPost
+                postId={Number(sharedPost.Post.id)}
+                userId={Number(sharedPost.Post.user_id)}
+                originalUserId={Number(post.Post.user_id)}
+                body={sharedPost.Post.body}
+                avatarUrl={sharedPost.User.avatar_url}
+                username={sharedPost.User.username}
+                created={sharedPost.Post.created}
+            />}
+
+            <PostHeader
+                postId={Number(Post.id)}
+                title={Post.title}
+                username={User.username}
+                avatarUrl={User.avatar_url}
+                created={Post.created}
+            />
+
+            <div style={postStyle.body}>
+                {Post.body}
             </div>
-            <div style={postStyle.info}>
-                <div style={postStyle.title}>
-                    <Link to={`/posts/${Post.id}`}>
-                        {Post.title}
-                    </Link>
-                </div>
-                <div>
-                    <Username username={User.username}/>
-                </div>
-            </div>
-        </div>
-        <div style={postStyle.body}>
-            {Post.body}
-        </div>
-        {!!Post.img_path && <PostImage imgPath={Post.img_path} title={Post.title}/>}
-    </PCard>
-)
+
+            {!!Post.img_path && <PostImage imgPath={Post.img_path} title={Post.title}/>}
+        </PCard>
+    )
+}
 
 export const PostItemMinimal = withRouter(Minimal);
 export default PostItem;

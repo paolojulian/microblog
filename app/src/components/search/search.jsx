@@ -48,11 +48,6 @@ const PSearch = (props) => {
         // TODO Add if mounted cancel all setters
     }, [props.location.search])
 
-    // const handleSearch = e => {
-    //     setSearchText(e.target.value);
-    //     searchUsersAndPosts(e.target.value);
-    // }
-
     const searchUsersAndPosts = async str => {
         const trimmedStr = str.trim();
         if ( ! trimmedStr) {
@@ -118,10 +113,6 @@ const PSearch = (props) => {
 
     const renderBody = () => (
         <div className={styles.container}>
-            {/* <SearchBar
-                handleSearch={handleSearch}
-                searchText={searchText}
-            /> */}
             <div className={styles.wrapper}>
                 <SearchUsers
                     className={styles.users}

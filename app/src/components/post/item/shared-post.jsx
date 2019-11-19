@@ -9,7 +9,6 @@ import PostHeader from '../header';
 const SharedPost = ({
     postId,
     userId,
-    originalPostId,
     originalUserId,
     body,
     avatarUrl,
@@ -48,7 +47,6 @@ SharedPost.propTypes = {
     userId: PropTypes.number.isRequired,
     postId: PropTypes.number.isRequired,
     originalUserId: PropTypes.number.isRequired,
-    originalPostId: PropTypes.number.isRequired,
     body: PropTypes.string.isRequired,
     avatarUrl: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,

@@ -271,7 +271,6 @@ class Post extends AppModel
                 'body LIKE' => "%$searchText%",
             ],
         ];
-        $totalPosts = $this->find('count', ['conditions' => $conditions]);
         $posts = $this->find('all', [
             'contain' => ['User'],
             'conditions' => $conditions,
@@ -279,12 +278,45 @@ class Post extends AppModel
             'limit' => $perPage,
             'page' => $page
         ]);
+        $totalPosts = $this->find('count', ['conditions' => $conditions]);
         $totalLeft = $totalPosts - ($perPage * $page);
+
+        $this->convertOriginalPost($posts);
         return [
             'list' => $posts,
             'totalPosts' => $totalPosts,
             'totalLeft' => $totalLeft > 0 ? $totalLeft : 0
         ];
+    }
+
+    /**
+     * If a post is a shared post
+     * fetches its original post
+     * 
+     * @param array $posts
+     * @return void
+     */
+    private function convertOriginalPost(&$posts)
+    {
+        foreach ($posts as $index => $post) {
+            if (!$post['Post']['retweet_post_id']) {
+                // Not a shared post
+                $posts[$index]['isShared'] = false;
+                continue;
+            }
+
+            // Is a shared post
+            $originalPost = $this->findById($post['Post']['retweet_post_id']);
+            if ( ! $originalPost) {
+                // TODO find a way to not include this in searches
+                continue;
+            }
+            $posts[$index]['isShared'] = true;
+            $posts[$index]['SharedPost']['Post'] = $posts[$index]['Post'];
+            $posts[$index]['SharedPost']['User'] = $posts[$index]['User'];
+            $posts[$index]['Post'] = $originalPost['Post'];
+            $posts[$index]['User'] = $originalPost['User'];
+        }
     }
 
     public function isOwnedBy($postId, $userId)

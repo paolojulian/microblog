@@ -91,7 +91,6 @@ const PostItem = ({
             {isShared && <SharedPost
                 postId={id}
                 userId={sharedPost.userId}
-                originalPostId={retweet_post_id}
                 originalUserId={user_id}
                 body={sharedPost.body}
                 avatarUrl={sharedPost.avatarUrl}
