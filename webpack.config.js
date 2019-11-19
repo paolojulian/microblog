@@ -15,6 +15,7 @@ module.exports = env => {
       filename: 'bundle.min.js',
     },
     plugins: [
+      new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
       new webpack.optimize.OccurrenceOrderPlugin(),
       new webpack.DefinePlugin({
         'process.env': {
